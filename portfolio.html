@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orion — My Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+  <style>
+    :root {
+      --green:        #00E576;
+      --green-dim:    rgba(0, 229, 118, 0.10);
+      --green-border: rgba(0, 229, 118, 0.28);
+      --red:          #FF6B6B;
+      --red-dim:      rgba(255, 107, 107, 0.10);
+      --purple:       #6A80FF;
+      --amber:        #FFB020;
+      --bg:           #07080F;
+      --bg-surface:   #0C0D17;
+      --bg-elevated:  #111220;
+      --bg-card:      #14151F;
+      --text-1:       #FFFFFF;
+      --text-2:       #8B8FA8;
+      --text-3:       #4A4D62;
+      --border:       rgba(255, 255, 255, 0.07);
+      --border-hi:    rgba(255, 255, 255, 0.13);
+      --max-w:        1280px;
+      --px:           48px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    nav, main { position: relative; z-index: 1; }
+
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      height: 60px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 8, 15, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
+      text-decoration: none; color: var(--text-1);
+    }
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--green); border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: #000;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--text-2);
+      font-size: 13px; font-weight: 500;
+      padding: 6px 14px; border-radius: 8px;
+      transition: all 0.18s ease;
+    }
+    .nav-links a:hover { color: var(--text-1); background: rgba(255,255,255,0.05); }
+    .nav-links a.active {
+      color: var(--text-1);
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    /* ── KPI ── */
+    .kpi-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .kpi-value {
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.04em; margin-top: 6px;
+    }
+    .kpi-sub {
+      font-size: 11px; color: var(--text-2); margin-top: 3px;
+    }
+    .pos { color: var(--green); }
+    .neg { color: var(--red); }
+
+    /* ── SLICER ── */
+    .slicer-btn {
+      background: none; border: 1px solid transparent;
+      color: var(--text-3); font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      padding: 5px 13px; border-radius: 7px;
+      transition: all 0.18s ease; letter-spacing: 0.02em;
+    }
+    .slicer-btn:hover { color: var(--text-2); background: rgba(255,255,255,0.05); }
+    .slicer-btn.active {
+      color: var(--green);
+      background: var(--green-dim);
+      border-color: var(--green-border);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0; transform: translateY(14px);
+      animation: fi 0.45s ease forwards;
+    }
+    @keyframes fi { to { opacity: 1; transform: translateY(0); } }
+    .d1 { animation-delay: 0.04s; }
+    .d2 { animation-delay: 0.10s; }
+    .d3 { animation-delay: 0.16s; }
+    .d4 { animation-delay: 0.22s; }
+    .d5 { animation-delay: 0.30s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .kpi-grid  { grid-template-columns: repeat(3, 1fr) !important; }
+      .charts-row{ grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 640px) {
+      :root { --px: 16px; }
+      .kpi-grid  { grid-template-columns: repeat(2, 1fr) !important; }
+      .nav-app-links { display: none !important; }
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════  NAV  ═══════════════ -->
+<nav>
+  <div class="nav-inner">
+
+    <div style="display:flex;align-items:center;gap:28px;">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-mark">↗</span>
+        Orion
+      </a>
+      <ul class="nav-links nav-app-links">
+        <li><a href="#" class="active">Overview</a></li>
+        <li><a href="#">Portfolio</a></li>
+        <li><a href="#">Analytics</a></li>
+        <li><a href="#">News</a></li>
+      </ul>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:14px;">
+      <!-- Last updated -->
+      <span style="font-size:11px;color:var(--text-3);">
+        <span style="display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:5px;vertical-align:middle;"></span>
+        Live · Apr 15, 2026
+      </span>
+      <!-- User avatar -->
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:100px;">
+        <div style="width:26px;height:26px;background:linear-gradient(135deg,#6A80FF,#00E576);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#000;flex-shrink:0;">A</div>
+        <span style="font-size:13px;font-weight:600;">Andrés</span>
+      </div>
+      <a href="index.html" style="color:var(--text-3);font-size:12px;font-weight:500;text-decoration:none;padding:6px 12px;border:1px solid var(--border);border-radius:7px;transition:all 0.18s;" onmouseover="this.style.color='var(--text-1)';this.style.borderColor='var(--border-hi)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='var(--border)'">
+        Log out
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+
+<!-- ═══════════════  MAIN  ═══════════════ -->
+<main style="padding:28px 0 72px;">
+  <div class="container">
+
+    <!-- Page header -->
+    <div class="fade-in d1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h1 style="font-size:24px;font-weight:700;letter-spacing:-0.03em;">My Portfolio</h1>
+        <p style="color:var(--text-3);font-size:12px;margin-top:3px;">Last synced today at 09:42 CET · 3 connected accounts</p>
+      </div>
+      <button
+        style="background:var(--green);color:#000;border:none;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;padding:8px 18px;border-radius:8px;transition:opacity 0.18s;"
+        onmouseover="this.style.opacity='0.82'" onmouseout="this.style.opacity='1'">
+        + Add transaction
+      </button>
+    </div>
+
+
+    <!-- ── KPI ROW ── -->
+    <div class="kpi-grid fade-in d2" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;">
+
+      <div class="card" style="padding:18px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);"></div>
+        <p class="kpi-label">Total Value</p>
+        <p class="kpi-value">€47,892</p>
+        <p class="kpi-sub pos">+€1,094 today ↑</p>
+      </div>
+
+      <div class="card" style="padding:18px;">
+        <p class="kpi-label">Day Return</p>
+        <p class="kpi-value pos">+2.34%</p>
+        <p class="kpi-sub">+€1,094.20</p>
+      </div>
+
+      <div class="card" style="padding:18px;">
+        <p class="kpi-label">Total Return</p>
+        <p class="kpi-value pos">+24.8%</p>
+        <p class="kpi-sub">+€9,502 all time</p>
+      </div>
+
+      <div class="card" style="padding:18px;">
+        <p class="kpi-label">YTD Return</p>
+        <p class="kpi-value pos">+15.0%</p>
+        <p class="kpi-sub">+€6,240 since Jan</p>
+      </div>
+
+      <div class="card" style="padding:18px;border-color:var(--green-border);">
+        <p class="kpi-label">Best Position</p>
+        <p class="kpi-value pos">+18.2%</p>
+        <p class="kpi-sub">NVDA · NVIDIA</p>
+      </div>
+
+      <div class="card" style="padding:18px;">
+        <p class="kpi-label">Dividend YTD</p>
+        <p class="kpi-value">€1,102</p>
+        <p class="kpi-sub">yield 2.3% ann.</p>
+      </div>
+
+    </div>
+
+
+    <!-- ── LINE CHART ── -->
+    <div class="card fade-in d3" style="padding:24px;margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;">Portfolio Evolution</p>
+          <p style="font-size:11px;color:var(--text-3);margin-top:2px;">Historical value · select a time range below</p>
+        </div>
+        <div id="slicer" style="display:flex;gap:3px;background:var(--bg-elevated);padding:4px;border-radius:9px;">
+          <button class="slicer-btn" data-range="1M">1M</button>
+          <button class="slicer-btn" data-range="3M">3M</button>
+          <button class="slicer-btn" data-range="6M">6M</button>
+          <button class="slicer-btn active" data-range="YTD">YTD</button>
+          <button class="slicer-btn" data-range="1Y">1Y</button>
+          <button class="slicer-btn" data-range="5Y">5Y</button>
+        </div>
+      </div>
+      <div style="position:relative;height:240px;">
+        <canvas id="lineChart"></canvas>
+      </div>
+    </div>
+
+
+    <!-- ── PIE + DIVERGING BAR ── -->
+    <div class="charts-row" style="display:grid;grid-template-columns:400px 1fr;gap:20px;">
+
+      <!-- Pie / Doughnut -->
+      <div class="card fade-in d4" style="padding:24px;">
+        <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Asset Distribution</p>
+        <p style="font-size:11px;color:var(--text-3);margin-bottom:16px;">Allocation by asset class</p>
+        <div style="position:relative;height:280px;">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Diverging horizontal bar -->
+      <div class="card fade-in d5" style="padding:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+          <p style="font-size:14px;font-weight:600;">Position Performance</p>
+          <div style="display:flex;gap:14px;font-size:11px;">
+            <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+              <span style="width:10px;height:10px;background:var(--green);border-radius:2px;display:inline-block;"></span>Positive
+            </span>
+            <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+              <span style="width:10px;height:10px;background:var(--red);border-radius:2px;display:inline-block;"></span>Negative
+            </span>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text-3);margin-bottom:16px;">Return % per position</p>
+        <div style="position:relative;height:280px;">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+
+<script>
+// ── Global Chart.js defaults ─────────────────────────────────
+Chart.defaults.color = '#8B8FA8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+Chart.defaults.font.family = "'Instrument Sans', sans-serif";
+Chart.defaults.font.size = 11;
+
+// Register datalabels plugin
+Chart.register(ChartDataLabels);
+
+// ── Portfolio time-series data ───────────────────────────────
+const ranges = {
+  '1M': {
+    labels: ['Mar 17','Mar 19','Mar 21','Mar 24','Mar 26','Mar 28','Apr 1','Apr 3','Apr 7','Apr 9','Apr 11','Apr 14','Apr 15'],
+    data:   [44200, 44050, 44600, 43800, 44900, 45200, 45800, 46100, 45700, 46400, 47000, 47500, 47892]
+  },
+  '3M': {
+    labels: ['Jan 15','Feb 1','Feb 15','Mar 1','Mar 15','Apr 1','Apr 7','Apr 15'],
+    data:   [41600, 42200, 43100, 43500, 44200, 46000, 47100, 47892]
+  },
+  '6M': {
+    labels: ['Oct 15','Nov 1','Nov 15','Dec 1','Jan 1','Feb 1','Mar 1','Apr 1','Apr 15'],
+    data:   [38200, 39100, 38600, 40200, 41000, 42200, 43500, 46000, 47892]
+  },
+  'YTD': {
+    labels: ['Jan 1','Jan 15','Feb 1','Feb 15','Mar 1','Mar 15','Apr 1','Apr 15'],
+    data:   [41652, 41600, 42200, 43100, 43500, 44200, 46000, 47892]
+  },
+  '1Y': {
+    labels: ['Apr 25','Jun 25','Aug 25','Oct 25','Dec 25','Feb 26','Apr 26'],
+    data:   [35800, 37200, 38900, 40200, 41000, 44200, 47892]
+  },
+  '5Y': {
+    labels: ['2021','2022','2023','2024','2025','Apr 26'],
+    data:   [18000, 16400, 22800, 30500, 38390, 47892]
+  }
+};
+
+// ── LINE CHART ───────────────────────────────────────────────
+const lineCanvas = document.getElementById('lineChart');
+const lineCtx    = lineCanvas.getContext('2d');
+
+function buildGradient(ctx, h) {
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, 'rgba(0,229,118,0.20)');
+  g.addColorStop(1, 'rgba(0,229,118,0.00)');
+  return g;
+}
+
+const lineChart = new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: ranges['YTD'].labels,
+    datasets: [{
+      data:            ranges['YTD'].data,
+      borderColor:     '#00E576',
+      borderWidth:     2,
+      backgroundColor: buildGradient(lineCtx, 240),
+      fill:            true,
+      tension:         0.4,
+      pointRadius:     0,
+      pointHoverRadius:     5,
+      pointHoverBackgroundColor: '#00E576',
+      pointHoverBorderColor:     '#07080F',
+      pointHoverBorderWidth:     2,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: { display: false },
+      tooltip: {
+        backgroundColor: '#14151F',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false,
+        callbacks: {
+          title: items => items[0].label,
+          label: ctx  => ' €' + ctx.parsed.y.toLocaleString('de-DE')
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { maxTicksLimit: 7, color: '#4A4D62' }
+      },
+      y: {
+        position: 'right',
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: {
+          callback: v => '€' + (v / 1000).toFixed(0) + 'k',
+          maxTicksLimit: 5,
+          color: '#4A4D62'
+        }
+      }
+    }
+  }
+});
+
+// Date slicer
+document.getElementById('slicer').addEventListener('click', e => {
+  const btn = e.target.closest('.slicer-btn');
+  if (!btn) return;
+  document.querySelectorAll('.slicer-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const r = ranges[btn.dataset.range];
+  lineChart.data.labels = r.labels;
+  lineChart.data.datasets[0].data = r.data;
+  lineChart.data.datasets[0].backgroundColor = buildGradient(lineCtx, 240);
+  lineChart.update('active');
+});
+
+
+// ── PIE / DOUGHNUT CHART ─────────────────────────────────────
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Equities', 'Crypto', 'Bonds', 'Cash'],
+    datasets: [{
+      data:            [45, 20, 20, 15],
+      backgroundColor: ['#00E576', '#6A80FF', '#FFB020', '#FF6B6B'],
+      borderColor:     '#07080F',
+      borderWidth:     3,
+      hoverOffset:     10
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding:        18,
+          usePointStyle:  true,
+          pointStyleWidth: 9,
+          font: { size: 12, weight: '500' },
+          color: '#8B8FA8'
+        }
+      },
+      datalabels: {
+        color: '#07080F',
+        font: { size: 12, weight: '700' },
+        formatter: v => v + '%',
+        textShadowBlur: 0,
+      },
+      tooltip: {
+        backgroundColor: '#14151F',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        padding: 12,
+        displayColors: true,
+        callbacks: {
+          label: ctx => '  ' + ctx.label + ': ' + ctx.parsed + '%'
+        }
+      }
+    }
+  }
+});
+
+
+// ── DIVERGING HORIZONTAL BAR CHART ──────────────────────────
+const positions = [
+  { label: 'NVDA',     value: 18.2 },
+  { label: 'META',     value: 12.4 },
+  { label: 'VWCE',     value:  9.8 },
+  { label: 'GOOGL',    value:  7.8 },
+  { label: 'MSFT',     value:  6.1 },
+  { label: 'AAPL',     value:  4.2 },
+  { label: 'AMZN',     value:  3.4 },
+  { label: 'BOND ETF', value: -1.4 },
+  { label: 'BTC',      value: -3.1 },
+  { label: 'ETH',      value: -8.2 },
+];
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: positions.map(p => p.label),
+    datasets: [{
+      data: positions.map(p => p.value),
+      backgroundColor: positions.map(p =>
+        p.value >= 0 ? 'rgba(0,229,118,0.70)' : 'rgba(255,107,107,0.70)'
+      ),
+      borderColor: positions.map(p =>
+        p.value >= 0 ? '#00E576' : '#FF6B6B'
+      ),
+      borderWidth:  1,
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        anchor: ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'end' : 'start',
+        align:  ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'right' : 'left',
+        color:  ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? '#00E576' : '#FF6B6B',
+        font:   { size: 11, weight: '700' },
+        formatter: v => (v >= 0 ? '+' : '') + v + '%',
+        clamp: true,
+      },
+      tooltip: {
+        backgroundColor: '#14151F',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        padding: 12,
+        displayColors: false,
+        callbacks: {
+          label: ctx => (ctx.parsed.x >= 0 ? ' +' : ' ') + ctx.parsed.x + '%'
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        border: { dash: [3, 3] },
+        ticks: {
+          callback: v => (v >= 0 ? '+' : '') + v + '%',
+          maxTicksLimit: 9,
+          color: '#4A4D62'
+        }
+      },
+      y: {
+        grid:   { display: false },
+        ticks:  { font: { size: 11, weight: '600' }, color: '#8B8FA8' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
