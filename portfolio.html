@@ -140,6 +140,19 @@
       background: var(--green-dim);
       border-color: var(--green-border);
     }
+    .gran-btn {
+      background: none; border: 1px solid transparent;
+      color: var(--text-3); font-size: 11px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      padding: 5px 10px; border-radius: 7px;
+      transition: all 0.18s ease; letter-spacing: 0.02em;
+    }
+    .gran-btn:hover { color: var(--text-2); background: rgba(255,255,255,0.05); }
+    .gran-btn.active {
+      color: var(--text-1);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.12);
+    }
 
     /* ── ANIMATIONS ── */
     .fade-in {
@@ -190,9 +203,9 @@
 
     <div style="display:flex;align-items:center;gap:14px;">
       <!-- Last updated -->
-      <span style="font-size:11px;color:var(--text-3);">
+      <span id="last-synced" style="font-size:11px;color:var(--text-3);">
         <span style="display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:5px;vertical-align:middle;"></span>
-        Live · Apr 15, 2026
+        Cargando…
       </span>
       <!-- User avatar -->
       <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;border:1px solid var(--border);border-radius:100px;">
@@ -216,7 +229,7 @@
     <div class="fade-in d1" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
       <div>
         <h1 style="font-size:24px;font-weight:700;letter-spacing:-0.03em;">My Portfolio</h1>
-        <p style="color:var(--text-3);font-size:12px;margin-top:3px;">Last synced today at 09:42 CET · 3 connected accounts</p>
+        <p id="page-subtitle" style="color:var(--text-3);font-size:12px;margin-top:3px;">Cargando datos…</p>
       </div>
       <button
         style="background:var(--green);color:#000;border:none;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;padding:8px 18px;border-radius:8px;transition:opacity 0.18s;"
@@ -232,38 +245,38 @@
       <div class="card" style="padding:18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);"></div>
         <p class="kpi-label">Total Value</p>
-        <p class="kpi-value">€47,892</p>
-        <p class="kpi-sub pos">+€1,094 today ↑</p>
+        <p class="kpi-value" id="kpi-total-value">—</p>
+        <p class="kpi-sub" id="kpi-total-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
         <p class="kpi-label">Day Return</p>
-        <p class="kpi-value pos">+2.34%</p>
-        <p class="kpi-sub">+€1,094.20</p>
+        <p class="kpi-value" id="kpi-day-return">—</p>
+        <p class="kpi-sub" id="kpi-day-sub">no disponible</p>
       </div>
 
       <div class="card" style="padding:18px;">
         <p class="kpi-label">Total Return</p>
-        <p class="kpi-value pos">+24.8%</p>
-        <p class="kpi-sub">+€9,502 all time</p>
+        <p class="kpi-value" id="kpi-total-return">—</p>
+        <p class="kpi-sub" id="kpi-total-return-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
-        <p class="kpi-label">YTD Return</p>
-        <p class="kpi-value pos">+15.0%</p>
-        <p class="kpi-sub">+€6,240 since Jan</p>
+        <p class="kpi-label">Capital neto</p>
+        <p class="kpi-value" id="kpi-capital-neto">—</p>
+        <p class="kpi-sub" id="kpi-capital-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;border-color:var(--green-border);">
         <p class="kpi-label">Best Position</p>
-        <p class="kpi-value pos">+18.2%</p>
-        <p class="kpi-sub">NVDA · NVIDIA</p>
+        <p class="kpi-value" id="kpi-best-pct">—</p>
+        <p class="kpi-sub" id="kpi-best-name">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
         <p class="kpi-label">Dividend YTD</p>
-        <p class="kpi-value">€1,102</p>
-        <p class="kpi-sub">yield 2.3% ann.</p>
+        <p class="kpi-value" id="kpi-div-ytd">—</p>
+        <p class="kpi-sub" id="kpi-div-sub">—</p>
       </div>
 
     </div>
@@ -271,18 +284,31 @@
 
     <!-- ── LINE CHART ── -->
     <div class="card fade-in d3" style="padding:24px;margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
         <div>
-          <p style="font-size:14px;font-weight:600;">Portfolio Evolution</p>
-          <p style="font-size:11px;color:var(--text-3);margin-top:2px;">Historical value · select a time range below</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+            <p style="font-size:14px;font-weight:600;" id="line-title">Valor de cartera</p>
+            <div id="mode-toggle" style="display:flex;gap:2px;background:var(--bg-elevated);padding:3px;border-radius:7px;">
+              <button class="mode-btn active" data-mode="valor" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:var(--green);color:#07080F;transition:background 0.15s,color 0.15s;">Valor</button>
+              <button class="mode-btn" data-mode="pnl" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:var(--text-3);transition:background 0.15s,color 0.15s;">PnL</button>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--text-3);" id="line-subtitle">Valor de mercado total de la cartera · selecciona un rango</p>
         </div>
-        <div id="slicer" style="display:flex;gap:3px;background:var(--bg-elevated);padding:4px;border-radius:9px;">
-          <button class="slicer-btn" data-range="1M">1M</button>
-          <button class="slicer-btn" data-range="3M">3M</button>
-          <button class="slicer-btn" data-range="6M">6M</button>
-          <button class="slicer-btn active" data-range="YTD">YTD</button>
-          <button class="slicer-btn" data-range="1Y">1Y</button>
-          <button class="slicer-btn" data-range="5Y">5Y</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div id="gran-slicer" style="display:flex;gap:3px;background:var(--bg-elevated);padding:4px;border-radius:9px;">
+            <button class="gran-btn active" data-gran="D">D</button>
+            <button class="gran-btn" data-gran="S">S</button>
+            <button class="gran-btn" data-gran="M">M</button>
+          </div>
+          <div id="slicer" style="display:flex;gap:3px;background:var(--bg-elevated);padding:4px;border-radius:9px;">
+            <button class="slicer-btn" data-range="1M">1M</button>
+            <button class="slicer-btn" data-range="3M">3M</button>
+            <button class="slicer-btn" data-range="6M">6M</button>
+            <button class="slicer-btn active" data-range="YTD">YTD</button>
+            <button class="slicer-btn" data-range="1Y">1Y</button>
+            <button class="slicer-btn" data-range="5Y">5Y</button>
+          </div>
         </div>
       </div>
       <div style="position:relative;height:240px;">
@@ -334,41 +360,20 @@ Chart.defaults.color = '#8B8FA8';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
 Chart.defaults.font.family = "'Instrument Sans', sans-serif";
 Chart.defaults.font.size = 11;
-
-// Register datalabels plugin
 Chart.register(ChartDataLabels);
 
-// ── Portfolio time-series data ───────────────────────────────
-const ranges = {
-  '1M': {
-    labels: ['Mar 17','Mar 19','Mar 21','Mar 24','Mar 26','Mar 28','Apr 1','Apr 3','Apr 7','Apr 9','Apr 11','Apr 14','Apr 15'],
-    data:   [44200, 44050, 44600, 43800, 44900, 45200, 45800, 46100, 45700, 46400, 47000, 47500, 47892]
-  },
-  '3M': {
-    labels: ['Jan 15','Feb 1','Feb 15','Mar 1','Mar 15','Apr 1','Apr 7','Apr 15'],
-    data:   [41600, 42200, 43100, 43500, 44200, 46000, 47100, 47892]
-  },
-  '6M': {
-    labels: ['Oct 15','Nov 1','Nov 15','Dec 1','Jan 1','Feb 1','Mar 1','Apr 1','Apr 15'],
-    data:   [38200, 39100, 38600, 40200, 41000, 42200, 43500, 46000, 47892]
-  },
-  'YTD': {
-    labels: ['Jan 1','Jan 15','Feb 1','Feb 15','Mar 1','Mar 15','Apr 1','Apr 15'],
-    data:   [41652, 41600, 42200, 43100, 43500, 44200, 46000, 47892]
-  },
-  '1Y': {
-    labels: ['Apr 25','Jun 25','Aug 25','Oct 25','Dec 25','Feb 26','Apr 26'],
-    data:   [35800, 37200, 38900, 40200, 41000, 44200, 47892]
-  },
-  '5Y': {
-    labels: ['2021','2022','2023','2024','2025','Apr 26'],
-    data:   [18000, 16400, 22800, 30500, 38390, 47892]
-  }
-};
+// ── Helpers ──────────────────────────────────────────────────
+const fmtEur    = v => '€' + Math.abs(v).toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+const fmtPct    = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+const fmtDelta  = v => (v >= 0 ? '+€' : '−€') + Math.abs(v).toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+const pnlClass  = v => v >= 0 ? 'pos' : 'neg';
 
-// ── LINE CHART ───────────────────────────────────────────────
-const lineCanvas = document.getElementById('lineChart');
-const lineCtx    = lineCanvas.getContext('2d');
+function set(id, text, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  if (cls !== undefined) el.className = cls;
+}
 
 function buildGradient(ctx, h) {
   const g = ctx.createLinearGradient(0, 0, 0, h);
@@ -377,196 +382,366 @@ function buildGradient(ctx, h) {
   return g;
 }
 
-const lineChart = new Chart(lineCtx, {
-  type: 'line',
-  data: {
-    labels: ranges['YTD'].labels,
-    datasets: [{
-      data:            ranges['YTD'].data,
-      borderColor:     '#00E576',
-      borderWidth:     2,
-      backgroundColor: buildGradient(lineCtx, 240),
-      fill:            true,
-      tension:         0.4,
-      pointRadius:     0,
-      pointHoverRadius:     5,
-      pointHoverBackgroundColor: '#00E576',
-      pointHoverBorderColor:     '#07080F',
-      pointHoverBorderWidth:     2,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      datalabels: { display: false },
-      tooltip: {
-        backgroundColor: '#14151F',
-        borderColor: 'rgba(255,255,255,0.12)',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: false,
-        callbacks: {
-          title: items => items[0].label,
-          label: ctx  => ' €' + ctx.parsed.y.toLocaleString('de-DE')
-        }
-      }
+// ── Main loader ───────────────────────────────────────────────
+async function loadPortfolio() {
+  let d;
+  try {
+    const res = await fetch('portfolio_data.json');
+    if (!res.ok) throw new Error('not found');
+    d = await res.json();
+  } catch (e) {
+    set('page-subtitle', 'portfolio_data.json no encontrado — ejecuta el notebook para generarlo');
+    console.warn('portfolio_data.json missing:', e);
+    return;
+  }
+
+  const k = d.kpis;
+  const gen = new Date(d.generated_at);
+  const genStr = gen.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+               + ' ' + gen.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+  // ── Last synced & subtitle ────────────────────────────────
+  document.getElementById('last-synced').innerHTML =
+    '<span style="display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:5px;vertical-align:middle;"></span>' +
+    'Datos del ' + genStr;
+  set('page-subtitle', 'DEGIRO · vía SnapTrade · sincronizado ' + genStr);
+
+  // ── KPI cards ─────────────────────────────────────────────
+  const lastPortVal = (d.portfolio_history && d.portfolio_history.length > 0)
+    ? d.portfolio_history[d.portfolio_history.length - 1].value : k.total_portfolio_eur;
+  const lastPnlVal = (d.pnl_history && d.pnl_history.length > 0)
+    ? d.pnl_history[d.pnl_history.length - 1].value : k.total_pnl_eur;
+
+  set('kpi-total-value', fmtEur(lastPortVal));
+  set('kpi-total-sub',   fmtEur(k.cash_eur) + ' cash disponible', 'kpi-sub');
+
+  set('kpi-day-return', '—', 'kpi-value');
+  set('kpi-day-sub',    'no disponible (cache diario)', 'kpi-sub');
+
+  set('kpi-capital-neto', fmtEur(k.capital_neto_eur), 'kpi-value');
+  set('kpi-capital-sub',  'capital neto aportado', 'kpi-sub');
+
+  set('kpi-best-pct',  fmtPct(k.best.pnl_pct),  'kpi-value ' + pnlClass(k.best.pnl_pct));
+  set('kpi-best-name', k.best.ticker + ' · mejor posición', 'kpi-sub');
+
+  set('kpi-div-ytd', fmtEur(k.dividendos_ytd_eur), 'kpi-value');
+  const histYield = k.capital_neto_eur > 0
+    ? (k.dividendos_eur / k.capital_neto_eur * 100).toFixed(1) + '% yield hist.'
+    : '—';
+  set('kpi-div-sub', histYield, 'kpi-sub');
+
+  // ── LINE CHART: Valor de cartera + PnL toggle ──────────────
+
+  // Base series
+  const valuePts = (d.portfolio_history && d.portfolio_history.length > 5)
+    ? d.portfolio_history
+    : d.cash_flow_series;
+
+  // PnL series: use pre-computed pnl_history from notebook §11
+  const pnlPts = (d.pnl_history && d.pnl_history.length > 5) ? d.pnl_history : [];
+
+  let currentMode     = 'valor';
+  let currentRangeKey = 'YTD';
+  let currentGran     = 'D';
+
+  function getRangePts(rangeKey, pts) {
+    switch (rangeKey) {
+      case '1M':  return filterDays(30,  pts);
+      case '3M':  return filterDays(90,  pts);
+      case '6M':  return filterDays(180, pts);
+      case 'YTD': return filterYTD(pts);
+      case '1Y':  return filterDays(365, pts);
+      default:    return pts;
+    }
+  }
+
+  function updateReturnKPI(rangeKey) {
+    const vPts = getRangePts(rangeKey, valuePts);
+    const pPts = getRangePts(rangeKey, pnlPts);
+    if (vPts.length < 2) return;
+    const firstVal = vPts[0].value;
+    const lastVal  = vPts[vPts.length - 1].value;
+    const pct      = firstVal > 0 ? (lastVal - firstVal) / firstVal * 100 : 0;
+    const eurAmt   = rangeKey === '5Y'
+      ? lastPnlVal
+      : (pPts.length >= 2 ? pPts[pPts.length - 1].value - pPts[0].value : lastVal - firstVal);
+    const label = rangeKey === '5Y' ? 'total' : rangeKey;
+    set('kpi-total-return',     fmtPct(pct),                     'kpi-value ' + pnlClass(eurAmt));
+    set('kpi-total-return-sub', fmtDelta(eurAmt) + ' ' + label,  'kpi-sub '   + pnlClass(eurAmt));
+  }
+
+  function getActivePts() {
+    return currentMode === 'valor' ? valuePts : pnlPts;
+  }
+
+  function filterDays(days, pts) {
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days);
+    return pts.filter(p => new Date(p.date) >= cutoff);
+  }
+  function filterYTD(pts) {
+    const jan1 = new Date(new Date().getFullYear(), 0, 1);
+    return pts.filter(p => new Date(p.date) >= jan1);
+  }
+  function applyGranularity(pts, gran) {
+    if (gran === 'D') return pts;
+    const seen = new Set(), out = [];
+    for (let i = pts.length - 1; i >= 0; i--) {
+      const d = new Date(pts[i].date);
+      const key = gran === 'S'
+        ? `${d.getFullYear()}-${Math.floor((d - new Date(d.getFullYear(),0,1)) / 604800000)}`
+        : `${d.getFullYear()}-${d.getMonth()}`;
+      if (!seen.has(key)) { seen.add(key); out.unshift(pts[i]); }
+    }
+    return out;
+  }
+  function toChartFmt(pts) {
+    return { labels: pts.map(p => p.label || p.date), data: pts.map(p => p.value) };
+  }
+
+  function buildRanges(pts) {
+    return {
+      '1M':  toChartFmt(applyGranularity(filterDays(30,  pts), currentGran)),
+      '3M':  toChartFmt(applyGranularity(filterDays(90,  pts), currentGran)),
+      '6M':  toChartFmt(applyGranularity(filterDays(180, pts), currentGran)),
+      'YTD': toChartFmt(applyGranularity(filterYTD(pts),       currentGran)),
+      '1Y':  toChartFmt(applyGranularity(filterDays(365, pts), currentGran)),
+      '5Y':  toChartFmt(applyGranularity(pts,                  currentGran)),
+    };
+  }
+
+  const lineCanvas = document.getElementById('lineChart');
+  const lineCtx    = lineCanvas.getContext('2d');
+
+  // Choose starting range
+  const initRanges = buildRanges(valuePts);
+  currentRangeKey  = initRanges['YTD'].labels.length > 1 ? 'YTD' : '5Y';
+
+  function modeColor() {
+    return currentMode === 'valor' ? '#00E576' : '#FFB020';
+  }
+  function modeGradientColor() {
+    return currentMode === 'valor'
+      ? 'rgba(0,229,118,0.18)'
+      : 'rgba(255,176,32,0.18)';
+  }
+  function buildGradientForMode(ctx, h) {
+    const g = ctx.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0,   modeGradientColor());
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    return g;
+  }
+
+  const firstRange = initRanges[currentRangeKey];
+
+  const lineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: firstRange.labels,
+      datasets: [{
+        data:            firstRange.data,
+        borderColor:     modeColor(),
+        borderWidth:     2,
+        backgroundColor: buildGradientForMode(lineCtx, 240),
+        fill:            true,
+        tension:         0.4,
+        pointRadius:     0,
+        pointStyle:      false,
+        pointHoverRadius:          5,
+        pointHoverBackgroundColor: modeColor(),
+        pointHoverBorderColor:     '#07080F',
+        pointHoverBorderWidth:     2,
+      }]
     },
-    scales: {
-      x: {
-        grid: { display: false },
-        ticks: { maxTicksLimit: 7, color: '#4A4D62' }
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      elements: { point: { radius: 0, hoverRadius: 5, pointStyle: false } },
+      plugins: {
+        legend:     { display: false },
+        datalabels: { display: false },
+        tooltip: {
+          backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1, padding: 12, displayColors: false,
+          callbacks: {
+            title: items => items[0].label,
+            label: ctx  => {
+              const v = ctx.parsed.y;
+              const sign = v >= 0 ? '' : '−€';
+              return (v >= 0 ? ' €' : ' −€') + Math.abs(v).toLocaleString('de-DE', {maximumFractionDigits:0});
+            }
+          }
+        }
       },
-      y: {
-        position: 'right',
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: {
-          callback: v => '€' + (v / 1000).toFixed(0) + 'k',
-          maxTicksLimit: 5,
-          color: '#4A4D62'
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 7, color: '#4A4D62', font: { size: 11 } } },
+        y: {
+          position: 'right', grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            callback: v => (v < 0 ? '−€' : '€') + Math.abs(v / 1000).toFixed(0) + 'k',
+            maxTicksLimit: 5, color: '#4A4D62', font: { size: 11 }
+          }
         }
       }
     }
+  });
+
+  function applyRange(rangeKey) {
+    const ranges = buildRanges(getActivePts());
+    const r = ranges[rangeKey];
+    if (!r || r.labels.length === 0) return;
+    const color = modeColor();
+    lineChart.data.labels                              = r.labels;
+    lineChart.data.datasets[0].data                   = r.data;
+    lineChart.data.datasets[0].borderColor              = color;
+    lineChart.data.datasets[0].backgroundColor          = buildGradientForMode(lineCtx, 240);
+    lineChart.data.datasets[0].pointHoverBackgroundColor = color;
+    lineChart.data.datasets[0].pointRadius              = 0;
+    lineChart.update('active');
   }
-});
 
-// Date slicer
-document.getElementById('slicer').addEventListener('click', e => {
-  const btn = e.target.closest('.slicer-btn');
-  if (!btn) return;
-  document.querySelectorAll('.slicer-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const r = ranges[btn.dataset.range];
-  lineChart.data.labels = r.labels;
-  lineChart.data.datasets[0].data = r.data;
-  lineChart.data.datasets[0].backgroundColor = buildGradient(lineCtx, 240);
-  lineChart.update('active');
-});
+  // Highlight active range btn on load + init KPI
+  document.querySelectorAll('.slicer-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.range === currentRangeKey);
+  });
+  updateReturnKPI(currentRangeKey);
 
+  // Range slicer
+  document.getElementById('slicer').addEventListener('click', e => {
+    const btn = e.target.closest('.slicer-btn');
+    if (!btn) return;
+    document.querySelectorAll('.slicer-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentRangeKey = btn.dataset.range;
+    applyRange(currentRangeKey);
+    updateReturnKPI(currentRangeKey);
+  });
 
-// ── PIE / DOUGHNUT CHART ─────────────────────────────────────
-new Chart(document.getElementById('pieChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Equities', 'Crypto', 'Bonds', 'Cash'],
-    datasets: [{
-      data:            [45, 20, 20, 15],
-      backgroundColor: ['#00E576', '#6A80FF', '#FFB020', '#FF6B6B'],
-      borderColor:     '#07080F',
-      borderWidth:     3,
-      hoverOffset:     10
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '60%',
-    plugins: {
-      legend: {
-        position: 'bottom',
-        labels: {
-          padding:        18,
-          usePointStyle:  true,
-          pointStyleWidth: 9,
-          font: { size: 12, weight: '500' },
-          color: '#8B8FA8'
-        }
-      },
-      datalabels: {
-        color: '#07080F',
-        font: { size: 12, weight: '700' },
-        formatter: v => v + '%',
-        textShadowBlur: 0,
-      },
-      tooltip: {
-        backgroundColor: '#14151F',
-        borderColor: 'rgba(255,255,255,0.12)',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: true,
-        callbacks: {
-          label: ctx => '  ' + ctx.label + ': ' + ctx.parsed + '%'
-        }
-      }
-    }
-  }
-});
+  // Granularity selector (D / S / M)
+  document.getElementById('gran-slicer').addEventListener('click', e => {
+    const btn = e.target.closest('.gran-btn');
+    if (!btn) return;
+    document.querySelectorAll('.gran-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentGran = btn.dataset.gran;
+    applyRange(currentRangeKey);
+  });
 
+  // Mode toggle (Valor / PnL)
+  document.getElementById('mode-toggle').addEventListener('click', e => {
+    const btn = e.target.closest('.mode-btn');
+    if (!btn) return;
+    currentMode = btn.dataset.mode;
+    const color = modeColor();
 
-// ── DIVERGING HORIZONTAL BAR CHART ──────────────────────────
-const positions = [
-  { label: 'NVDA',     value: 18.2 },
-  { label: 'META',     value: 12.4 },
-  { label: 'VWCE',     value:  9.8 },
-  { label: 'GOOGL',    value:  7.8 },
-  { label: 'MSFT',     value:  6.1 },
-  { label: 'AAPL',     value:  4.2 },
-  { label: 'AMZN',     value:  3.4 },
-  { label: 'BOND ETF', value: -1.4 },
-  { label: 'BTC',      value: -3.1 },
-  { label: 'ETH',      value: -8.2 },
-];
+    // Update button styles
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      const isActive = b.dataset.mode === currentMode;
+      b.style.background = isActive ? color : 'transparent';
+      b.style.color      = isActive ? '#07080F' : 'var(--text-3)';
+    });
 
-new Chart(document.getElementById('barChart'), {
-  type: 'bar',
-  data: {
-    labels: positions.map(p => p.label),
-    datasets: [{
-      data: positions.map(p => p.value),
-      backgroundColor: positions.map(p =>
-        p.value >= 0 ? 'rgba(0,229,118,0.70)' : 'rgba(255,107,107,0.70)'
-      ),
-      borderColor: positions.map(p =>
-        p.value >= 0 ? '#00E576' : '#FF6B6B'
-      ),
-      borderWidth:  1,
-      borderRadius: 4,
-      borderSkipped: false,
-    }]
-  },
-  options: {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      datalabels: {
-        anchor: ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'end' : 'start',
-        align:  ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'right' : 'left',
-        color:  ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? '#00E576' : '#FF6B6B',
-        font:   { size: 11, weight: '700' },
-        formatter: v => (v >= 0 ? '+' : '') + v + '%',
-        clamp: true,
-      },
-      tooltip: {
-        backgroundColor: '#14151F',
-        borderColor: 'rgba(255,255,255,0.12)',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: false,
-        callbacks: {
-          label: ctx => (ctx.parsed.x >= 0 ? ' +' : ' ') + ctx.parsed.x + '%'
-        }
-      }
+    // Update title + subtitle
+    document.getElementById('line-title').textContent    = currentMode === 'valor' ? 'Valor de cartera' : 'PnL acumulado';
+    document.getElementById('line-subtitle').textContent = currentMode === 'valor'
+      ? 'Valor de mercado total de la cartera · selecciona un rango'
+      : 'Ganancia / pérdida neta (valor − capital invertido) · selecciona un rango';
+
+    applyRange(currentRangeKey);
+  });
+
+  // ── PIE / DOUGHNUT CHART ──────────────────────────────────
+  const PIE_MIN    = 2.5; // agrupa < 2.5% en "Otros"
+  const PIE_COLORS = ['#00E576','#6A80FF','#FFB020','#FF6B6B','#36CFC9','#F759AB','#FFC53D','#73D13D','#40A9FF','#B37FEB','#8B8FA8'];
+
+  const mainSlices  = d.pie.filter(p => p.weight_pct >= PIE_MIN);
+  const otherSlices = d.pie.filter(p => p.weight_pct <  PIE_MIN);
+  const othersTotal = otherSlices.reduce((s, p) => s + p.weight_pct, 0);
+
+  const pieLabels = mainSlices.map(p => p.ticker);
+  const pieValues = mainSlices.map(p => parseFloat(p.weight_pct.toFixed(1)));
+  if (othersTotal > 0) { pieLabels.push('Otros'); pieValues.push(parseFloat(othersTotal.toFixed(1))); }
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: {
+      labels: pieLabels,
+      datasets: [{
+        data:            pieValues,
+        backgroundColor: PIE_COLORS.slice(0, pieLabels.length),
+        borderColor:     '#07080F',
+        borderWidth:     3,
+        hoverOffset:     10
+      }]
     },
-    scales: {
-      x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        border: { dash: [3, 3] },
-        ticks: {
-          callback: v => (v >= 0 ? '+' : '') + v + '%',
-          maxTicksLimit: 9,
-          color: '#4A4D62'
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { padding: 18, usePointStyle: true, pointStyleWidth: 9, font: { size: 12, weight: '500' }, color: '#8B8FA8' }
+        },
+        datalabels: {
+          color: '#07080F', font: { size: 11, weight: '700' },
+          formatter: v => v.toFixed(1) + '%',
+          display: ctx => ctx.dataset.data[ctx.dataIndex] >= PIE_MIN,
+        },
+        tooltip: {
+          backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1, padding: 12, displayColors: true,
+          callbacks: { label: ctx => '  ' + ctx.label + ': ' + ctx.parsed.toFixed(1) + '%' }
         }
-      },
-      y: {
-        grid:   { display: false },
-        ticks:  { font: { size: 11, weight: '600' }, color: '#8B8FA8' }
       }
     }
-  }
-});
+  });
+
+  // ── DIVERGING BAR CHART (winners & losers) ────────────────
+  const barData = d.positions; // ya viene ordenado desc por pnl_pct
+  const barContainerHeight = Math.max(280, barData.length * 32);
+  document.querySelector('#barChart').parentElement.style.height = barContainerHeight + 'px';
+
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: barData.map(p => p.ticker),
+      datasets: [{
+        data:            barData.map(p => p.pnl_pct),
+        backgroundColor: barData.map(p => p.pnl_pct >= 0 ? 'rgba(0,229,118,0.70)' : 'rgba(255,107,107,0.70)'),
+        borderColor:     barData.map(p => p.pnl_pct >= 0 ? '#00E576' : '#FF6B6B'),
+        borderWidth: 1, borderRadius: 4, borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          anchor:    ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'end'   : 'start',
+          align:     ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? 'right' : 'left',
+          color:     ctx => ctx.dataset.data[ctx.dataIndex] >= 0 ? '#00E576' : '#FF6B6B',
+          font: { size: 11, weight: '700' },
+          formatter: v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%',
+          clamp: true,
+        },
+        tooltip: {
+          backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1, padding: 12, displayColors: false,
+          callbacks: {
+            title: ctx => ctx[0].label + ' · ' + (barData[ctx[0].dataIndex]?.description || ''),
+            label: ctx => (ctx.parsed.x >= 0 ? ' +' : ' ') + ctx.parsed.x.toFixed(2) + '%  (' + fmtDelta(barData[ctx[0].dataIndex]?.pnl_eur || 0) + ')'
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' }, border: { dash: [3, 3] },
+          ticks: { callback: v => (v >= 0 ? '+' : '') + v + '%', maxTicksLimit: 9, color: '#4A4D62' }
+        },
+        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#8B8FA8' } }
+      }
+    }
+  });
+}
+
+loadPortfolio();
 </script>
 </body>
 </html>
