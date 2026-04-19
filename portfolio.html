@@ -458,16 +458,18 @@ async function loadPortfolio() {
   function updateReturnKPI(rangeKey) {
     const vPts = getRangePts(rangeKey, valuePts);
     const pPts = getRangePts(rangeKey, pnlPts);
-    if (vPts.length < 2) return;
-    const firstVal = vPts[0].value;
-    const lastVal  = vPts[vPts.length - 1].value;
-    const pct      = firstVal > 0 ? (lastVal - firstVal) / firstVal * 100 : 0;
-    const eurAmt   = rangeKey === '5Y'
-      ? lastPnlVal
-      : (pPts.length >= 2 ? pPts[pPts.length - 1].value - pPts[0].value : lastVal - firstVal);
-    const label = rangeKey === '5Y' ? 'total' : rangeKey;
-    set('kpi-total-return',     fmtPct(pct),                     'kpi-value ' + pnlClass(eurAmt));
-    set('kpi-total-return-sub', fmtDelta(eurAmt) + ' ' + label,  'kpi-sub '   + pnlClass(eurAmt));
+    if (vPts.length < 2 || pPts.length < 2) return;
+
+    // (P&L_end - P&L_start) / portfolio_total_start
+    // Numerator = riqueza generada por mercado (excluye depósitos)
+    // Denominator = cartera total inicio período (posiciones + cash)
+    const portfolioStart = vPts[0].value;
+    const eurAmt         = pPts[pPts.length - 1].value - pPts[0].value;
+    const pct            = portfolioStart > 0 ? eurAmt / portfolioStart * 100 : 0;
+
+    const label = rangeKey === '5Y' ? 'histórico' : rangeKey;
+    set('kpi-total-return',     fmtPct(pct),                    'kpi-value ' + pnlClass(eurAmt));
+    set('kpi-total-return-sub', fmtDelta(eurAmt) + ' ' + label, 'kpi-sub '   + pnlClass(eurAmt));
   }
 
   function getActivePts() {
