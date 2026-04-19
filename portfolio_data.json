@@ -1,193 +1,193 @@
 {
-  "generated_at": "2026-04-18T15:17:50",
+  "generated_at": "2026-04-19T13:05:18",
   "kpis": {
-    "total_portfolio_eur": 21351.01,
-    "total_mkt_eur": 18447.38,
-    "cash_eur": 2903.63,
-    "total_pnl_eur": 3181.21,
-    "total_pnl_pct": 20.84,
+    "total_portfolio_eur": 22290.09,
+    "total_mkt_eur": 19486.46,
+    "cash_eur": 2803.63,
+    "total_pnl_eur": 4220.29,
+    "total_pnl_pct": 27.64,
     "capital_neto_eur": 19830.46,
     "dividendos_eur": 98.45,
     "dividendos_ytd_eur": 63.83,
     "best": {
       "ticker": "GDX.MI",
-      "pnl_pct": 115.9
+      "pnl_pct": 123.06
     },
     "worst": {
       "ticker": "NOVC.XGAT",
-      "pnl_pct": -17.88
+      "pnl_pct": -12.08
     }
   },
   "positions": [
     {
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
-      "mkt_eur": 3102.99,
-      "pnl_pct": 115.9,
-      "pnl_eur": 1665.74,
-      "weight_pct": 14.53
+      "mkt_eur": 3205.95,
+      "pnl_pct": 123.06,
+      "pnl_eur": 1768.7,
+      "weight_pct": 14.38
     },
     {
       "ticker": "NVDA",
       "description": "NVIDIA Corp",
-      "mkt_eur": 3217.51,
-      "pnl_pct": 50.84,
-      "pnl_eur": 1084.45,
-      "weight_pct": 15.07
+      "mkt_eur": 3427.75,
+      "pnl_pct": 60.7,
+      "pnl_eur": 1294.69,
+      "weight_pct": 15.38
     },
     {
       "ticker": "OHLA.MC",
       "description": "Obrascon Huarte Lain",
-      "mkt_eur": 883.8,
-      "pnl_pct": 30.93,
-      "pnl_eur": 208.8,
-      "weight_pct": 4.14
+      "mkt_eur": 884.52,
+      "pnl_pct": 31.04,
+      "pnl_eur": 209.52,
+      "weight_pct": 3.97
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
-      "mkt_eur": 2042.22,
-      "pnl_pct": 19.55,
-      "pnl_eur": 334.03,
-      "weight_pct": 9.56
-    },
-    {
-      "ticker": "AMZN",
-      "description": "Amazon.com Inc.",
-      "mkt_eur": 1630.87,
-      "pnl_pct": 12.1,
-      "pnl_eur": 176.09,
-      "weight_pct": 7.64
-    },
-    {
-      "ticker": "BABA",
-      "description": "Alibaba Group Holding Ltd - ADR",
-      "mkt_eur": 1305.39,
-      "pnl_pct": 7.67,
-      "pnl_eur": 92.94,
-      "weight_pct": 6.11
-    },
-    {
-      "ticker": "UNH",
-      "description": "Unitedhealth Group Inc",
-      "mkt_eur": 1861.91,
-      "pnl_pct": 3.17,
-      "pnl_eur": 57.28,
-      "weight_pct": 8.72
-    },
-    {
-      "ticker": "BRK.B",
-      "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
-      "mkt_eur": 1632.26,
-      "pnl_pct": -1.67,
-      "pnl_eur": -27.74,
-      "weight_pct": 7.64
+      "mkt_eur": 2102.0,
+      "pnl_pct": 23.05,
+      "pnl_eur": 393.81,
+      "weight_pct": 9.43
     },
     {
       "ticker": "HOOD",
       "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
-      "mkt_eur": 1096.29,
-      "pnl_pct": -4.01,
-      "pnl_eur": -45.84,
-      "weight_pct": 5.13
+      "mkt_eur": 1388.15,
+      "pnl_pct": 21.54,
+      "pnl_eur": 246.02,
+      "weight_pct": 6.23
+    },
+    {
+      "ticker": "BABA",
+      "description": "Alibaba Group Holding Ltd - ADR",
+      "mkt_eur": 1437.96,
+      "pnl_pct": 18.6,
+      "pnl_eur": 225.51,
+      "weight_pct": 6.45
+    },
+    {
+      "ticker": "AMZN",
+      "description": "Amazon.com Inc.",
+      "mkt_eur": 1703.41,
+      "pnl_pct": 17.09,
+      "pnl_eur": 248.63,
+      "weight_pct": 7.64
+    },
+    {
+      "ticker": "UNH",
+      "description": "Unitedhealth Group Inc",
+      "mkt_eur": 1931.09,
+      "pnl_pct": 7.01,
+      "pnl_eur": 126.46,
+      "weight_pct": 8.66
+    },
+    {
+      "ticker": "BRK.B",
+      "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
+      "mkt_eur": 1613.19,
+      "pnl_pct": -2.82,
+      "pnl_eur": -46.81,
+      "weight_pct": 7.24
     },
     {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
-      "mkt_eur": 1674.14,
-      "pnl_pct": -17.88,
-      "pnl_eur": -364.54,
-      "weight_pct": 7.84
+      "mkt_eur": 1792.44,
+      "pnl_pct": -12.08,
+      "pnl_eur": -246.24,
+      "weight_pct": 8.04
     }
   ],
   "pie": [
     {
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
-      "mkt_eur": 3102.99,
-      "pnl_pct": 115.9,
-      "pnl_eur": 1665.74,
-      "weight_pct": 14.53
+      "mkt_eur": 3205.95,
+      "pnl_pct": 123.06,
+      "pnl_eur": 1768.7,
+      "weight_pct": 14.38
     },
     {
       "ticker": "NVDA",
       "description": "NVIDIA Corp",
-      "mkt_eur": 3217.51,
-      "pnl_pct": 50.84,
-      "pnl_eur": 1084.45,
-      "weight_pct": 15.07
+      "mkt_eur": 3427.75,
+      "pnl_pct": 60.7,
+      "pnl_eur": 1294.69,
+      "weight_pct": 15.38
     },
     {
       "ticker": "OHLA.MC",
       "description": "Obrascon Huarte Lain",
-      "mkt_eur": 883.8,
-      "pnl_pct": 30.93,
-      "pnl_eur": 208.8,
-      "weight_pct": 4.14
+      "mkt_eur": 884.52,
+      "pnl_pct": 31.04,
+      "pnl_eur": 209.52,
+      "weight_pct": 3.97
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
-      "mkt_eur": 2042.22,
-      "pnl_pct": 19.55,
-      "pnl_eur": 334.03,
-      "weight_pct": 9.56
-    },
-    {
-      "ticker": "AMZN",
-      "description": "Amazon.com Inc.",
-      "mkt_eur": 1630.87,
-      "pnl_pct": 12.1,
-      "pnl_eur": 176.09,
-      "weight_pct": 7.64
-    },
-    {
-      "ticker": "BABA",
-      "description": "Alibaba Group Holding Ltd - ADR",
-      "mkt_eur": 1305.39,
-      "pnl_pct": 7.67,
-      "pnl_eur": 92.94,
-      "weight_pct": 6.11
-    },
-    {
-      "ticker": "UNH",
-      "description": "Unitedhealth Group Inc",
-      "mkt_eur": 1861.91,
-      "pnl_pct": 3.17,
-      "pnl_eur": 57.28,
-      "weight_pct": 8.72
-    },
-    {
-      "ticker": "BRK.B",
-      "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
-      "mkt_eur": 1632.26,
-      "pnl_pct": -1.67,
-      "pnl_eur": -27.74,
-      "weight_pct": 7.64
+      "mkt_eur": 2102.0,
+      "pnl_pct": 23.05,
+      "pnl_eur": 393.81,
+      "weight_pct": 9.43
     },
     {
       "ticker": "HOOD",
       "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
-      "mkt_eur": 1096.29,
-      "pnl_pct": -4.01,
-      "pnl_eur": -45.84,
-      "weight_pct": 5.13
+      "mkt_eur": 1388.15,
+      "pnl_pct": 21.54,
+      "pnl_eur": 246.02,
+      "weight_pct": 6.23
+    },
+    {
+      "ticker": "BABA",
+      "description": "Alibaba Group Holding Ltd - ADR",
+      "mkt_eur": 1437.96,
+      "pnl_pct": 18.6,
+      "pnl_eur": 225.51,
+      "weight_pct": 6.45
+    },
+    {
+      "ticker": "AMZN",
+      "description": "Amazon.com Inc.",
+      "mkt_eur": 1703.41,
+      "pnl_pct": 17.09,
+      "pnl_eur": 248.63,
+      "weight_pct": 7.64
+    },
+    {
+      "ticker": "UNH",
+      "description": "Unitedhealth Group Inc",
+      "mkt_eur": 1931.09,
+      "pnl_pct": 7.01,
+      "pnl_eur": 126.46,
+      "weight_pct": 8.66
+    },
+    {
+      "ticker": "BRK.B",
+      "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
+      "mkt_eur": 1613.19,
+      "pnl_pct": -2.82,
+      "pnl_eur": -46.81,
+      "weight_pct": 7.24
     },
     {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
-      "mkt_eur": 1674.14,
-      "pnl_pct": -17.88,
-      "pnl_eur": -364.54,
-      "weight_pct": 7.84
+      "mkt_eur": 1792.44,
+      "pnl_pct": -12.08,
+      "pnl_eur": -246.24,
+      "weight_pct": 8.04
     },
     {
       "ticker": "Cash",
       "description": "Cash disponible",
-      "mkt_eur": 2903.63,
+      "mkt_eur": 2803.63,
       "pnl_pct": 0,
       "pnl_eur": 0,
-      "weight_pct": 13.6
+      "weight_pct": 12.58
     }
   ],
   "cash_flow_series": [
@@ -774,7 +774,7 @@
     {
       "date": "2026-04-07",
       "label": "07 Apr 26",
-      "value": 19210.46
+      "value": 18410.46
     },
     {
       "date": "2026-04-07",
@@ -3911,6 +3911,22 @@
     {
       "date": "2026-04-13",
       "value": 21444.2
+    },
+    {
+      "date": "2026-04-14",
+      "value": 21838.03
+    },
+    {
+      "date": "2026-04-15",
+      "value": 21951.84
+    },
+    {
+      "date": "2026-04-16",
+      "value": 22045.64
+    },
+    {
+      "date": "2026-04-17",
+      "value": 22336.8
     }
   ],
   "pnl_history": [
@@ -7037,6 +7053,22 @@
     {
       "date": "2026-04-13",
       "value": 4894.69
+    },
+    {
+      "date": "2026-04-14",
+      "value": 5288.51
+    },
+    {
+      "date": "2026-04-15",
+      "value": 5402.32
+    },
+    {
+      "date": "2026-04-16",
+      "value": 5496.13
+    },
+    {
+      "date": "2026-04-17",
+      "value": 5837.28
     }
   ]
 }
