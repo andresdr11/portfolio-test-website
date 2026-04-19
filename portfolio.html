@@ -463,9 +463,14 @@ async function loadPortfolio() {
     // (P&L_end - P&L_start) / portfolio_total_start
     // Numerator = riqueza generada por mercado (excluye depósitos)
     // Denominator = cartera total inicio período (posiciones + cash)
-    const portfolioStart = vPts[0].value;
-    const eurAmt         = pPts[pPts.length - 1].value - pPts[0].value;
-    const pct            = portfolioStart > 0 ? eurAmt / portfolioStart * 100 : 0;
+    const eurAmt = pPts[pPts.length - 1].value - pPts[0].value;
+
+    let portfolioStart = vPts[0].value;
+    if (portfolioStart === 0) {
+      // Histórico: portfolio vacío al inicio del dataset → usar capital neto aportado como base
+      portfolioStart = k.capital_neto_eur || 1;
+    }
+    const pct = portfolioStart > 0 ? eurAmt / portfolioStart * 100 : 0;
 
     const label = rangeKey === '5Y' ? 'histórico' : rangeKey;
     set('kpi-total-return',     fmtPct(pct),                    'kpi-value ' + pnlClass(eurAmt));
