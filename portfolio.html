@@ -121,7 +121,7 @@
       letter-spacing: -0.04em; margin-top: 6px;
     }
     .kpi-sub {
-      font-size: 11px; color: var(--text-2); margin-top: 3px;
+      font-size: 11px; color: var(--text-1); margin-top: 3px;
     }
     .pos { color: var(--green); }
     .neg { color: var(--red); }
@@ -168,7 +168,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      .kpi-grid  { grid-template-columns: repeat(3, 1fr) !important; }
+      .kpi-grid  { grid-template-columns: repeat(2, 1fr) !important; }
       .charts-row{ grid-template-columns: 1fr !important; }
     }
     @media (max-width: 640px) {
@@ -180,6 +180,30 @@
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+    /* ── POSITIONS TABLE ── */
+    .pos-table { width:100%; border-collapse:collapse; }
+    .pos-table thead th {
+      font-size:11px; color:var(--text-2); font-weight:600;
+      padding:10px 16px; text-align:right;
+      border-bottom:1px solid var(--border); white-space:nowrap;
+    }
+    .pos-table thead th:first-child { text-align:left; padding-left:20px; }
+    .pos-table tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.1s; }
+    .pos-table tbody tr:last-child { border-bottom:none; }
+    .pos-table tbody tr:hover { background:rgba(255,255,255,0.03); }
+    .pos-table td { padding:12px 16px; vertical-align:middle; text-align:right; }
+    .pos-table td:first-child { text-align:left; padding-left:20px; }
+    .pt-cell   { display:flex; align-items:center; gap:10px; }
+    .pt-avatar { width:34px; height:34px; border-radius:7px; background:var(--bg-elevated); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--text-2); flex-shrink:0; }
+    .pt-name   { font-size:12px; font-weight:600; }
+    .pt-sub    { font-size:10px; color:var(--text-2); margin-top:1px; }
+    .pt-main   { font-size:12px; font-weight:600; }
+    .pt-sec    { font-size:10px; color:var(--text-2); margin-top:1px; }
+    .pt-wbar-wrap { display:flex; align-items:center; gap:7px; justify-content:flex-end; }
+    .pt-wbar-bg   { width:44px; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+    .pt-wbar-fill { height:100%; background:var(--purple); border-radius:2px; }
+    .pt-wval      { font-size:12px; font-weight:600; min-width:34px; text-align:right; }
   </style>
 </head>
 <body>
@@ -240,43 +264,37 @@
 
 
     <!-- ── KPI ROW ── -->
-    <div class="kpi-grid fade-in d2" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;">
+    <div class="kpi-grid fade-in d2" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;">
 
       <div class="card" style="padding:18px;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);"></div>
-        <p class="kpi-label">Total Value</p>
+        <p class="kpi-label">Total Account Value</p>
         <p class="kpi-value" id="kpi-total-value">—</p>
         <p class="kpi-sub" id="kpi-total-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
-        <p class="kpi-label">Day Return</p>
+        <p class="kpi-label">Daily Profit</p>
         <p class="kpi-value" id="kpi-day-return">—</p>
-        <p class="kpi-sub" id="kpi-day-sub">no disponible</p>
+        <p class="kpi-sub" id="kpi-day-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
-        <p class="kpi-label">Total Return</p>
-        <p class="kpi-value" id="kpi-total-return">—</p>
-        <p class="kpi-sub" id="kpi-total-return-sub">—</p>
+        <p class="kpi-label">Total Profit</p>
+        <p class="kpi-value" id="kpi-total-profit">—</p>
+        <p class="kpi-sub" id="kpi-total-profit-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
-        <p class="kpi-label">Capital neto</p>
-        <p class="kpi-value" id="kpi-capital-neto">—</p>
-        <p class="kpi-sub" id="kpi-capital-sub">—</p>
-      </div>
-
-      <div class="card" style="padding:18px;border-color:var(--green-border);">
-        <p class="kpi-label">Best Position</p>
-        <p class="kpi-value" id="kpi-best-pct">—</p>
-        <p class="kpi-sub" id="kpi-best-name">—</p>
+        <p class="kpi-label">Cash Available</p>
+        <p class="kpi-value" id="kpi-cash">—</p>
+        <p class="kpi-sub" id="kpi-cash-sub">—</p>
       </div>
 
       <div class="card" style="padding:18px;">
-        <p class="kpi-label">Dividend YTD</p>
-        <p class="kpi-value" id="kpi-div-ytd">—</p>
-        <p class="kpi-sub" id="kpi-div-sub">—</p>
+        <p class="kpi-label">Annualized Return</p>
+        <p class="kpi-value" id="kpi-cagr">—</p>
+        <p class="kpi-sub" id="kpi-cagr-sub">—</p>
       </div>
 
     </div>
@@ -287,13 +305,14 @@
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
         <div>
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-            <p style="font-size:14px;font-weight:600;" id="line-title">Valor de cartera</p>
+            <p style="font-size:14px;font-weight:600;" id="line-title">Portfolio Value</p>
             <div id="mode-toggle" style="display:flex;gap:2px;background:var(--bg-elevated);padding:3px;border-radius:7px;">
               <button class="mode-btn active" data-mode="valor" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:var(--green);color:#07080F;transition:background 0.15s,color 0.15s;">Valor</button>
-              <button class="mode-btn" data-mode="pnl" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:var(--text-3);transition:background 0.15s,color 0.15s;">PnL</button>
+              <button class="mode-btn" data-mode="pnl" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:#FFFFFF;transition:background 0.15s,color 0.15s;">Profit</button>
+              <button class="mode-btn" data-mode="twr" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:#FFFFFF;transition:background 0.15s,color 0.15s;">TWR</button>
             </div>
           </div>
-          <p style="font-size:11px;color:var(--text-3);" id="line-subtitle">Valor de mercado total de la cartera · selecciona un rango</p>
+          <p style="font-size:11px;color:var(--text-3);" id="line-subtitle">Total market value of the portfolio · select a range</p>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <div id="gran-slicer" style="display:flex;gap:3px;background:var(--bg-elevated);padding:4px;border-radius:9px;">
@@ -329,26 +348,82 @@
         </div>
       </div>
 
-      <!-- Diverging horizontal bar -->
-      <div class="card fade-in d5" style="padding:24px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
-          <p style="font-size:14px;font-weight:600;">Position Performance</p>
-          <div style="display:flex;gap:14px;font-size:11px;">
-            <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
-              <span style="width:10px;height:10px;background:var(--green);border-radius:2px;display:inline-block;"></span>Positive
-            </span>
-            <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
-              <span style="width:10px;height:10px;background:var(--red);border-radius:2px;display:inline-block;"></span>Negative
-            </span>
-          </div>
+      <!-- Positions Table -->
+      <div class="card fade-in d5" style="overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);">
+          <p style="font-size:14px;font-weight:600;">Positions</p>
+          <span id="pos-count" style="font-size:11px;color:var(--text-2);"></span>
         </div>
-        <p style="font-size:11px;color:var(--text-3);margin-bottom:16px;">Return % per position</p>
-        <div style="position:relative;height:280px;">
-          <canvas id="barChart"></canvas>
-        </div>
+        <table class="pos-table">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Weight</th>
+              <th>Cost</th>
+              <th>Value</th>
+              <th>P/L</th>
+            </tr>
+          </thead>
+          <tbody id="pos-tbody"></tbody>
+        </table>
       </div>
 
     </div>
+
+
+    <!-- ── DIVERGING BAR (Position Performance) ── -->
+    <div class="card fade-in d5" style="padding:24px;margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+        <p style="font-size:14px;font-weight:600;">Position Performance</p>
+        <div style="display:flex;gap:14px;font-size:11px;">
+          <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+            <span style="width:10px;height:10px;background:var(--green);border-radius:2px;display:inline-block;"></span>Positive
+          </span>
+          <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+            <span style="width:10px;height:10px;background:var(--red);border-radius:2px;display:inline-block;"></span>Negative
+          </span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-3);margin-bottom:16px;">Return % per position</p>
+      <div style="position:relative;height:320px;">
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+
+
+    <!-- ── CONTRIBUTION TO RETURN ── -->
+    <div id="contribReturnSection" class="card fade-in d5" style="padding:24px;margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Contribution to Return</p>
+          <p style="font-size:11px;color:var(--text-3);">YTD — % points each position added to portfolio return</p>
+        </div>
+        <p style="font-size:11px;color:var(--text-2);">TWR YTD: <span id="ctr-ytd-total" style="color:var(--green);font-weight:600;">—</span></p>
+      </div>
+      <div style="position:relative;height:300px;"><canvas id="contribReturnChart"></canvas></div>
+    </div>
+
+    <!-- ── MONTHLY CONTRIBUTIONS ── -->
+    <div id="contributionsSection" class="card fade-in d5" style="padding:24px;margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Aportaciones netas</p>
+          <p style="font-size:11px;color:var(--text-3);">Capital depositado / retirado por mes</p>
+        </div>
+        <div style="display:flex;gap:14px;font-size:11px;">
+          <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+            <span style="width:10px;height:10px;background:var(--green);border-radius:2px;display:inline-block;"></span>Aportación
+          </span>
+          <span style="display:flex;align-items:center;gap:5px;color:var(--text-2);">
+            <span style="width:10px;height:10px;background:var(--red);border-radius:2px;display:inline-block;"></span>Retirada
+          </span>
+        </div>
+      </div>
+      <div style="position:relative;height:220px;">
+        <canvas id="contributionsChart"></canvas>
+      </div>
+    </div>
+
 
   </div>
 </main>
@@ -412,23 +487,34 @@ async function loadPortfolio() {
   const lastPnlVal = (d.pnl_history && d.pnl_history.length > 0)
     ? d.pnl_history[d.pnl_history.length - 1].value : k.total_pnl_eur;
 
-  set('kpi-total-value', fmtEur(lastPortVal));
-  set('kpi-total-sub',   fmtEur(k.cash_eur) + ' cash disponible', 'kpi-sub');
+  // 1. Total Account Value
+  set('kpi-total-value', fmtEur(lastPortVal), 'kpi-value');
+  set('kpi-total-sub',   'positions + cash',  'kpi-sub');
 
-  set('kpi-day-return', '—', 'kpi-value');
-  set('kpi-day-sub',    'no disponible (cache diario)', 'kpi-sub');
+  // 2. Daily Profit — last day vs previous in portfolio_history
+  const hist = d.portfolio_history || [];
+  let dailyEur = 0, dailyPct = 0;
+  if (hist.length >= 2) {
+    const vLast = hist[hist.length - 1].value;
+    const vPrev = hist[hist.length - 2].value;
+    dailyEur = vLast - vPrev;
+    dailyPct = vPrev > 0 ? dailyEur / vPrev * 100 : 0;
+  }
+  set('kpi-day-return', fmtDelta(dailyEur),                       'kpi-value ' + pnlClass(dailyEur));
+  set('kpi-day-sub',    fmtPct(dailyPct) + ' · vs previous day',  'kpi-sub '   + pnlClass(dailyEur));
 
-  set('kpi-capital-neto', fmtEur(k.capital_neto_eur), 'kpi-value');
-  set('kpi-capital-sub',  'capital neto aportado', 'kpi-sub');
+  // 3. Total Profit — from pnl_history (unrealized + realized + dividends - fees)
+  const totalProfitPct = k.capital_neto_eur > 0 ? lastPnlVal / k.capital_neto_eur * 100 : 0;
+  set('kpi-total-profit',     fmtDelta(lastPnlVal),                           'kpi-value ' + pnlClass(lastPnlVal));
+  set('kpi-total-profit-sub', fmtPct(totalProfitPct) + ' over net capital',   'kpi-sub '   + pnlClass(lastPnlVal));
 
-  set('kpi-best-pct',  fmtPct(k.best.pnl_pct),  'kpi-value ' + pnlClass(k.best.pnl_pct));
-  set('kpi-best-name', k.best.ticker + ' · mejor posición', 'kpi-sub');
+  // 4. Cash Available
+  const cashPct = lastPortVal > 0 ? k.cash_eur / lastPortVal * 100 : 0;
+  set('kpi-cash',     fmtEur(k.cash_eur),                      'kpi-value');
+  set('kpi-cash-sub', cashPct.toFixed(1) + '% of portfolio',   'kpi-sub');
 
-  set('kpi-div-ytd', fmtEur(k.dividendos_ytd_eur), 'kpi-value');
-  const histYield = k.capital_neto_eur > 0
-    ? (k.dividendos_eur / k.capital_neto_eur * 100).toFixed(1) + '% yield hist.'
-    : '—';
-  set('kpi-div-sub', histYield, 'kpi-sub');
+  // 5. Annualized Return (TWR CAGR since inception) — computed after twrPts is defined below
+  // (populated after line chart section)
 
   // ── LINE CHART: Valor de cartera + PnL toggle ──────────────
 
@@ -439,6 +525,21 @@ async function loadPortfolio() {
 
   // PnL series: use pre-computed pnl_history from notebook §11
   const pnlPts = (d.pnl_history && d.pnl_history.length > 5) ? d.pnl_history : [];
+  // TWR series: time-weighted return (%) — eliminates deposit size effect
+  const twrPts  = (d.twr_history  && d.twr_history.length  > 5) ? d.twr_history  : [];
+  // S&P 500 benchmark (same dates as twr_history, normalized to 0%)
+  const sp500Pts = (d.sp500_history && d.sp500_history.length > 5) ? d.sp500_history : [];
+
+  // 5. Annualized Return KPI (TWR CAGR since inception)
+  if (twrPts.length > 1) {
+    const _t0   = new Date(twrPts[0].date);
+    const _t1   = new Date(twrPts[twrPts.length - 1].date);
+    const _yrs  = (_t1 - _t0) / (365.25 * 24 * 3600 * 1000);
+    const _twr  = twrPts[twrPts.length - 1].value;
+    const _cagr = _yrs > 0 ? ((1 + _twr / 100) ** (1 / _yrs) - 1) * 100 : 0;
+    set('kpi-cagr',     fmtPct(_cagr),                              'kpi-value ' + pnlClass(_cagr));
+    set('kpi-cagr-sub', 'TWR ann. · ' + _yrs.toFixed(1) + 'y hist', 'kpi-sub');
+  }
 
   let currentMode     = 'valor';
   let currentRangeKey = 'YTD';
@@ -478,7 +579,9 @@ async function loadPortfolio() {
   }
 
   function getActivePts() {
-    return currentMode === 'valor' ? valuePts : pnlPts;
+    if (currentMode === 'twr')   return twrPts;
+    if (currentMode === 'pnl')   return pnlPts;
+    return valuePts;
   }
 
   function filterDays(days, pts) {
@@ -524,12 +627,12 @@ async function loadPortfolio() {
   currentRangeKey  = initRanges['YTD'].labels.length > 1 ? 'YTD' : '5Y';
 
   function modeColor() {
-    return currentMode === 'valor' ? '#00E576' : '#FFB020';
+    if (currentMode === 'pnl') return '#FFB020';
+    return '#00E576';  // valor + twr both use green (brand line)
   }
   function modeGradientColor() {
-    return currentMode === 'valor'
-      ? 'rgba(0,229,118,0.18)'
-      : 'rgba(255,176,32,0.18)';
+    if (currentMode === 'pnl') return 'rgba(255,176,32,0.18)';
+    return 'rgba(0,229,118,0.18)';
   }
   function buildGradientForMode(ctx, h) {
     const g = ctx.createLinearGradient(0, 0, 0, h);
@@ -544,20 +647,40 @@ async function loadPortfolio() {
     type: 'line',
     data: {
       labels: firstRange.labels,
-      datasets: [{
-        data:            firstRange.data,
-        borderColor:     modeColor(),
-        borderWidth:     2,
-        backgroundColor: buildGradientForMode(lineCtx, 240),
-        fill:            true,
-        tension:         0.4,
-        pointRadius:     0,
-        pointStyle:      false,
-        pointHoverRadius:          5,
-        pointHoverBackgroundColor: modeColor(),
-        pointHoverBorderColor:     '#07080F',
-        pointHoverBorderWidth:     2,
-      }]
+      datasets: [
+        {
+          label:           'Portfolio',
+          data:            firstRange.data,
+          borderColor:     modeColor(),
+          borderWidth:     2,
+          backgroundColor: buildGradientForMode(lineCtx, 240),
+          fill:            true,
+          tension:         0.4,
+          pointRadius:     0,
+          pointStyle:      false,
+          pointHoverRadius:          5,
+          pointHoverBackgroundColor: modeColor(),
+          pointHoverBorderColor:     '#07080F',
+          pointHoverBorderWidth:     2,
+        },
+        {
+          label:           'S&P 500',
+          data:            [],
+          borderColor:     '#6A80FF',
+          borderWidth:     1.5,
+          borderDash:      [5, 4],
+          backgroundColor: 'transparent',
+          fill:            false,
+          tension:         0.4,
+          pointRadius:     0,
+          pointStyle:      false,
+          pointHoverRadius:          4,
+          pointHoverBackgroundColor: '#6A80FF',
+          pointHoverBorderColor:     '#07080F',
+          pointHoverBorderWidth:     2,
+          hidden:          true,
+        }
+      ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
@@ -572,36 +695,72 @@ async function loadPortfolio() {
             title: items => items[0].label,
             label: ctx  => {
               const v = ctx.parsed.y;
-              const sign = v >= 0 ? '' : '−€';
+              if (currentMode === 'twr') {
+                const name = ctx.datasetIndex === 1 ? 'S&P 500' : 'Portfolio';
+                return `  ${name}: ${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+              }
               return (v >= 0 ? ' €' : ' −€') + Math.abs(v).toLocaleString('de-DE', {maximumFractionDigits:0});
             }
           }
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { maxTicksLimit: 7, color: '#4A4D62', font: { size: 11 } } },
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 7, color: '#FFFFFF', font: { size: 11 } } },
         y: {
           position: 'right', grid: { color: 'rgba(255,255,255,0.04)' },
           ticks: {
-            callback: v => (v < 0 ? '−€' : '€') + Math.abs(v / 1000).toFixed(0) + 'k',
-            maxTicksLimit: 5, color: '#4A4D62', font: { size: 11 }
+            callback: v => currentMode === 'twr'
+              ? (v >= 0 ? '+' : '') + v.toFixed(1) + '%'
+              : (v < 0 ? '−€' : '€') + Math.abs(v / 1000).toFixed(0) + 'k',
+            maxTicksLimit: 5, color: '#FFFFFF', font: { size: 11 }
           }
         }
       }
     }
   });
 
+  // Dynamic subtitle for TWR mode: shows period return + CAGR annualized
+  function updateTWRSubtitle(rangeKey, rebasedData) {
+    const twrPct = rebasedData[rebasedData.length - 1];
+    const periodLabels = { '1M': 'past month', '3M': 'past 3 months', '6M': 'past 6 months', 'YTD': 'year to date', '1Y': 'past year', '5Y': 'since inception' };
+    const color = twrPct >= 0 ? '#00E576' : '#FF6B6B';
+    const arrow = twrPct >= 0 ? '↑' : '↓';
+    const sign  = twrPct >= 0 ? '+' : '';
+    const html = `<span style="color:${color};font-weight:600;">${sign}${twrPct.toFixed(2)}% ${arrow} ${periodLabels[rangeKey] || rangeKey}</span>`;
+    document.getElementById('line-subtitle').innerHTML = html;
+  }
+
+  // Rebase a % series so the first point = 0% (for sub-period TWR comparisons)
+  function rebasePct(data) {
+    if (!data || data.length === 0) return data;
+    const base = data[0];
+    return data.map(v => v == null ? null : ((1 + v / 100) / (1 + base / 100) - 1) * 100);
+  }
+
   function applyRange(rangeKey) {
     const ranges = buildRanges(getActivePts());
     const r = ranges[rangeKey];
     if (!r || r.labels.length === 0) return;
     const color = modeColor();
+    const portfolioData = currentMode === 'twr' ? rebasePct(r.data) : r.data;
+    if (currentMode === 'twr') updateTWRSubtitle(rangeKey, portfolioData);
     lineChart.data.labels                              = r.labels;
-    lineChart.data.datasets[0].data                   = r.data;
+    lineChart.data.datasets[0].data                   = portfolioData;
     lineChart.data.datasets[0].borderColor              = color;
     lineChart.data.datasets[0].backgroundColor          = buildGradientForMode(lineCtx, 240);
     lineChart.data.datasets[0].pointHoverBackgroundColor = color;
     lineChart.data.datasets[0].pointRadius              = 0;
+
+    // S&P 500 overlay — only visible in TWR mode, rebased to same start point
+    if (currentMode === 'twr' && sp500Pts.length > 0) {
+      const spxR = buildRanges(sp500Pts)[rangeKey];
+      lineChart.data.datasets[1].data   = spxR ? rebasePct(spxR.data) : [];
+      lineChart.data.datasets[1].hidden = false;
+    } else {
+      lineChart.data.datasets[1].data   = [];
+      lineChart.data.datasets[1].hidden = true;
+    }
+
     lineChart.update('active');
   }
 
@@ -609,7 +768,6 @@ async function loadPortfolio() {
   document.querySelectorAll('.slicer-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.range === currentRangeKey);
   });
-  updateReturnKPI(currentRangeKey);
 
   // Range slicer
   document.getElementById('slicer').addEventListener('click', e => {
@@ -619,7 +777,6 @@ async function loadPortfolio() {
     btn.classList.add('active');
     currentRangeKey = btn.dataset.range;
     applyRange(currentRangeKey);
-    updateReturnKPI(currentRangeKey);
   });
 
   // Granularity selector (D / S / M)
@@ -643,14 +800,19 @@ async function loadPortfolio() {
     document.querySelectorAll('.mode-btn').forEach(b => {
       const isActive = b.dataset.mode === currentMode;
       b.style.background = isActive ? color : 'transparent';
-      b.style.color      = isActive ? '#07080F' : 'var(--text-3)';
+      b.style.color      = isActive ? '#07080F' : '#FFFFFF';
     });
 
     // Update title + subtitle
-    document.getElementById('line-title').textContent    = currentMode === 'valor' ? 'Valor de cartera' : 'PnL acumulado';
-    document.getElementById('line-subtitle').textContent = currentMode === 'valor'
-      ? 'Valor de mercado total de la cartera · selecciona un rango'
-      : 'Ganancia / pérdida neta (valor − capital invertido) · selecciona un rango';
+    const titles = { valor: 'Portfolio Value', pnl: 'Profit accumulated', twr: 'My Portfolio TWR' };
+    const subs   = {
+      valor: 'Total market value of the portfolio · select a range',
+      pnl:   'Net gain / loss (value − invested capital) · select a range',
+    };
+    document.getElementById('line-title').textContent = titles[currentMode];
+    if (currentMode !== 'twr') {
+      document.getElementById('line-subtitle').textContent = subs[currentMode];
+    }
 
     applyRange(currentRangeKey);
   });
@@ -684,7 +846,7 @@ async function loadPortfolio() {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { padding: 18, usePointStyle: true, pointStyleWidth: 9, font: { size: 12, weight: '500' }, color: '#8B8FA8' }
+          labels: { padding: 18, usePointStyle: true, pointStyleWidth: 9, font: { size: 12, weight: '500' }, color: '#FFFFFF' }
         },
         datalabels: {
           color: '#07080F', font: { size: 11, weight: '700' },
@@ -700,10 +862,60 @@ async function loadPortfolio() {
     }
   });
 
+  // ── POSITIONS TABLE ──────────────────────────────────────────
+  const posData = d.positions; // sorted by weight_pct desc
+  const maxWt   = Math.max(...posData.map(p => p.weight_pct));
+
+  document.getElementById('pos-count').textContent = posData.length + ' positions';
+
+  function ptFmtPrice(price, cur) {
+    const sym = cur === 'EUR' ? '€' : cur === 'USD' ? '$' : cur === 'DKK' ? 'kr ' : '';
+    const dec = price < 10 ? 3 : 2;
+    return sym + price.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+
+  const ptTbody = document.getElementById('pos-tbody');
+  posData.forEach(p => {
+    const isPos    = p.pnl_eur >= 0;
+    const cls      = isPos ? 'pos' : 'neg';
+    const sign     = isPos ? '+' : '';
+    const initials = p.ticker.replace(/\..*/,'').substring(0,3).toUpperCase();
+    const barW     = Math.round(p.weight_pct / maxWt * 100);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="pt-cell">
+          <div class="pt-avatar">${initials}</div>
+          <div>
+            <div class="pt-name">${p.description || p.ticker}</div>
+            <div class="pt-sub">${p.ticker} &nbsp;·&nbsp; ×${p.units}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="pt-wbar-wrap">
+          <div class="pt-wbar-bg"><div class="pt-wbar-fill" style="width:${barW}%"></div></div>
+          <span class="pt-wval">${p.weight_pct.toFixed(1)}%</span>
+        </div>
+      </td>
+      <td>
+        <div class="pt-main">€${p.cost_eur.toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:0})}</div>
+        <div class="pt-sec">${ptFmtPrice(p.avg_price, p.currency)} avg</div>
+      </td>
+      <td>
+        <div class="pt-main">€${p.mkt_eur.toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:0})}</div>
+        <div class="pt-sec">${ptFmtPrice(p.price, p.currency)}</div>
+      </td>
+      <td>
+        <div class="pt-main ${cls}">${sign}€${Math.abs(p.pnl_eur).toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:0})}</div>
+        <div class="pt-sec ${cls}">${sign}${p.pnl_pct.toFixed(2)}%</div>
+      </td>
+    `;
+    ptTbody.appendChild(tr);
+  });
+
   // ── DIVERGING BAR CHART (winners & losers) ────────────────
   const barData = d.positions; // ya viene ordenado desc por pnl_pct
-  const barContainerHeight = Math.max(280, barData.length * 32);
-  document.querySelector('#barChart').parentElement.style.height = barContainerHeight + 'px';
 
   new Chart(document.getElementById('barChart'), {
     type: 'bar',
@@ -740,12 +952,168 @@ async function loadPortfolio() {
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,0.04)' }, border: { dash: [3, 3] },
-          ticks: { callback: v => (v >= 0 ? '+' : '') + v + '%', maxTicksLimit: 9, color: '#4A4D62' }
+          ticks: { callback: v => (v >= 0 ? '+' : '') + v + '%', maxTicksLimit: 9, color: '#FFFFFF' }
         },
-        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#8B8FA8' } }
+        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#FFFFFF' } }
       }
     }
   });
+
+  // ── MONTHLY CONTRIBUTIONS CHART ──────────────────────────────
+  const mc = d.monthly_contributions;
+  if (mc && mc.length > 0) {
+    function filterMonthly(rangeKey) {
+      const now = new Date();
+      let cutoff;
+      switch (rangeKey) {
+        case '1M':  cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 30);  break;
+        case '3M':  cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 90);  break;
+        case '6M':  cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 180); break;
+        case 'YTD': cutoff = new Date(now.getFullYear(), 0, 1); break;
+        case '1Y':  cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - 365); break;
+        default:    return mc;
+      }
+      return mc.filter(c => new Date(c.month + '-01') >= cutoff);
+    }
+
+    function cBg(c)     { return c.amount < 0 ? 'rgba(255,107,107,0.70)' : 'rgba(0,229,118,0.70)'; }
+    function cBorder(c) { return c.amount < 0 ? '#FF6B6B'                : '#00E576'; }
+
+    const contribChart = new Chart(document.getElementById('contributionsChart'), {
+      type: 'bar',
+      data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderColor: [], borderWidth: 1, borderRadius: 4 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          datalabels: {
+            anchor: 'end',
+            align:  'end',
+            color:  ctx => Array.isArray(ctx.dataset.borderColor) ? ctx.dataset.borderColor[ctx.dataIndex] : '#8B8FA8',
+            font: { size: 10, weight: '700' },
+            formatter: v => (v >= 0 ? '+' : '−') + Math.round(Math.abs(v)).toLocaleString('de-DE') + '€',
+            display: ctx => ctx.chart.data.labels.length <= 16 && Math.abs(ctx.dataset.data[ctx.dataIndex]) > 50,
+          },
+          tooltip: {
+            backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
+            borderWidth: 1, padding: 12, displayColors: false,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => {
+                const v = ctx.parsed.y;
+                return (v >= 0 ? ' Aportado: +€' : ' Retirado: −€') + Math.abs(v).toLocaleString('de-DE', { maximumFractionDigits: 0 });
+              }
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#FFFFFF', font: { size: 11 } } },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.04)' },
+            ticks: { callback: v => (v < 0 ? '−€' : '€') + Math.abs(v / 1000).toFixed(0) + 'k', maxTicksLimit: 5, color: '#FFFFFF', font: { size: 11 } }
+          }
+        }
+      }
+    });
+
+    function applyContribRange(rangeKey) {
+      const fil = filterMonthly(rangeKey);
+      contribChart.data.labels                      = fil.map(c => { const [y, m] = c.month.split('-'); return m + '/' + y.slice(2); });
+      contribChart.data.datasets[0].data            = fil.map(c => c.amount);
+      contribChart.data.datasets[0].backgroundColor = fil.map(cBg);
+      contribChart.data.datasets[0].borderColor     = fil.map(cBorder);
+      contribChart.update('active');
+    }
+
+    applyContribRange(currentRangeKey);
+
+    document.getElementById('slicer').addEventListener('click', e => {
+      if (!e.target.closest('.slicer-btn')) return;
+      applyContribRange(currentRangeKey);
+    });
+
+  } else {
+    const sec = document.getElementById('contributionsSection');
+    if (sec) sec.style.display = 'none';
+  }
+
+  // ── CONTRIBUTION TO RETURN CHART ─────────────────────────────
+  const ctrData = d.position_contributions;
+  if (ctrData && ctrData.length > 0) {
+    // Update YTD TWR label
+    const twrYTD = twrPts.length > 1 ? (() => {
+      const jan1 = new Date(new Date().getFullYear(), 0, 1);
+      const fil  = twrPts.filter(p => new Date(p.date) >= jan1);
+      if (fil.length < 2) return null;
+      return ((1 + fil[fil.length-1].value/100) / (1 + fil[0].value/100) - 1) * 100;
+    })() : null;
+    if (twrYTD !== null) {
+      const el = document.getElementById('ctr-ytd-total');
+      el.textContent = (twrYTD >= 0 ? '+' : '') + twrYTD.toFixed(2) + '%';
+      el.style.color = twrYTD >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+
+    const ctrReversed = [...ctrData].reverse(); // bottom-up for Chart.js horizontal
+    const ctrLabels  = ctrReversed.map(p => p.ticker);
+    const ctrContrib = ctrReversed.map(p => p.contrib_pp);
+    const ctrColors  = ctrContrib.map(v => v >= 0 ? 'rgba(0,229,118,0.75)' : 'rgba(255,107,107,0.75)');
+    const ctrBorders = ctrContrib.map(v => v >= 0 ? '#00E576' : '#FF6B6B');
+
+    new Chart(document.getElementById('contribReturnChart'), {
+      type: 'bar',
+      data: {
+        labels: ctrLabels,
+        datasets: [{ data: ctrContrib, backgroundColor: ctrColors, borderColor: ctrBorders,
+                     borderWidth: 1, borderRadius: 4, borderSkipped: false, barThickness: 18 }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          datalabels: {
+            anchor: ctx => ctrContrib[ctx.dataIndex] >= 0 ? 'end' : 'start',
+            align:  ctx => ctrContrib[ctx.dataIndex] >= 0 ? 'right' : 'left',
+            color:  ctx => ctrContrib[ctx.dataIndex] >= 0 ? '#00E576' : '#FF6B6B',
+            font: { size: 11, weight: '600' },
+            formatter: (v, ctx) => {
+              const p   = ctrReversed[ctx.dataIndex];
+              const s   = v >= 0 ? '+' : '';
+              const rs  = p.ytd_return_pct >= 0 ? '+' : '';
+              return `${s}${v.toFixed(2)}pp   (${rs}${p.ytd_return_pct.toFixed(1)}%)`;
+            },
+            clip: false,
+          },
+          tooltip: {
+            backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1, padding: 12, displayColors: false,
+            callbacks: {
+              title: items => items[0].label,
+              label: ctx => {
+                const p = ctrReversed[ctx.dataIndex];
+                const s = p.contrib_pp >= 0 ? '+' : '';
+                const rs = p.ytd_return_pct >= 0 ? '+' : '';
+                return [
+                  `  Contribution: ${s}${p.contrib_pp.toFixed(3)}pp`,
+                  `  YTD return:   ${rs}${p.ytd_return_pct.toFixed(2)}%`,
+                  `  P&L:          ${p.pnl_eur >= 0 ? '+' : ''}€${Math.abs(p.pnl_eur).toLocaleString('de-DE', {maximumFractionDigits:0})}`
+                ];
+              }
+            }
+          }
+        },
+        layout: { padding: { right: 160 } },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.04)' }, border: { dash: [3,3] },
+            ticks: { color: '#FFFFFF', font: { size: 11 }, callback: v => (v>=0?'+':'')+v+'pp' }
+          },
+          y: { grid: { display: false }, ticks: { color: '#FFFFFF', font: { size: 12, weight: '600' } } }
+        }
+      }
+    });
+  } else {
+    const sec = document.getElementById('contribReturnSection');
+    if (sec) sec.style.display = 'none';
+  }
 }
 
 loadPortfolio();
