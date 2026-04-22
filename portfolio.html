@@ -205,6 +205,18 @@
     .pt-wbar-fill { height:100%; background:var(--purple); border-radius:2px; }
     .pt-wval      { font-size:12px; font-weight:600; min-width:34px; text-align:right; }
 
+    /* ── RISK DASHBOARD ── */
+    .risk-tile {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .risk-label { font-size:11px; color:var(--text-3); font-weight:600; letter-spacing:0.02em; margin-bottom:8px; text-transform:uppercase; }
+    .risk-val   { font-size:26px; font-weight:700; letter-spacing:-0.03em; margin-bottom:4px; }
+    .risk-sub   { font-size:11px; color:var(--text-3); }
+    @media (max-width:640px) { .risk-grid { grid-template-columns:repeat(2,1fr) !important; } }
+
     /* ── BENCHMARK PILLS ── */
     .bench-pill {
       display:inline-flex; align-items:center; gap:6px;
@@ -355,6 +367,40 @@
         <span style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.07em;text-transform:uppercase;margin-right:4px;">Compare</span>
         <div id="bench-pills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
         <button id="bench-clear" style="display:none;font-size:10px;font-weight:600;font-family:inherit;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:none;color:var(--text-3);cursor:pointer;transition:all 0.18s;margin-left:4px;" onmouseover="this.style.color='var(--text-1)';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='rgba(255,255,255,0.12)'">Clear all</button>
+      </div>
+    </div>
+
+
+    <!-- ── RISK DASHBOARD ── -->
+    <div id="riskSection" class="card fade-in d4" style="padding:24px;margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Risk Metrics</p>
+          <p style="font-size:11px;color:var(--text-3);">Based on daily TWR · annualized · risk-free rate 3.5%</p>
+        </div>
+        <span id="risk-period-badge" style="font-size:10px;font-weight:700;color:var(--text-2);letter-spacing:0.05em;background:rgba(255,255,255,0.06);padding:4px 10px;border-radius:6px;text-transform:uppercase;">—</span>
+      </div>
+      <div class="risk-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div class="risk-tile">
+          <p class="risk-label">Sharpe Ratio</p>
+          <p class="risk-val" id="risk-sharpe-val">—</p>
+          <p class="risk-sub" id="risk-sharpe-sub">risk-adjusted return</p>
+        </div>
+        <div class="risk-tile">
+          <p class="risk-label">Max Drawdown</p>
+          <p class="risk-val" id="risk-dd-val">—</p>
+          <p class="risk-sub" id="risk-dd-sub">peak-to-trough loss</p>
+        </div>
+        <div class="risk-tile">
+          <p class="risk-label">Ann. Volatility</p>
+          <p class="risk-val" id="risk-vol-val">—</p>
+          <p class="risk-sub" id="risk-vol-sub">annualized std dev</p>
+        </div>
+        <div class="risk-tile">
+          <p class="risk-label">Beta vs S&amp;P 500</p>
+          <p class="risk-val" id="risk-beta-val">—</p>
+          <p class="risk-sub" id="risk-beta-sub">market sensitivity</p>
+        </div>
       </div>
     </div>
 
@@ -804,6 +850,109 @@ async function loadPortfolio() {
     return applyGranularity(filtered, currentGran);
   }
 
+  // ── RISK METRICS ─────────────────────────────────────────────
+  function computeRiskMetrics(rangeKey) {
+    const pts = getRangePts(rangeKey, twrPts);
+    if (pts.length < 10) return null;
+
+    const rets = [];
+    for (let i = 1; i < pts.length; i++) rets.push(pts[i].value - pts[i - 1].value);
+
+    const n    = rets.length;
+    const mean = rets.reduce((s, v) => s + v, 0) / n;
+    const vari = rets.reduce((s, v) => s + (v - mean) ** 2, 0) / (n - 1);
+    const std  = Math.sqrt(vari);
+
+    const annRet = mean * 252;
+    const annVol = std  * Math.sqrt(252);
+    const rf     = 3.5;
+    const sharpe = annVol > 0 ? (annRet - rf) / annVol : 0;
+
+    // Max drawdown from rebased cumulative series
+    const rebased = pts.map(p => p.value - pts[0].value);
+    let peak = rebased[0], maxDD = 0;
+    rebased.forEach(v => { if (v > peak) peak = v; const dd = v - peak; if (dd < maxDD) maxDD = dd; });
+
+    // Beta vs S&P 500
+    let beta = null;
+    const spSlice = getRangePts(rangeKey, sp500Pts);
+    if (spSlice.length >= 5) {
+      const spMap = {};
+      spSlice.forEach(p => { spMap[p.date] = p.value; });
+      const pr = [], sr = [];
+      for (let i = 1; i < pts.length; i++) {
+        const d0 = pts[i - 1].date, d1 = pts[i].date;
+        if (spMap[d1] !== undefined && spMap[d0] !== undefined) {
+          pr.push(pts[i].value - pts[i - 1].value);
+          sr.push(spMap[d1] - spMap[d0]);
+        }
+      }
+      if (sr.length > 5) {
+        const sm = sr.reduce((s, v) => s + v, 0) / sr.length;
+        const pm = pr.reduce((s, v) => s + v, 0) / pr.length;
+        let cov = 0, spVar = 0;
+        for (let i = 0; i < sr.length; i++) {
+          cov   += (pr[i] - pm) * (sr[i] - sm);
+          spVar += (sr[i] - sm) ** 2;
+        }
+        beta = spVar > 0 ? cov / spVar : null;
+      }
+    }
+
+    return { sharpe, maxDD, annVol, beta };
+  }
+
+  function updateRiskCard(rangeKey) {
+    const badge = document.getElementById('risk-period-badge');
+    if (badge) badge.textContent = rangeKey;
+    const m = computeRiskMetrics(rangeKey);
+    if (!m) {
+      ['risk-sharpe-val','risk-dd-val','risk-vol-val','risk-beta-val'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = '—'; el.style.color = ''; }
+      });
+      return;
+    }
+
+    // Sharpe
+    const sharpeEl = document.getElementById('risk-sharpe-val');
+    if (sharpeEl) {
+      sharpeEl.style.color = m.sharpe > 1 ? '#00E576' : m.sharpe > 0.5 ? '#FFB020' : '#FF6B6B';
+      sharpeEl.textContent = m.sharpe.toFixed(2);
+    }
+    set('risk-sharpe-sub', m.sharpe > 1 ? 'Good risk-adjusted return' : m.sharpe > 0.5 ? 'Moderate' : 'Low — review risk');
+
+    // Max Drawdown
+    const ddEl = document.getElementById('risk-dd-val');
+    if (ddEl) {
+      ddEl.style.color = m.maxDD < -5 ? '#FF6B6B' : m.maxDD < -2 ? '#FFB020' : '#00E576';
+      ddEl.textContent = (m.maxDD <= 0 ? m.maxDD.toFixed(2) : '0.00') + '%';
+    }
+    set('risk-dd-sub', 'peak-to-trough loss');
+
+    // Volatility
+    const volEl = document.getElementById('risk-vol-val');
+    if (volEl) {
+      volEl.style.color = m.annVol < 12 ? '#00E576' : m.annVol < 20 ? '#FFB020' : '#FF6B6B';
+      volEl.textContent = m.annVol.toFixed(1) + '%';
+    }
+    set('risk-vol-sub', m.annVol < 12 ? 'Low — defensive' : m.annVol < 20 ? 'Moderate' : 'High — aggressive');
+
+    // Beta
+    const betaEl = document.getElementById('risk-beta-val');
+    if (betaEl) {
+      if (m.beta !== null) {
+        betaEl.style.color = m.beta < 0.8 ? '#00E576' : m.beta < 1.2 ? '#FFB020' : '#FF6B6B';
+        betaEl.textContent = m.beta.toFixed(2);
+        set('risk-beta-sub', m.beta < 0.8 ? 'Low market sensitivity' : m.beta < 1.2 ? 'Market-like' : 'Amplifies market moves');
+      } else {
+        betaEl.textContent = '—';
+        betaEl.style.color = '';
+        set('risk-beta-sub', 'S&P data unavailable');
+      }
+    }
+  }
+
   function applyRange(rangeKey) {
     const ranges = buildRanges(getActivePts());
     const r = ranges[rangeKey];
@@ -833,6 +982,7 @@ async function loadPortfolio() {
     });
 
     lineChart.update('active');
+    updateRiskCard(rangeKey);
   }
 
   // Highlight active range btn on load + init KPI
