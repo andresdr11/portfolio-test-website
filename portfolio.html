@@ -324,6 +324,11 @@
               <button class="mode-btn" data-mode="pnl" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:#FFFFFF;transition:background 0.15s,color 0.15s;">Profit</button>
               <button class="mode-btn" data-mode="twr" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;border:none;cursor:pointer;background:transparent;color:#FFFFFF;transition:background 0.15s,color 0.15s;">TWR</button>
             </div>
+            <button id="compare-btn" style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;font-family:inherit;padding:4px 12px;border-radius:7px;border:1px solid rgba(106,128,255,0.35);background:rgba(106,128,255,0.12);color:#6A80FF;cursor:pointer;transition:all 0.18s;" onmouseover="this.style.background='rgba(106,128,255,0.24)';this.style.borderColor='rgba(106,128,255,0.6)'" onmouseout="if(!this.classList.contains('on')){this.style.background='rgba(106,128,255,0.12)';this.style.borderColor='rgba(106,128,255,0.35)'}">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Compare
+              <span id="compare-count" style="display:none;background:#6A80FF;color:#07080F;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;"></span>
+            </button>
           </div>
           <p style="font-size:11px;color:var(--text-3);" id="line-subtitle">Total market value of the portfolio · select a range</p>
         </div>
@@ -851,18 +856,62 @@ async function loadPortfolio() {
 
     // Show/hide benchmark toggles
     const bt = document.getElementById('bench-toggles');
-    bt.style.display = currentMode === 'twr' ? 'flex' : 'none';
+    if (currentMode !== 'twr') { bt.style.display = 'none'; }
 
     applyRange(currentRangeKey);
   });
 
-  // ── BENCHMARK PILLS ──────────────────────────────────────────
+  // ── COMPARE BUTTON ───────────────────────────────────────────
+  const compareBtn   = document.getElementById('compare-btn');
+  const compareCount = document.getElementById('compare-count');
+  const benchToggles = document.getElementById('bench-toggles');
+  let compareOpen    = false;
+
+  function updateCompareBtn() {
+    const n = activeBenches.size;
+    compareCount.style.display = n > 0 ? 'inline' : 'none';
+    compareCount.textContent   = n;
+    if (activeBenches.size > 0 || compareOpen) {
+      compareBtn.classList.add('on');
+      compareBtn.style.background   = 'rgba(106,128,255,0.24)';
+      compareBtn.style.borderColor  = 'rgba(106,128,255,0.6)';
+    } else {
+      compareBtn.classList.remove('on');
+      compareBtn.style.background   = 'rgba(106,128,255,0.12)';
+      compareBtn.style.borderColor  = 'rgba(106,128,255,0.35)';
+    }
+  }
+
+  compareBtn.addEventListener('click', () => {
+    compareOpen = !compareOpen;
+    if (compareOpen) {
+      // Switch to TWR mode
+      if (currentMode !== 'twr') {
+        currentMode = 'twr';
+        document.querySelectorAll('.mode-btn').forEach(b2 => {
+          const isA = b2.dataset.mode === 'twr';
+          b2.style.background = isA ? '#00E576' : 'transparent';
+          b2.style.color      = isA ? '#07080F' : '#FFFFFF';
+        });
+        document.getElementById('line-title').textContent = 'My Portfolio TWR';
+      }
+      benchToggles.style.display = 'flex';
+    } else {
+      benchToggles.style.display = 'none';
+    }
+    updateCompareBtn();
+    applyRange(currentRangeKey);
+  });
+
+  // ── BENCHMARK PILLS ───────────────────────────────────────────
   const benchPillsEl = document.getElementById('bench-pills');
   BENCH_CFG.forEach(b => {
-    if (b.pts.length === 0 && b.id !== 'sp500') return; // skip if no data yet
     const pill = document.createElement('button');
     pill.className = 'bench-pill';
+    const noData = b.pts.length === 0;
+    pill.title = noData ? 'Ejecuta el notebook para cargar datos' : '';
     pill.innerHTML = `<span class="bench-dot"></span>${b.name}`;
+    if (noData) { pill.style.opacity = '0.4'; pill.style.cursor = 'not-allowed'; }
 
     function applyPillState() {
       const on = activeBenches.has(b.id);
@@ -873,25 +922,18 @@ async function loadPortfolio() {
     }
 
     pill.addEventListener('click', () => {
-      if (currentMode !== 'twr') {
-        // Auto-switch to TWR when clicking a benchmark
-        currentMode = 'twr';
-        document.querySelectorAll('.mode-btn').forEach(b2 => {
-          const isA = b2.dataset.mode === 'twr';
-          b2.style.background = isA ? '#00E576' : 'transparent';
-          b2.style.color      = isA ? '#07080F' : '#FFFFFF';
-        });
-        document.getElementById('line-title').textContent = 'My Portfolio TWR';
-        document.getElementById('bench-toggles').style.display = 'flex';
-      }
+      if (noData) return;
       activeBenches.has(b.id) ? activeBenches.delete(b.id) : activeBenches.add(b.id);
       applyPillState();
+      updateCompareBtn();
       applyRange(currentRangeKey);
     });
 
     applyPillState();
     benchPillsEl.appendChild(pill);
   });
+
+  updateCompareBtn();
 
   // ── PIE / DOUGHNUT CHART ──────────────────────────────────
   const PIE_MIN    = 2.5; // agrupa < 2.5% en "Otros"
