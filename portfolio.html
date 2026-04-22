@@ -204,6 +204,19 @@
     .pt-wbar-bg   { width:44px; height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
     .pt-wbar-fill { height:100%; background:var(--purple); border-radius:2px; }
     .pt-wval      { font-size:12px; font-weight:600; min-width:34px; text-align:right; }
+
+    /* ── BENCHMARK PILLS ── */
+    .bench-pill {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:5px 12px; border-radius:20px;
+      font-size:11px; font-weight:600; font-family:inherit;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
+      color:var(--text-3); cursor:pointer;
+      transition:all 0.18s; user-select:none;
+    }
+    .bench-pill:hover { border-color:rgba(255,255,255,0.14); color:var(--text-2); }
+    .bench-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; transition:background 0.18s; }
   </style>
 </head>
 <body>
@@ -332,6 +345,10 @@
       </div>
       <div style="position:relative;height:240px;">
         <canvas id="lineChart"></canvas>
+      </div>
+      <div id="bench-toggles" style="display:none;flex-wrap:wrap;align-items:center;gap:6px;padding-top:14px;border-top:1px solid var(--border);margin-top:16px;">
+        <span style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.07em;text-transform:uppercase;margin-right:4px;">Compare</span>
+        <div id="bench-pills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
       </div>
     </div>
 
@@ -530,6 +547,18 @@ async function loadPortfolio() {
   // S&P 500 benchmark (same dates as twr_history, normalized to 0%)
   const sp500Pts = (d.sp500_history && d.sp500_history.length > 5) ? d.sp500_history : [];
 
+  // ── Benchmark config ──────────────────────────────────────────
+  const BENCH_CFG = [
+    { id:'sp500',   name:'S&P 500',       color:'#6A80FF', pts: sp500Pts },
+    { id:'nasdaq',  name:'NASDAQ-100',    color:'#FFB020', pts: d.benchmarks?.nasdaq   || [] },
+    { id:'msciw',   name:'MSCI World',    color:'#36CFC9', pts: d.benchmarks?.msciw    || [] },
+    { id:'dow',     name:'Dow Jones',     color:'#F759AB', pts: d.benchmarks?.dow      || [] },
+    { id:'stoxx50', name:'Euro Stoxx 50', color:'#73D13D', pts: d.benchmarks?.stoxx50  || [] },
+    { id:'ibex',    name:'IBEX 35',       color:'#FF9C6E', pts: d.benchmarks?.ibex     || [] },
+    { id:'em',      name:'MSCI EM',       color:'#B37FEB', pts: d.benchmarks?.em       || [] },
+  ];
+  const activeBenches = new Set(['sp500']);
+
   // 5. Annualized Return KPI (TWR CAGR since inception)
   if (twrPts.length > 1) {
     const _t0   = new Date(twrPts[0].date);
@@ -663,10 +692,10 @@ async function loadPortfolio() {
           pointHoverBorderColor:     '#07080F',
           pointHoverBorderWidth:     2,
         },
-        {
-          label:           'S&P 500',
+        ...BENCH_CFG.map(b => ({
+          label:           b.name,
           data:            [],
-          borderColor:     '#6A80FF',
+          borderColor:     b.color,
           borderWidth:     1.5,
           borderDash:      [5, 4],
           backgroundColor: 'transparent',
@@ -675,11 +704,11 @@ async function loadPortfolio() {
           pointRadius:     0,
           pointStyle:      false,
           pointHoverRadius:          4,
-          pointHoverBackgroundColor: '#6A80FF',
+          pointHoverBackgroundColor: b.color,
           pointHoverBorderColor:     '#07080F',
           pointHoverBorderWidth:     2,
           hidden:          true,
-        }
+        }))
       ]
     },
     options: {
@@ -696,12 +725,15 @@ async function loadPortfolio() {
             label: ctx  => {
               const v = ctx.parsed.y;
               if (currentMode === 'twr') {
-                const name = ctx.datasetIndex === 1 ? 'S&P 500' : 'Portfolio';
-                return `  ${name}: ${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+                return `  ${ctx.dataset.label}: ${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
               }
               return (v >= 0 ? ' €' : ' −€') + Math.abs(v).toLocaleString('de-DE', {maximumFractionDigits:0});
-            }
-          }
+            },
+            labelColor: ctx => ({ borderColor: ctx.dataset.borderColor, backgroundColor: ctx.dataset.borderColor }),
+          },
+          filter:   item => !item.dataset.hidden,
+          itemSort: (a, b) => b.parsed.y - a.parsed.y,
+          displayColors: true, usePointStyle: true, boxWidth: 7, boxHeight: 7,
         }
       },
       scales: {
@@ -751,15 +783,18 @@ async function loadPortfolio() {
     lineChart.data.datasets[0].pointHoverBackgroundColor = color;
     lineChart.data.datasets[0].pointRadius              = 0;
 
-    // S&P 500 overlay — only visible in TWR mode, rebased to same start point
-    if (currentMode === 'twr' && sp500Pts.length > 0) {
-      const spxR = buildRanges(sp500Pts)[rangeKey];
-      lineChart.data.datasets[1].data   = spxR ? rebasePct(spxR.data) : [];
-      lineChart.data.datasets[1].hidden = false;
-    } else {
-      lineChart.data.datasets[1].data   = [];
-      lineChart.data.datasets[1].hidden = true;
-    }
+    // Benchmark overlays — only visible in TWR mode, rebased to period start
+    BENCH_CFG.forEach((b, i) => {
+      const ds = lineChart.data.datasets[i + 1];
+      if (currentMode === 'twr' && b.pts.length > 0 && activeBenches.has(b.id)) {
+        const r = buildRanges(b.pts)[rangeKey];
+        ds.data   = r ? rebasePct(r.data) : [];
+        ds.hidden = false;
+      } else {
+        ds.data   = [];
+        ds.hidden = true;
+      }
+    });
 
     lineChart.update('active');
   }
@@ -814,7 +849,48 @@ async function loadPortfolio() {
       document.getElementById('line-subtitle').textContent = subs[currentMode];
     }
 
+    // Show/hide benchmark toggles
+    const bt = document.getElementById('bench-toggles');
+    bt.style.display = currentMode === 'twr' ? 'flex' : 'none';
+
     applyRange(currentRangeKey);
+  });
+
+  // ── BENCHMARK PILLS ──────────────────────────────────────────
+  const benchPillsEl = document.getElementById('bench-pills');
+  BENCH_CFG.forEach(b => {
+    if (b.pts.length === 0 && b.id !== 'sp500') return; // skip if no data yet
+    const pill = document.createElement('button');
+    pill.className = 'bench-pill';
+    pill.innerHTML = `<span class="bench-dot"></span>${b.name}`;
+
+    function applyPillState() {
+      const on = activeBenches.has(b.id);
+      pill.style.background  = on ? `${b.color}1A` : 'rgba(255,255,255,0.03)';
+      pill.style.borderColor = on ? `${b.color}60` : 'rgba(255,255,255,0.08)';
+      pill.style.color       = on ? b.color : 'var(--text-3)';
+      pill.querySelector('.bench-dot').style.background = on ? b.color : '#4A4D62';
+    }
+
+    pill.addEventListener('click', () => {
+      if (currentMode !== 'twr') {
+        // Auto-switch to TWR when clicking a benchmark
+        currentMode = 'twr';
+        document.querySelectorAll('.mode-btn').forEach(b2 => {
+          const isA = b2.dataset.mode === 'twr';
+          b2.style.background = isA ? '#00E576' : 'transparent';
+          b2.style.color      = isA ? '#07080F' : '#FFFFFF';
+        });
+        document.getElementById('line-title').textContent = 'My Portfolio TWR';
+        document.getElementById('bench-toggles').style.display = 'flex';
+      }
+      activeBenches.has(b.id) ? activeBenches.delete(b.id) : activeBenches.add(b.id);
+      applyPillState();
+      applyRange(currentRangeKey);
+    });
+
+    applyPillState();
+    benchPillsEl.appendChild(pill);
   });
 
   // ── PIE / DOUGHNUT CHART ──────────────────────────────────
