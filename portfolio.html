@@ -906,6 +906,7 @@ async function loadPortfolio() {
 
   // ── BENCHMARK PILLS ───────────────────────────────────────────
   const benchPillsEl  = document.getElementById('bench-pills');
+  const allPillEls    = [];
   function refreshClearBtn() {
     const el = document.getElementById('bench-clear');
     if (el) el.style.display = activeBenches.size > 0 ? 'inline-block' : 'none';
@@ -944,7 +945,6 @@ async function loadPortfolio() {
 
   // ── CLEAR ALL button ─────────────────────────────────────────
   const benchClearBtn = document.getElementById('bench-clear');
-  const allPillEls    = [];
 
   benchClearBtn.addEventListener('click', () => {
     activeBenches.clear();
