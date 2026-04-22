@@ -229,6 +229,29 @@
     }
     .bench-pill:hover { border-color:rgba(255,255,255,0.14); color:var(--text-2); }
     .bench-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; transition:background 0.18s; }
+
+    /* ── DIVIDEND SECTION ── */
+    .div-year-pill {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 13px; border-radius:20px;
+      font-size:11px; font-weight:700; font-family:inherit;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.04);
+      color:var(--text-3); cursor:pointer;
+      transition:all 0.18s; user-select:none; letter-spacing:0.01em;
+    }
+    .div-year-pill:hover  { border-color:rgba(255,255,255,0.18); color:var(--text-2); }
+    .div-year-pill.active { background:rgba(255,176,32,0.15); border-color:rgba(255,176,32,0.40); color:#FFB020; }
+    .div-yoc-row { display:flex; align-items:center; gap:10px; }
+    .div-yoc-bar-bg  { flex:1; height:4px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+    .div-yoc-bar-fill{ height:100%; border-radius:2px; transition:width 0.4s; }
+    .div-sched-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 12px; border-radius:8px;
+      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05);
+      font-size:11px;
+    }
+    @media (max-width:640px) { #dividendSection [style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; } }
   </style>
 </head>
 <body>
@@ -490,6 +513,66 @@
       </div>
       <div style="position:relative;height:220px;">
         <canvas id="contributionsChart"></canvas>
+      </div>
+    </div>
+
+
+    <!-- ── DIVIDEND INCOME ── -->
+    <div id="dividendSection" class="card fade-in d5" style="padding:24px;margin-top:20px;">
+
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Dividend Income</p>
+          <p style="font-size:11px;color:var(--text-3);">Cobros reales · proyección 12 meses · yield on cost</p>
+        </div>
+        <!-- Year toggle pills -->
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.07em;text-transform:uppercase;">Años</span>
+          <div id="div-year-pills" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <!-- KPI row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+        <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+          <p style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;">Ingreso proyectado / año</p>
+          <p id="div-kpi-annual" style="font-size:24px;font-weight:700;letter-spacing:-0.03em;color:#00E576;">—</p>
+          <p style="font-size:11px;color:var(--text-3);margin-top:4px;">basado en DPS actual × posiciones</p>
+        </div>
+        <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+          <p style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;">Cobrado este año</p>
+          <p id="div-kpi-ytd" style="font-size:24px;font-weight:700;letter-spacing:-0.03em;color:#FFB020;">—</p>
+          <p id="div-kpi-ytd-sub" style="font-size:11px;color:var(--text-3);margin-top:4px;">YTD vs proyectado</p>
+        </div>
+        <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+          <p style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px;">Yield on cost medio</p>
+          <p id="div-kpi-yoc" style="font-size:24px;font-weight:700;letter-spacing:-0.03em;">—</p>
+          <p style="font-size:11px;color:var(--text-3);margin-top:4px;">sobre posiciones con dividendo</p>
+        </div>
+      </div>
+
+      <!-- Stacked bar chart -->
+      <div style="position:relative;height:220px;margin-bottom:24px;">
+        <canvas id="divChart"></canvas>
+      </div>
+
+      <!-- Bottom grid: YoC table + upcoming schedule -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <!-- Yield on cost per position -->
+        <div>
+          <p style="font-size:12px;font-weight:600;margin-bottom:12px;color:var(--text-2);">Yield on Cost por posición</p>
+          <div id="div-yoc-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+
+        <!-- Upcoming dividend schedule -->
+        <div>
+          <p style="font-size:12px;font-weight:600;margin-bottom:12px;color:var(--text-2);">Próximos dividendos estimados</p>
+          <div id="div-schedule-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+          <p style="font-size:10px;color:var(--text-3);margin-top:10px;">Fechas estimadas · basado en historial de pagos</p>
+        </div>
+
       </div>
     </div>
 
@@ -1438,9 +1521,181 @@ async function loadPortfolio() {
     const sec = document.getElementById('contribReturnSection');
     if (sec) sec.style.display = 'none';
   }
+
+  // Signal dividend section with full data payload
+  document.dispatchEvent(new CustomEvent('portfolioLoaded', { detail: d }));
 }
 
 loadPortfolio();
+
+// ── DIVIDEND INCOME SECTION ───────────────────────────────────
+(function() {
+
+  const TICKER_COLORS = [
+    '#FFB020','#00E576','#6A80FF','#36CFC9','#F759AB',
+    '#73D13D','#FF9C6E','#B37FEB','#FF6B6B','#5CDBD3',
+  ];
+
+  let divChart = null;
+  let activeYears = new Set();
+  let divData = null;
+
+  function initDividends(d) {
+    if (!d || !d.dividends) {
+      document.getElementById('dividendSection').style.display = 'none';
+      return;
+    }
+    divData = d.dividends;
+
+    // KPIs
+    const annual = divData.projected_annual_eur || 0;
+    const ytd    = divData.ytd_collected_eur    || 0;
+    const yocPositions = (divData.positions || []).filter(p => p.yield_on_cost_pct > 0);
+    const avgYoc = yocPositions.length
+      ? yocPositions.reduce((s, p) => s + p.yield_on_cost_pct, 0) / yocPositions.length
+      : 0;
+    const ytdPct = annual > 0 ? (ytd / annual * 100).toFixed(0) : 0;
+
+    document.getElementById('div-kpi-annual').textContent = '€' + annual.toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2});
+    document.getElementById('div-kpi-ytd').textContent    = '€' + ytd.toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2});
+    document.getElementById('div-kpi-ytd-sub').textContent = ytdPct + '% del proyectado anual';
+
+    const yocEl = document.getElementById('div-kpi-yoc');
+    yocEl.textContent = avgYoc > 0 ? avgYoc.toFixed(2) + '%' : '—';
+    yocEl.style.color = avgYoc > 3 ? '#00E576' : avgYoc > 1.5 ? '#FFB020' : '#8B8FA8';
+
+    // Year pills
+    const history = divData.history || [];
+    const years   = [...new Set(history.map(m => m.year))].sort();
+    activeYears   = new Set(years);
+
+    const pillsEl = document.getElementById('div-year-pills');
+    pillsEl.innerHTML = '';
+    years.forEach(yr => {
+      const btn = document.createElement('button');
+      btn.className = 'div-year-pill active';
+      btn.textContent = yr;
+      btn.dataset.year = yr;
+      btn.addEventListener('click', () => {
+        activeYears.has(yr) ? activeYears.delete(yr) : activeYears.add(yr);
+        btn.classList.toggle('active', activeYears.has(yr));
+        updateDivChart();
+      });
+      pillsEl.appendChild(btn);
+    });
+
+    // Build chart
+    buildDivChart();
+    updateDivChart();
+
+    // YoC per-position list
+    buildYocList(divData.positions || []);
+
+    // Schedule
+    buildSchedule(divData.schedule || []);
+  }
+
+  function buildDivChart() {
+    const ctx = document.getElementById('divChart').getContext('2d');
+    divChart = new Chart(ctx, {
+      type: 'bar',
+      data: { labels: [], datasets: [] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#14151F',
+            borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1,
+            callbacks: {
+              label: c => `  ${c.dataset.label}:  €${c.parsed.y.toFixed(2)}`,
+              footer: items => {
+                const total = items.reduce((s, i) => s + i.parsed.y, 0);
+                return `  Total: €${total.toFixed(2)}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: { stacked: true, grid: { display: false }, ticks: { color: '#FFFFFF', font: { size: 11 } } },
+          y: { stacked: true, position: 'right',
+               grid: { color: 'rgba(255,255,255,0.04)' },
+               ticks: { callback: v => '€' + v.toFixed(0), color: '#FFFFFF', font: { size: 11 }, maxTicksLimit: 5 }
+          }
+        }
+      }
+    });
+  }
+
+  function updateDivChart() {
+    if (!divChart || !divData) return;
+    const history = (divData.history || []).filter(m => activeYears.has(m.year));
+
+    const labels = history.map(m => m.month_label);
+    const allTickers = [...new Set(history.flatMap(m => Object.keys(m.by_ticker || {})))];
+
+    const datasets = allTickers.map((tk, i) => ({
+      label: tk,
+      data:  history.map(m => (m.by_ticker || {})[tk] || 0),
+      backgroundColor: TICKER_COLORS[i % TICKER_COLORS.length] + 'CC',
+      borderColor:     TICKER_COLORS[i % TICKER_COLORS.length],
+      borderWidth: 1, borderRadius: 3, borderSkipped: false,
+    }));
+
+    divChart.data.labels   = labels;
+    divChart.data.datasets = datasets;
+    divChart.update('active');
+  }
+
+  function buildYocList(positions) {
+    const el = document.getElementById('div-yoc-list');
+    el.innerHTML = '';
+    const paying = positions.filter(p => p.annual_income_eur > 0).slice(0, 8);
+    if (!paying.length) { el.innerHTML = '<p style="font-size:11px;color:var(--text-3);">Sin datos de dividendo disponibles</p>'; return; }
+    const maxYoc = Math.max(...paying.map(p => p.yield_on_cost_pct));
+    paying.forEach((p, i) => {
+      const color = TICKER_COLORS[i % TICKER_COLORS.length];
+      const pct   = maxYoc > 0 ? (p.yield_on_cost_pct / maxYoc * 100).toFixed(1) : 0;
+      const row   = document.createElement('div');
+      row.className = 'div-yoc-row';
+      row.innerHTML = `
+        <span style="font-size:11px;font-weight:600;min-width:90px;color:var(--text-1);">${p.ticker}</span>
+        <div class="div-yoc-bar-bg"><div class="div-yoc-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+        <span style="font-size:11px;font-weight:700;min-width:38px;text-align:right;color:${color};">${p.yield_on_cost_pct.toFixed(2)}%</span>
+        <span style="font-size:10px;color:var(--text-3);min-width:48px;text-align:right;">€${p.annual_income_eur.toFixed(0)}/yr</span>
+      `;
+      el.appendChild(row);
+    });
+  }
+
+  function buildSchedule(schedule) {
+    const el = document.getElementById('div-schedule-list');
+    el.innerHTML = '';
+    const upcoming = schedule.filter(s => s.ex_date >= new Date().toISOString().slice(0,10)).slice(0, 8);
+    if (!upcoming.length) { el.innerHTML = '<p style="font-size:11px;color:var(--text-3);">Sin próximos eventos calculados — ejecuta el notebook</p>'; return; }
+    const freqLabel = { quarterly: 'trimestral', 'semi-annual': 'semestral', annual: 'anual', monthly: 'mensual' };
+    upcoming.forEach(s => {
+      const d   = new Date(s.ex_date);
+      const dStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+      const row = document.createElement('div');
+      row.className = 'div-sched-row';
+      row.innerHTML = `
+        <span style="font-size:11px;font-weight:700;color:var(--text-2);min-width:52px;">${dStr}</span>
+        <span style="font-size:11px;font-weight:600;flex:1;margin:0 8px;">${s.ticker}</span>
+        <span style="font-size:10px;color:var(--text-3);margin-right:10px;">${freqLabel[s.frequency] || s.frequency}</span>
+        <span style="font-size:12px;font-weight:700;color:#FFB020;">~€${s.estimated_eur.toFixed(2)}</span>
+      `;
+      el.appendChild(row);
+    });
+  }
+
+  // Hook into loadPortfolio — patch the fetch callback
+  const _origLoad = loadPortfolio;
+  window._divInit = initDividends;
+})();
+
+// Patch: call _divInit after data loads — add to loadPortfolio via event
+document.addEventListener('portfolioLoaded', e => window._divInit && window._divInit(e.detail));
 </script>
 </body>
 </html>
