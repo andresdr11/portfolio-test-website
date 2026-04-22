@@ -354,6 +354,7 @@
       <div id="bench-toggles" style="display:none;flex-wrap:wrap;align-items:center;gap:6px;padding-top:14px;border-top:1px solid var(--border);margin-top:16px;">
         <span style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.07em;text-transform:uppercase;margin-right:4px;">Compare</span>
         <div id="bench-pills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        <button id="bench-clear" style="display:none;font-size:10px;font-weight:600;font-family:inherit;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:none;color:var(--text-3);cursor:pointer;transition:all 0.18s;margin-left:4px;" onmouseover="this.style.color='var(--text-1)';this.style.borderColor='rgba(255,255,255,0.25)'" onmouseout="this.style.color='var(--text-3)';this.style.borderColor='rgba(255,255,255,0.12)'">Clear all</button>
       </div>
     </div>
 
@@ -904,7 +905,11 @@ async function loadPortfolio() {
   });
 
   // ── BENCHMARK PILLS ───────────────────────────────────────────
-  const benchPillsEl = document.getElementById('bench-pills');
+  const benchPillsEl  = document.getElementById('bench-pills');
+  function refreshClearBtn() {
+    const el = document.getElementById('bench-clear');
+    if (el) el.style.display = activeBenches.size > 0 ? 'inline-block' : 'none';
+  }
   BENCH_CFG.forEach(b => {
     const pill = document.createElement('button');
     pill.className = 'bench-pill';
@@ -926,14 +931,35 @@ async function loadPortfolio() {
       activeBenches.has(b.id) ? activeBenches.delete(b.id) : activeBenches.add(b.id);
       applyPillState();
       updateCompareBtn();
+      refreshClearBtn();
       applyRange(currentRangeKey);
     });
 
     applyPillState();
+    allPillEls.push(pill);
     benchPillsEl.appendChild(pill);
   });
 
   updateCompareBtn();
+
+  // ── CLEAR ALL button ─────────────────────────────────────────
+  const benchClearBtn = document.getElementById('bench-clear');
+  const allPillEls    = [];
+
+  benchClearBtn.addEventListener('click', () => {
+    activeBenches.clear();
+    allPillEls.forEach((pill, i) => {
+      const b = BENCH_CFG[i];
+      pill.style.background  = 'rgba(255,255,255,0.03)';
+      pill.style.borderColor = 'rgba(255,255,255,0.08)';
+      pill.style.color       = 'var(--text-3)';
+      pill.querySelector('.bench-dot').style.background = '#4A4D62';
+    });
+    updateCompareBtn();
+    refreshClearBtn();
+    applyRange(currentRangeKey);
+  });
+  refreshClearBtn();
 
   // ── PIE / DOUGHNUT CHART ──────────────────────────────────
   const PIE_MIN    = 2.5; // agrupa < 2.5% en "Otros"
