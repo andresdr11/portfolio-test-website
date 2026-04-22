@@ -775,6 +775,35 @@ async function loadPortfolio() {
     return data.map(v => v == null ? null : ((1 + v / 100) / (1 + base / 100) - 1) * 100);
   }
 
+  // Align benchmark data to portfolio date labels (forward-fill missing dates)
+  function alignBench(benchPts, portRawPts) {
+    const bMap = {};
+    benchPts.forEach(p => { bMap[p.date] = p.value; });
+    let lastVal = benchPts.length ? benchPts[0].value : 0;
+    return portRawPts.map(p => {
+      const d = p.date || p.label;
+      if (bMap[d] !== undefined) { lastVal = bMap[d]; return bMap[d]; }
+      // Find nearest earlier date in bMap
+      const earlier = benchPts.filter(b => b.date <= d);
+      if (earlier.length) lastVal = earlier[earlier.length - 1].value;
+      return lastVal;
+    });
+  }
+
+  function getPortRawPts(rangeKey) {
+    const pts = getActivePts();
+    let filtered;
+    switch (rangeKey) {
+      case '1M':  filtered = filterDays(30,  pts); break;
+      case '3M':  filtered = filterDays(90,  pts); break;
+      case '6M':  filtered = filterDays(180, pts); break;
+      case 'YTD': filtered = filterYTD(pts);        break;
+      case '1Y':  filtered = filterDays(365, pts); break;
+      default:    filtered = pts;
+    }
+    return applyGranularity(filtered, currentGran);
+  }
+
   function applyRange(rangeKey) {
     const ranges = buildRanges(getActivePts());
     const r = ranges[rangeKey];
@@ -789,12 +818,13 @@ async function loadPortfolio() {
     lineChart.data.datasets[0].pointHoverBackgroundColor = color;
     lineChart.data.datasets[0].pointRadius              = 0;
 
-    // Benchmark overlays — only visible in TWR mode, rebased to period start
+    // Benchmark overlays — aligned to portfolio dates, rebased to period start
+    const portRawPts = getPortRawPts(rangeKey);
     BENCH_CFG.forEach((b, i) => {
       const ds = lineChart.data.datasets[i + 1];
       if (currentMode === 'twr' && b.pts.length > 0 && activeBenches.has(b.id)) {
-        const r = buildRanges(b.pts)[rangeKey];
-        ds.data   = r ? rebasePct(r.data) : [];
+        const aligned = alignBench(b.pts, portRawPts);
+        ds.data   = rebasePct(aligned);
         ds.hidden = false;
       } else {
         ds.data   = [];
