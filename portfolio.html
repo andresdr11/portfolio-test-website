@@ -205,6 +205,15 @@
     .pt-wbar-fill { height:100%; background:var(--purple); border-radius:2px; }
     .pt-wval      { font-size:12px; font-weight:600; min-width:34px; text-align:right; }
 
+    /* ── PIE TOGGLE ── */
+    .pie-toggle-btn {
+      font-size:11px; font-weight:600; font-family:inherit;
+      padding:4px 12px; border-radius:6px; border:none; cursor:pointer;
+      background:transparent; color:var(--text-3); transition:all 0.18s;
+    }
+    .pie-toggle-btn:hover  { color:var(--text-2); }
+    .pie-toggle-btn.active { background:var(--bg-card); color:var(--text-1); box-shadow:0 1px 4px rgba(0,0,0,0.4); }
+
     /* ── RISK DASHBOARD ── */
     .risk-tile {
       background: var(--bg-elev);
@@ -433,8 +442,16 @@
 
       <!-- Pie / Doughnut -->
       <div class="card fade-in d4" style="padding:24px;">
-        <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Asset Distribution</p>
-        <p style="font-size:11px;color:var(--text-3);margin-bottom:16px;">Allocation by asset class</p>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+          <div>
+            <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Asset Distribution</p>
+            <p id="pie-subtitle" style="font-size:11px;color:var(--text-3);">Por posición individual</p>
+          </div>
+          <div style="display:flex;background:var(--bg-elev);border-radius:8px;padding:3px;gap:2px;">
+            <button id="pie-toggle-pos" class="pie-toggle-btn active" data-mode="position">Posición</button>
+            <button id="pie-toggle-sec" class="pie-toggle-btn" data-mode="sector">Sector</button>
+          </div>
+        </div>
         <div style="position:relative;height:280px;">
           <canvas id="pieChart"></canvas>
         </div>
@@ -1225,35 +1242,66 @@ async function loadPortfolio() {
   refreshClearBtn();
 
   // ── PIE / DOUGHNUT CHART ──────────────────────────────────
-  const PIE_MIN    = 2.5; // agrupa < 2.5% en "Otros"
+  const PIE_MIN    = 2.5;
   const PIE_COLORS = ['#00E576','#6A80FF','#FFB020','#FF6B6B','#36CFC9','#F759AB','#FFC53D','#73D13D','#40A9FF','#B37FEB','#8B8FA8'];
 
-  const mainSlices  = d.pie.filter(p => p.weight_pct >= PIE_MIN);
-  const otherSlices = d.pie.filter(p => p.weight_pct <  PIE_MIN);
-  const othersTotal = otherSlices.reduce((s, p) => s + p.weight_pct, 0);
+  const SECTOR_COLORS = {
+    'Technology':    '#6A80FF',
+    'Healthcare':    '#00E576',
+    'Financials':    '#FFB020',
+    'Consumer Discretionary': '#FF9C6E',
+    'Industrials':   '#73D13D',
+    'Commodities':   '#FFC53D',
+    'Global Equity': '#36CFC9',
+    'Cash':          '#8B8FA8',
+    'Other':         '#4A4D62',
+  };
 
-  const pieLabels = mainSlices.map(p => p.ticker);
-  const pieValues = mainSlices.map(p => parseFloat(p.weight_pct.toFixed(1)));
-  if (othersTotal > 0) { pieLabels.push('Otros'); pieValues.push(parseFloat(othersTotal.toFixed(1))); }
+  function buildPiePosition() {
+    const main   = d.pie.filter(p => p.weight_pct >= PIE_MIN);
+    const others = d.pie.filter(p => p.weight_pct <  PIE_MIN);
+    const oTotal = parseFloat(others.reduce((s, p) => s + p.weight_pct, 0).toFixed(1));
+    const labels = main.map(p => p.ticker);
+    const values = main.map(p => parseFloat(p.weight_pct.toFixed(1)));
+    const colors = PIE_COLORS.slice(0, labels.length);
+    if (oTotal > 0) { labels.push('Otros'); values.push(oTotal); colors.push('#4A4D62'); }
+    return { labels, values, colors };
+  }
 
-  new Chart(document.getElementById('pieChart'), {
+  function buildPieSector() {
+    const map = {};
+    d.pie.forEach(p => {
+      const sec = p.sector || 'Other';
+      map[sec] = (map[sec] || 0) + p.weight_pct;
+    });
+    const labels = Object.keys(map).sort((a, b) => map[b] - map[a]);
+    const values = labels.map(s => parseFloat(map[s].toFixed(1)));
+    const colors = labels.map(s => SECTOR_COLORS[s] || '#4A4D62');
+    return { labels, values, colors };
+  }
+
+  let currentPieMode = 'position';
+  const initPie = buildPiePosition();
+
+  const pieChart = new Chart(document.getElementById('pieChart'), {
     type: 'doughnut',
     data: {
-      labels: pieLabels,
+      labels: initPie.labels,
       datasets: [{
-        data:            pieValues,
-        backgroundColor: PIE_COLORS.slice(0, pieLabels.length),
+        data:            initPie.values,
+        backgroundColor: initPie.colors,
         borderColor:     '#07080F',
         borderWidth:     3,
-        hoverOffset:     10
+        hoverOffset:     10,
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '60%',
+      animation: { duration: 500 },
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { padding: 18, usePointStyle: true, pointStyleWidth: 9, font: { size: 12, weight: '500' }, color: '#FFFFFF' }
+          labels: { padding: 14, usePointStyle: true, pointStyleWidth: 9, font: { size: 11, weight: '500' }, color: '#FFFFFF' }
         },
         datalabels: {
           color: '#07080F', font: { size: 11, weight: '700' },
@@ -1263,10 +1311,29 @@ async function loadPortfolio() {
         tooltip: {
           backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
           borderWidth: 1, padding: 12, displayColors: true,
-          callbacks: { label: ctx => '  ' + ctx.label + ': ' + ctx.parsed.toFixed(1) + '%' }
+          callbacks: { label: ctx => '  ' + ctx.label + ':  ' + ctx.parsed.toFixed(1) + '%' }
         }
       }
     }
+  });
+
+  function updatePieChart(mode) {
+    const { labels, values, colors } = mode === 'sector' ? buildPieSector() : buildPiePosition();
+    pieChart.data.labels                      = labels;
+    pieChart.data.datasets[0].data            = values;
+    pieChart.data.datasets[0].backgroundColor = colors;
+    pieChart.update();
+    document.getElementById('pie-subtitle').textContent =
+      mode === 'sector' ? 'Por sector · % de cartera' : 'Por posición individual';
+  }
+
+  document.querySelectorAll('.pie-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pie-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPieMode = btn.dataset.mode;
+      updatePieChart(currentPieMode);
+    });
   });
 
   // ── POSITIONS TABLE ──────────────────────────────────────────
