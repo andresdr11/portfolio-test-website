@@ -278,17 +278,35 @@
     }
     .proj-horizon:hover { color:var(--text-2); border-color:rgba(255,255,255,0.15); }
     .proj-horizon.active { background:rgba(0,229,118,0.12); border-color:rgba(0,229,118,0.35); color:#00E576; }
+    .proj-rate-badge {
+      display:inline-flex; align-items:baseline; gap:4px;
+      background:rgba(0,229,118,0.08); border:1px solid rgba(0,229,118,0.25);
+      border-radius:8px; padding:6px 14px;
+      font-size:20px; font-weight:700; color:#00E576; line-height:1;
+    }
+    .proj-rate-badge small { font-size:11px; font-weight:600; color:rgba(0,229,118,0.55); }
+    .proj-comp-add {
+      background:none; border:1px dashed rgba(255,255,255,0.15); border-radius:8px;
+      color:var(--text-3); font-size:11px; font-weight:600; font-family:inherit;
+      padding:7px 13px; cursor:pointer; transition:all 0.2s; white-space:nowrap;
+    }
+    .proj-comp-add:hover { border-color:rgba(106,128,255,0.45); color:#6A80FF; }
+    .proj-comp-row { display:none; align-items:center; gap:8px; }
+    .proj-comp-row.visible { display:flex; }
+    .proj-comp-dismiss {
+      width:22px; height:22px; border-radius:50%;
+      border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04);
+      color:var(--text-3); font-size:11px; cursor:pointer; font-family:inherit;
+      display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0;
+    }
+    .proj-comp-dismiss:hover { background:rgba(255,107,107,0.15); border-color:rgba(255,107,107,0.4); color:#FF6B6B; }
     .proj-rate-box {
       display:flex; flex-direction:column; gap:4px;
       background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
-      border-radius:8px; padding:8px 12px; min-width:88px;
+      border-radius:8px; padding:8px 12px; min-width:84px;
     }
-    .proj-rate-box.p-bear { border-color:rgba(255,107,107,0.28); }
-    .proj-rate-box.p-base { border-color:rgba(0,229,118,0.28); }
     .proj-rate-box.p-bull { border-color:rgba(106,128,255,0.28); }
     .proj-rate-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
-    .p-bear .proj-rate-tag, .p-bear .proj-rate-inp, .p-bear .proj-pct { color:#FF6B6B; }
-    .p-base .proj-rate-tag, .p-base .proj-rate-inp, .p-base .proj-pct { color:#00E576; }
     .p-bull .proj-rate-tag, .p-bull .proj-rate-inp, .p-bull .proj-pct { color:#6A80FF; }
     .proj-rate-row  { display:flex; align-items:baseline; gap:1px; }
     .proj-rate-inp  {
@@ -602,11 +620,14 @@
           <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Portfolio Projection</p>
           <p style="font-size:11px;color:var(--text-3);">Simulación de crecimiento futuro · interés compuesto</p>
         </div>
-        <!-- Legend inline -->
-        <div style="display:flex;align-items:center;gap:14px;font-size:11px;">
-          <span style="display:flex;align-items:center;gap:5px;color:#00E576;font-weight:600;"><span style="width:18px;height:2px;background:#00E576;border-radius:2px;display:inline-block;"></span>Base</span>
-          <span style="display:flex;align-items:center;gap:5px;color:#6A80FF;"><span style="width:18px;height:1px;background:#6A80FF;border-radius:2px;display:inline-block;border-bottom:1px dashed #6A80FF;"></span>Optimista</span>
-          <span style="display:flex;align-items:center;gap:5px;color:#FF6B6B;"><span style="width:18px;height:1px;background:#FF6B6B;border-radius:2px;display:inline-block;border-bottom:1px dashed #FF6B6B;"></span>Pesimista</span>
+        <!-- Legend inline — updated dynamically -->
+        <div id="proj-legend" style="display:flex;align-items:center;gap:14px;font-size:11px;">
+          <span style="display:flex;align-items:center;gap:5px;color:#00E576;font-weight:600;">
+            <span style="width:18px;height:2px;background:#00E576;border-radius:2px;display:inline-block;"></span>Base (TWR)
+          </span>
+          <span id="proj-legend-comp" style="display:none;align-items:center;gap:5px;color:#6A80FF;">
+            <span style="width:18px;height:1px;background:#6A80FF;display:inline-block;border-bottom:1px dashed #6A80FF;border-radius:2px;"></span>Comparar
+          </span>
         </div>
       </div>
 
@@ -628,8 +649,9 @@
 
         <div class="proj-ctrl-group">
           <span class="proj-ctrl-label">Horizonte temporal</span>
-          <div style="display:flex;gap:4px;">
-            <button class="proj-horizon active" data-y="5">5Y</button>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            <button class="proj-horizon active" id="proj-cy-btn" data-mode="cy">—</button>
+            <button class="proj-horizon" data-y="5">5Y</button>
             <button class="proj-horizon" data-y="10">10Y</button>
             <button class="proj-horizon" data-y="20">20Y</button>
             <button class="proj-horizon" data-y="30">30Y</button>
@@ -639,28 +661,26 @@
         <div class="proj-ctrl-div"></div>
 
         <div class="proj-ctrl-group">
-          <span class="proj-ctrl-label">Rentabilidad anual esperada</span>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="proj-rate-box p-bear">
-              <span class="proj-rate-tag">Pesimista</span>
-              <div class="proj-rate-row">
-                <input id="proj-bear" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="4">
-                <span class="proj-pct">%</span>
+          <span class="proj-ctrl-label">Rentabilidad anual</span>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <!-- Base: read-only CAGR badge -->
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <span style="font-size:9px;font-weight:700;color:rgba(0,229,118,0.55);text-transform:uppercase;letter-spacing:0.06em;">Base · TWR histórico</span>
+              <div class="proj-rate-badge">
+                <span id="proj-base-display">—</span><small>% / año</small>
               </div>
             </div>
-            <div class="proj-rate-box p-base">
-              <span class="proj-rate-tag">Base</span>
-              <div class="proj-rate-row">
-                <input id="proj-base" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="7">
-                <span class="proj-pct">%</span>
+            <!-- Compare toggle -->
+            <button class="proj-comp-add" id="proj-comp-add">+ Añadir línea</button>
+            <div class="proj-comp-row" id="proj-comp-row">
+              <div class="proj-rate-box p-bull">
+                <span class="proj-rate-tag">Comparar</span>
+                <div class="proj-rate-row">
+                  <input id="proj-comp" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="10">
+                  <span class="proj-pct">%</span>
+                </div>
               </div>
-            </div>
-            <div class="proj-rate-box p-bull">
-              <span class="proj-rate-tag">Optimista</span>
-              <div class="proj-rate-row">
-                <input id="proj-bull" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="10">
-                <span class="proj-pct">%</span>
-              </div>
+              <button class="proj-comp-dismiss" id="proj-comp-dismiss" title="Quitar">✕</button>
             </div>
           </div>
         </div>
@@ -1779,11 +1799,23 @@ window.initProjection = function(d) {
     if (yrs > 0.3) baseCagr = Math.round(((1 + twr / 100) ** (1 / yrs) - 1) * 1000) / 10;
   }
 
-  // Pre-fill inputs
-  document.getElementById('proj-pmt').value  = avgPmt;
-  document.getElementById('proj-base').value = baseCagr;
+  // Current year horizon
+  const now     = new Date();
+  const curYear = now.getFullYear();
+  const dec31   = new Date(curYear, 11, 31);
+  const cyMonths = Math.max(1, Math.round((dec31 - now) / (30.44 * 86400000)));
 
+  // Pre-fill controls
+  document.getElementById('proj-pmt').value          = avgPmt;
+  document.getElementById('proj-base-display').textContent = baseCagr.toFixed(1);
+  document.getElementById('proj-cy-btn').textContent = String(curYear);
+
+  // Horizon state — default: current year
+  let horizonMode  = 'cy'; // 'cy' | 'years'
   let horizonYears = 5;
+
+  // Comparison line state
+  let compVisible = false;
 
   // ── Helpers ──────────────────────────────────────────────────
   function fmtV(v) {
@@ -1793,69 +1825,73 @@ window.initProjection = function(d) {
   }
   function fmtFull(v) { return '€' + Math.round(v).toLocaleString('de-DE'); }
 
-  function project(pv, pmt, annRate, years) {
+  // project: iterate monthly; push every month if monthly=true, else every 12
+  function project(startPv, pmt, annRate, totalMonths, monthly) {
     const r = annRate / 100 / 12;
-    const pts = [pv];
-    let val = pv;
-    for (let m = 1; m <= years * 12; m++) {
+    const pts = [startPv];
+    let val = startPv;
+    for (let m = 1; m <= totalMonths; m++) {
       val = val * (1 + r) + pmt;
-      if (m % 12 === 0) pts.push(val);
+      if (monthly || m % 12 === 0) pts.push(val);
     }
     return pts;
   }
 
-  function getVals() {
-    return {
-      pmt:  parseFloat(document.getElementById('proj-pmt').value)  || 0,
-      bear: parseFloat(document.getElementById('proj-bear').value) || 0,
-      base: parseFloat(document.getElementById('proj-base').value) || 0,
-      bull: parseFloat(document.getElementById('proj-bull').value) || 0,
-    };
-  }
-
-  function makeLabels(y) {
+  function makeLabelsYears(y) {
     return Array.from({ length: y + 1 }, (_, i) => i === 0 ? 'Hoy' : `+${i}Y`);
   }
 
+  function makeLabelsCY() {
+    const mNames = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const labels = ['Hoy'];
+    const startM = now.getMonth();
+    for (let i = 1; i <= cyMonths; i++) labels.push(mNames[(startM + i) % 12]);
+    return labels;
+  }
+
+  function getHorizonParams() {
+    if (horizonMode === 'cy') return { labels: makeLabelsCY(), months: cyMonths, monthly: true };
+    return { labels: makeLabelsYears(horizonYears), months: horizonYears * 12, monthly: false };
+  }
+
+  function getPmt() { return parseFloat(document.getElementById('proj-pmt').value) || 0; }
+  function getComp() { return parseFloat(document.getElementById('proj-comp').value) || 0; }
+
+  function periodLabel() {
+    if (horizonMode === 'cy') return `a fin de ${curYear}`;
+    return `en ${horizonYears} año${horizonYears > 1 ? 's' : ''}`;
+  }
+
   // ── Chart ────────────────────────────────────────────────────
-  const ctx = document.getElementById('projChart').getContext('2d');
-  const iv  = getVals();
+  const ctx  = document.getElementById('projChart').getContext('2d');
+  const hp0  = getHorizonParams();
+  const pmt0 = getPmt();
 
   const projChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: makeLabels(horizonYears),
+      labels: hp0.labels,
       datasets: [
-        { // 0 — Pesimista (bottom boundary)
-          label: 'Pesimista',
-          data: project(pv, iv.pmt, iv.bear, horizonYears),
-          borderColor: '#FF6B6B', borderWidth: 1.5,
-          borderDash: [5, 4], fill: false,
-          backgroundColor: 'transparent', tension: 0.4,
-          pointRadius: 0, pointHoverRadius: 4,
-          pointHoverBackgroundColor: '#FF6B6B',
-          order: 3,
-        },
-        { // 1 — Optimista (top boundary, fills to pessimistic)
-          label: 'Optimista',
-          data: project(pv, iv.pmt, iv.bull, horizonYears),
-          borderColor: '#6A80FF', borderWidth: 1.5,
-          borderDash: [5, 4],
-          backgroundColor: 'rgba(106,128,255,0.07)',
-          fill: '-1', tension: 0.4,
-          pointRadius: 0, pointHoverRadius: 4,
-          pointHoverBackgroundColor: '#6A80FF',
-          order: 2,
-        },
-        { // 2 — Base (solid, on top)
+        { // 0 — Base (always on, green solid)
           label: 'Base',
-          data: project(pv, iv.pmt, iv.base, horizonYears),
+          data: project(pv, pmt0, baseCagr, hp0.months, hp0.monthly),
           borderColor: '#00E576', borderWidth: 2.5,
           backgroundColor: 'transparent', fill: false, tension: 0.4,
           pointRadius: 0, pointHoverRadius: 5,
           pointHoverBackgroundColor: '#00E576',
           pointHoverBorderColor: '#07080F', pointHoverBorderWidth: 2,
           order: 1,
+        },
+        { // 1 — Comparar (toggled, purple dashed)
+          label: 'Comparar',
+          data: project(pv, pmt0, getComp(), hp0.months, hp0.monthly),
+          borderColor: '#6A80FF', borderWidth: 1.5,
+          borderDash: [5, 4],
+          backgroundColor: 'transparent', fill: false, tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#6A80FF',
+          hidden: true,
+          order: 2,
         },
       ],
     },
@@ -1865,11 +1901,13 @@ window.initProjection = function(d) {
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
+        datalabels: { display: false },
         tooltip: {
           backgroundColor: '#14151F',
           borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1,
           padding: { top: 10, bottom: 10, left: 14, right: 16 },
           itemSort: (a, b) => b.parsed.y - a.parsed.y,
+          filter: item => !item.dataset.hidden,
           callbacks: {
             title: items => items[0].label,
             label: c => `  ${c.dataset.label}:  ${fmtFull(c.parsed.y)}`,
@@ -1878,7 +1916,10 @@ window.initProjection = function(d) {
         },
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: '#8B8FA8', font: { size: 11 } } },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#8B8FA8', font: { size: 11 }, maxTicksLimit: 10, maxRotation: 0 },
+        },
         y: {
           position: 'right',
           grid: { color: 'rgba(255,255,255,0.04)' },
@@ -1889,31 +1930,31 @@ window.initProjection = function(d) {
   });
 
   // ── KPI update ───────────────────────────────────────────────
-  function updateKPIs(basePts, pmt, years) {
+  function updateKPIs(basePts, pmt) {
+    const hp   = getHorizonParams();
     const fin  = basePts[basePts.length - 1];
-    const inv  = pv + pmt * years * 12;
+    const inv  = pv + pmt * hp.months;
     const gain = fin - inv;
     const mult = inv > 0 ? fin / inv : 0;
     document.getElementById('proj-final').textContent     = fmtFull(fin);
-    document.getElementById('proj-final-sub').textContent = `en ${years} año${years > 1 ? 's' : ''} · escenario base`;
+    document.getElementById('proj-final-sub').textContent = `${periodLabel()} · escenario base`;
     document.getElementById('proj-invested').textContent  = fmtFull(inv);
     document.getElementById('proj-gain').textContent      = fmtFull(Math.max(0, gain));
     document.getElementById('proj-gain-sub').textContent  = `×${mult.toFixed(1)} sobre lo invertido`;
   }
 
   function refresh() {
-    const { pmt, bear, base, bull } = getVals();
-    const labels = makeLabels(horizonYears);
-    projChart.data.labels           = labels;
-    projChart.data.datasets[0].data = project(pv, pmt, bear, horizonYears);
-    projChart.data.datasets[1].data = project(pv, pmt, bull, horizonYears);
-    projChart.data.datasets[2].data = project(pv, pmt, base, horizonYears);
+    const hp  = getHorizonParams();
+    const pmt = getPmt();
+    projChart.data.labels           = hp.labels;
+    projChart.data.datasets[0].data = project(pv, pmt, baseCagr, hp.months, hp.monthly);
+    projChart.data.datasets[1].data = project(pv, pmt, getComp(), hp.months, hp.monthly);
     projChart.update('active');
-    updateKPIs(project(pv, pmt, base, horizonYears), pmt, horizonYears);
+    updateKPIs(projChart.data.datasets[0].data, pmt);
   }
 
   // Initial KPIs
-  updateKPIs(project(pv, iv.pmt, iv.base, horizonYears), iv.pmt, horizonYears);
+  updateKPIs(projChart.data.datasets[0].data, pmt0);
 
   // ── Events ───────────────────────────────────────────────────
   document.getElementById('proj-pmt-minus').addEventListener('click', () => {
@@ -1926,17 +1967,42 @@ window.initProjection = function(d) {
     el.value = (parseFloat(el.value) || 0) + 50;
     refresh();
   });
-  ['proj-pmt', 'proj-bear', 'proj-base', 'proj-bull'].forEach(id =>
+  ['proj-pmt', 'proj-comp'].forEach(id =>
     document.getElementById(id).addEventListener('input', refresh)
   );
-  document.querySelectorAll('.proj-horizon').forEach(btn =>
+
+  // Horizon buttons
+  document.querySelectorAll('.proj-horizon').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.proj-horizon').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      horizonYears = parseInt(btn.dataset.y);
+      if (btn.dataset.mode === 'cy') {
+        horizonMode = 'cy';
+      } else {
+        horizonMode  = 'years';
+        horizonYears = parseInt(btn.dataset.y);
+      }
       refresh();
-    })
-  );
+    });
+  });
+
+  // Comparison line toggle
+  document.getElementById('proj-comp-add').addEventListener('click', () => {
+    compVisible = true;
+    document.getElementById('proj-comp-row').classList.add('visible');
+    document.getElementById('proj-comp-add').style.display = 'none';
+    document.getElementById('proj-legend-comp').style.display = 'flex';
+    projChart.data.datasets[1].hidden = false;
+    refresh();
+  });
+  document.getElementById('proj-comp-dismiss').addEventListener('click', () => {
+    compVisible = false;
+    document.getElementById('proj-comp-row').classList.remove('visible');
+    document.getElementById('proj-comp-add').style.display = '';
+    document.getElementById('proj-legend-comp').style.display = 'none';
+    projChart.data.datasets[1].hidden = true;
+    projChart.update('active');
+  });
 };
 
 loadPortfolio();
