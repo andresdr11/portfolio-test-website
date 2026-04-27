@@ -239,6 +239,66 @@
     .bench-pill:hover { border-color:rgba(255,255,255,0.14); color:var(--text-2); }
     .bench-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; transition:background 0.18s; }
 
+    /* ── PORTFOLIO PROJECTION ── */
+    .proj-controls {
+      display:flex; align-items:flex-end; flex-wrap:wrap; gap:0;
+      background:var(--bg-elev); border:1px solid var(--border);
+      border-radius:12px; padding:16px 20px; margin-bottom:20px;
+    }
+    .proj-ctrl-group { display:flex; flex-direction:column; gap:8px; padding:0 20px; }
+    .proj-ctrl-group:first-child { padding-left:0; }
+    .proj-ctrl-group:last-child  { padding-right:0; }
+    .proj-ctrl-label { font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; }
+    .proj-ctrl-div   { width:1px; height:48px; background:var(--border); align-self:center; flex-shrink:0; }
+    .proj-stepper    { display:flex; align-items:center; gap:6px; }
+    .proj-step {
+      width:28px; height:28px; border-radius:7px;
+      border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.04);
+      color:var(--text-2); font-size:16px; line-height:1; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.15s; font-family:inherit;
+    }
+    .proj-step:hover { background:rgba(255,255,255,0.09); color:var(--text-1); }
+    .proj-amt-wrap {
+      display:flex; align-items:center; gap:4px;
+      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+      border-radius:8px; padding:0 10px;
+    }
+    .proj-euro { font-size:13px; font-weight:600; color:var(--text-2); }
+    .proj-amt  {
+      background:none; border:none; outline:none;
+      color:var(--text-1); font-size:14px; font-weight:700; font-family:inherit;
+      width:72px; padding:7px 0;
+    }
+    .proj-amt::-webkit-inner-spin-button, .proj-amt::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .proj-horizon {
+      background:none; border:1px solid rgba(255,255,255,0.08); border-radius:7px;
+      color:var(--text-3); font-size:11px; font-weight:700; font-family:inherit;
+      padding:5px 11px; cursor:pointer; transition:all 0.15s;
+    }
+    .proj-horizon:hover { color:var(--text-2); border-color:rgba(255,255,255,0.15); }
+    .proj-horizon.active { background:rgba(0,229,118,0.12); border-color:rgba(0,229,118,0.35); color:#00E576; }
+    .proj-rate-box {
+      display:flex; flex-direction:column; gap:4px;
+      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+      border-radius:8px; padding:8px 12px; min-width:88px;
+    }
+    .proj-rate-box.p-bear { border-color:rgba(255,107,107,0.28); }
+    .proj-rate-box.p-base { border-color:rgba(0,229,118,0.28); }
+    .proj-rate-box.p-bull { border-color:rgba(106,128,255,0.28); }
+    .proj-rate-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+    .p-bear .proj-rate-tag, .p-bear .proj-rate-inp, .p-bear .proj-pct { color:#FF6B6B; }
+    .p-base .proj-rate-tag, .p-base .proj-rate-inp, .p-base .proj-pct { color:#00E576; }
+    .p-bull .proj-rate-tag, .p-bull .proj-rate-inp, .p-bull .proj-pct { color:#6A80FF; }
+    .proj-rate-row  { display:flex; align-items:baseline; gap:1px; }
+    .proj-rate-inp  {
+      background:none; border:none; outline:none; width:42px;
+      font-size:20px; font-weight:700; font-family:inherit; padding:0;
+    }
+    .proj-rate-inp::-webkit-inner-spin-button, .proj-rate-inp::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .proj-pct { font-size:14px; font-weight:700; }
+    @media(max-width:768px) { .proj-ctrl-div { display:none; } .proj-ctrl-group { padding:8px 0; border-top:1px solid var(--border); } .proj-ctrl-group:first-child { border-top:none; padding-top:0; } }
+
     /* ── DIVIDEND SECTION ── */
     .div-year-pill {
       display:inline-flex; align-items:center; gap:5px;
@@ -531,6 +591,108 @@
       <div style="position:relative;height:220px;">
         <canvas id="contributionsChart"></canvas>
       </div>
+    </div>
+
+
+    <!-- ── PORTFOLIO PROJECTION ── -->
+    <div id="projectionSection" class="card fade-in d5" style="padding:24px;margin-top:20px;">
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Portfolio Projection</p>
+          <p style="font-size:11px;color:var(--text-3);">Simulación de crecimiento futuro · interés compuesto</p>
+        </div>
+        <!-- Legend inline -->
+        <div style="display:flex;align-items:center;gap:14px;font-size:11px;">
+          <span style="display:flex;align-items:center;gap:5px;color:#00E576;font-weight:600;"><span style="width:18px;height:2px;background:#00E576;border-radius:2px;display:inline-block;"></span>Base</span>
+          <span style="display:flex;align-items:center;gap:5px;color:#6A80FF;"><span style="width:18px;height:1px;background:#6A80FF;border-radius:2px;display:inline-block;border-bottom:1px dashed #6A80FF;"></span>Optimista</span>
+          <span style="display:flex;align-items:center;gap:5px;color:#FF6B6B;"><span style="width:18px;height:1px;background:#FF6B6B;border-radius:2px;display:inline-block;border-bottom:1px dashed #FF6B6B;"></span>Pesimista</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="proj-controls">
+        <div class="proj-ctrl-group">
+          <span class="proj-ctrl-label">Aportación / mes</span>
+          <div class="proj-stepper">
+            <button class="proj-step" id="proj-pmt-minus">−</button>
+            <div class="proj-amt-wrap">
+              <span class="proj-euro">€</span>
+              <input id="proj-pmt" type="number" class="proj-amt" min="0" step="50" value="200">
+            </div>
+            <button class="proj-step" id="proj-pmt-plus">+</button>
+          </div>
+        </div>
+
+        <div class="proj-ctrl-div"></div>
+
+        <div class="proj-ctrl-group">
+          <span class="proj-ctrl-label">Horizonte temporal</span>
+          <div style="display:flex;gap:4px;">
+            <button class="proj-horizon active" data-y="5">5Y</button>
+            <button class="proj-horizon" data-y="10">10Y</button>
+            <button class="proj-horizon" data-y="20">20Y</button>
+            <button class="proj-horizon" data-y="30">30Y</button>
+          </div>
+        </div>
+
+        <div class="proj-ctrl-div"></div>
+
+        <div class="proj-ctrl-group">
+          <span class="proj-ctrl-label">Rentabilidad anual esperada</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="proj-rate-box p-bear">
+              <span class="proj-rate-tag">Pesimista</span>
+              <div class="proj-rate-row">
+                <input id="proj-bear" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="4">
+                <span class="proj-pct">%</span>
+              </div>
+            </div>
+            <div class="proj-rate-box p-base">
+              <span class="proj-rate-tag">Base</span>
+              <div class="proj-rate-row">
+                <input id="proj-base" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="7">
+                <span class="proj-pct">%</span>
+              </div>
+            </div>
+            <div class="proj-rate-box p-bull">
+              <span class="proj-rate-tag">Optimista</span>
+              <div class="proj-rate-row">
+                <input id="proj-bull" type="number" class="proj-rate-inp" min="0" max="50" step="0.5" value="10">
+                <span class="proj-pct">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div style="position:relative;height:300px;margin-bottom:20px;">
+        <canvas id="projChart"></canvas>
+      </div>
+
+      <!-- KPI row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+        <div class="risk-tile">
+          <p class="risk-label">Valor final estimado</p>
+          <p class="risk-val" id="proj-final" style="color:#00E576;">—</p>
+          <p class="risk-sub" id="proj-final-sub">escenario base</p>
+        </div>
+        <div class="risk-tile">
+          <p class="risk-label">Capital aportado</p>
+          <p class="risk-val" id="proj-invested">—</p>
+          <p class="risk-sub">cartera actual + aportaciones</p>
+        </div>
+        <div class="risk-tile">
+          <p class="risk-label">Ganancia de mercado</p>
+          <p class="risk-val" id="proj-gain" style="color:#00E576;">—</p>
+          <p class="risk-sub" id="proj-gain-sub">generado por interés compuesto</p>
+        </div>
+      </div>
+
+      <p style="font-size:10px;color:var(--text-3);text-align:center;padding-top:12px;border-top:1px solid var(--border);letter-spacing:0.02em;">
+        Proyección orientativa · rentabilidades pasadas no garantizan futuras
+      </p>
     </div>
 
 
@@ -1589,9 +1751,193 @@ async function loadPortfolio() {
     if (sec) sec.style.display = 'none';
   }
 
+  // Portfolio Projection
+  if (window.initProjection) window.initProjection(d);
+
   // Signal dividend section with full data payload
   document.dispatchEvent(new CustomEvent('portfolioLoaded', { detail: d }));
 }
+
+// ── PORTFOLIO PROJECTION ─────────────────────────────────────
+window.initProjection = function(d) {
+  const pv = d.kpis.total_portfolio_eur || 0;
+
+  // Avg monthly contribution — last 12 months positive deposits, rounded to €50
+  const contribs = (d.monthly_contributions || []).filter(m => m.amount > 0);
+  const last12   = contribs.slice(-12);
+  const rawAvg   = last12.length > 0 ? last12.reduce((s, m) => s + m.amount, 0) / last12.length : 200;
+  const avgPmt   = Math.round(rawAvg / 50) * 50;
+
+  // CAGR from twr_history
+  let baseCagr = 7.0;
+  const twrH = d.twr_history || [];
+  if (twrH.length > 1) {
+    const t0  = new Date(twrH[0].date);
+    const t1  = new Date(twrH[twrH.length - 1].date);
+    const yrs = (t1 - t0) / (365.25 * 24 * 3600 * 1000);
+    const twr = twrH[twrH.length - 1].value;
+    if (yrs > 0.3) baseCagr = Math.round(((1 + twr / 100) ** (1 / yrs) - 1) * 1000) / 10;
+  }
+
+  // Pre-fill inputs
+  document.getElementById('proj-pmt').value  = avgPmt;
+  document.getElementById('proj-base').value = baseCagr;
+
+  let horizonYears = 5;
+
+  // ── Helpers ──────────────────────────────────────────────────
+  function fmtV(v) {
+    if (v >= 1e6) return '€' + (v / 1e6).toFixed(2) + 'M';
+    if (v >= 1e3) return '€' + Math.round(v / 1e3) + 'k';
+    return '€' + Math.round(v);
+  }
+  function fmtFull(v) { return '€' + Math.round(v).toLocaleString('de-DE'); }
+
+  function project(pv, pmt, annRate, years) {
+    const r = annRate / 100 / 12;
+    const pts = [pv];
+    let val = pv;
+    for (let m = 1; m <= years * 12; m++) {
+      val = val * (1 + r) + pmt;
+      if (m % 12 === 0) pts.push(val);
+    }
+    return pts;
+  }
+
+  function getVals() {
+    return {
+      pmt:  parseFloat(document.getElementById('proj-pmt').value)  || 0,
+      bear: parseFloat(document.getElementById('proj-bear').value) || 0,
+      base: parseFloat(document.getElementById('proj-base').value) || 0,
+      bull: parseFloat(document.getElementById('proj-bull').value) || 0,
+    };
+  }
+
+  function makeLabels(y) {
+    return Array.from({ length: y + 1 }, (_, i) => i === 0 ? 'Hoy' : `+${i}Y`);
+  }
+
+  // ── Chart ────────────────────────────────────────────────────
+  const ctx = document.getElementById('projChart').getContext('2d');
+  const iv  = getVals();
+
+  const projChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: makeLabels(horizonYears),
+      datasets: [
+        { // 0 — Pesimista (bottom boundary)
+          label: 'Pesimista',
+          data: project(pv, iv.pmt, iv.bear, horizonYears),
+          borderColor: '#FF6B6B', borderWidth: 1.5,
+          borderDash: [5, 4], fill: false,
+          backgroundColor: 'transparent', tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#FF6B6B',
+          order: 3,
+        },
+        { // 1 — Optimista (top boundary, fills to pessimistic)
+          label: 'Optimista',
+          data: project(pv, iv.pmt, iv.bull, horizonYears),
+          borderColor: '#6A80FF', borderWidth: 1.5,
+          borderDash: [5, 4],
+          backgroundColor: 'rgba(106,128,255,0.07)',
+          fill: '-1', tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#6A80FF',
+          order: 2,
+        },
+        { // 2 — Base (solid, on top)
+          label: 'Base',
+          data: project(pv, iv.pmt, iv.base, horizonYears),
+          borderColor: '#00E576', borderWidth: 2.5,
+          backgroundColor: 'transparent', fill: false, tension: 0.4,
+          pointRadius: 0, pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#00E576',
+          pointHoverBorderColor: '#07080F', pointHoverBorderWidth: 2,
+          order: 1,
+        },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 400 },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#14151F',
+          borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1,
+          padding: { top: 10, bottom: 10, left: 14, right: 16 },
+          itemSort: (a, b) => b.parsed.y - a.parsed.y,
+          callbacks: {
+            title: items => items[0].label,
+            label: c => `  ${c.dataset.label}:  ${fmtFull(c.parsed.y)}`,
+            labelColor: c => ({ borderColor: c.dataset.borderColor, backgroundColor: c.dataset.borderColor }),
+          },
+        },
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8B8FA8', font: { size: 11 } } },
+        y: {
+          position: 'right',
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { callback: v => fmtV(v), color: '#8B8FA8', font: { size: 11 }, maxTicksLimit: 6 },
+        },
+      },
+    },
+  });
+
+  // ── KPI update ───────────────────────────────────────────────
+  function updateKPIs(basePts, pmt, years) {
+    const fin  = basePts[basePts.length - 1];
+    const inv  = pv + pmt * years * 12;
+    const gain = fin - inv;
+    const mult = inv > 0 ? fin / inv : 0;
+    document.getElementById('proj-final').textContent     = fmtFull(fin);
+    document.getElementById('proj-final-sub').textContent = `en ${years} año${years > 1 ? 's' : ''} · escenario base`;
+    document.getElementById('proj-invested').textContent  = fmtFull(inv);
+    document.getElementById('proj-gain').textContent      = fmtFull(Math.max(0, gain));
+    document.getElementById('proj-gain-sub').textContent  = `×${mult.toFixed(1)} sobre lo invertido`;
+  }
+
+  function refresh() {
+    const { pmt, bear, base, bull } = getVals();
+    const labels = makeLabels(horizonYears);
+    projChart.data.labels           = labels;
+    projChart.data.datasets[0].data = project(pv, pmt, bear, horizonYears);
+    projChart.data.datasets[1].data = project(pv, pmt, bull, horizonYears);
+    projChart.data.datasets[2].data = project(pv, pmt, base, horizonYears);
+    projChart.update('active');
+    updateKPIs(project(pv, pmt, base, horizonYears), pmt, horizonYears);
+  }
+
+  // Initial KPIs
+  updateKPIs(project(pv, iv.pmt, iv.base, horizonYears), iv.pmt, horizonYears);
+
+  // ── Events ───────────────────────────────────────────────────
+  document.getElementById('proj-pmt-minus').addEventListener('click', () => {
+    const el = document.getElementById('proj-pmt');
+    el.value = Math.max(0, (parseFloat(el.value) || 0) - 50);
+    refresh();
+  });
+  document.getElementById('proj-pmt-plus').addEventListener('click', () => {
+    const el = document.getElementById('proj-pmt');
+    el.value = (parseFloat(el.value) || 0) + 50;
+    refresh();
+  });
+  ['proj-pmt', 'proj-bear', 'proj-base', 'proj-bull'].forEach(id =>
+    document.getElementById(id).addEventListener('input', refresh)
+  );
+  document.querySelectorAll('.proj-horizon').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.proj-horizon').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      horizonYears = parseInt(btn.dataset.y);
+      refresh();
+    })
+  );
+};
 
 loadPortfolio();
 
