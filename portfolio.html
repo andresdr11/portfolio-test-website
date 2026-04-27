@@ -226,6 +226,78 @@
     .risk-sub   { font-size:11px; color:var(--text-3); }
     @media (max-width:640px) { .risk-grid { grid-template-columns:repeat(2,1fr) !important; } }
 
+    /* ── CONCENTRATION SECTION ── */
+    .conc-scale-track {
+      height: 3px;
+      background: linear-gradient(to right, #00E576 0%, #00E576 25%, #FFB020 45%, #FFB020 60%, #FF6B6B 78%, #FF6B6B 100%);
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .conc-needle {
+      position: absolute;
+      top: -6px;
+      width: 2px;
+      height: 15px;
+      background: #fff;
+      transform: translateX(-50%);
+      left: 0%;
+      transition: left 1.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+      box-shadow: 0 0 6px rgba(255,255,255,0.5);
+    }
+    .conc-seg {
+      height: 100%;
+      transform-origin: left center;
+      animation: concSegIn 0.7s cubic-bezier(0.25,0.46,0.45,0.94) both;
+    }
+    @keyframes concSegIn {
+      from { transform: scaleX(0); opacity: 0; }
+      to   { transform: scaleX(1); opacity: 1; }
+    }
+    .conc-tile {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .conc-tile::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 2px; height: 100%;
+      background: var(--accent-color, var(--text-3));
+    }
+    .conc-tile-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 9px;
+    }
+    .conc-tile-val {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 5px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .conc-tile-sub {
+      font-size: 10px;
+      color: var(--text-2);
+      line-height: 1.4;
+    }
+    .conc-bar-label-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow: hidden;
+    }
+    @media (max-width:640px) {
+      #conc-grid { grid-template-columns: repeat(2,1fr) !important; }
+    }
+
     /* ── BENCHMARK PILLS ── */
     .bench-pill {
       display:inline-flex; align-items:center; gap:6px;
@@ -614,6 +686,46 @@
       </div>
     </div>
 
+
+    <!-- ── CONCENTRATION ── -->
+    <div id="concentrationSection" class="card fade-in d4" style="padding:24px;margin-top:20px;display:none;">
+
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:32px;margin-bottom:22px;flex-wrap:wrap;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Concentración de Cartera</p>
+          <p style="font-size:11px;color:var(--text-3);">Índice HHI · dispersión del capital entre posiciones</p>
+        </div>
+        <!-- HHI score + scale -->
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:260px;flex:1;max-width:340px;">
+          <div style="display:flex;align-items:baseline;gap:12px;width:100%;justify-content:flex-end;">
+            <span id="conc-hhi-num" style="font-size:44px;font-weight:700;line-height:1;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:var(--text-1);">—</span>
+            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;">
+              <span style="font-size:9px;font-weight:700;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;">HHI score</span>
+              <span id="conc-hhi-badge" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2px 9px;border:1px solid currentColor;">—</span>
+            </div>
+          </div>
+          <div style="width:100%;">
+            <div class="conc-scale-track">
+              <div id="conc-needle" class="conc-needle"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);letter-spacing:0.04em;text-transform:uppercase;padding-top:2px;">
+              <span>0 Diversificado</span><span>5</span><span>10 Concentrado</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segmented bar -->
+      <div style="margin-bottom:22px;">
+        <div id="conc-bar-track" style="display:flex;height:26px;width:100%;gap:2px;overflow:hidden;border-radius:2px;margin-bottom:9px;"></div>
+        <div id="conc-bar-labels" style="display:flex;gap:2px;"></div>
+      </div>
+
+      <!-- Metric grid -->
+      <div id="conc-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+
+    </div>
 
     <!-- ── PIE + DIVERGING BAR ── -->
     <div class="charts-row" style="display:grid;grid-template-columns:400px 1fr;gap:20px;">
@@ -2043,6 +2155,153 @@ async function loadPortfolio() {
 
   // Portfolio Projection
   if (window.initProjection) window.initProjection(d);
+
+  // ── CONCENTRATION SECTION ──────────────────────────────────────────────────
+  (function initConcentration() {
+    const positions = (d.positions || []).filter(p => p.mkt_eur > 0);
+    const kpis      = d.kpis || {};
+    const breakdown = d.pnl_breakdown || [];
+    const totalMkt  = kpis.total_mkt_eur || 0;
+    const cashEur   = kpis.cash_eur || 0;
+    const totalPort = totalMkt + cashEur;
+    if (!positions.length || totalPort <= 0) return;
+
+    const sec = document.getElementById('concentrationSection');
+    sec.style.display = '';
+
+    // ── Weights (positions only, cash separate)
+    const withW = positions.map(p => ({ ...p, w: p.mkt_eur / totalPort * 100 }))
+                           .sort((a, b) => b.w - a.w);
+
+    // ── HHI: sqrt(Σwi²) / 10, wi in % → meaningful 0-10 scale
+    const hhiRaw = Math.sqrt(withW.reduce((s, p) => s + p.w * p.w, 0) + (cashEur / totalPort * 100) ** 2);
+    const hhiScore = Math.min(10, Math.max(0, hhiRaw / 10));
+
+    const hhiColor = hhiScore < 2 ? 'var(--green)' : hhiScore < 4 ? 'var(--amber)' : 'var(--red)';
+    const hhiLabel = hhiScore < 2 ? 'Bien diversificado' : hhiScore < 4 ? 'Moderado' : 'Concentrado';
+
+    document.getElementById('conc-hhi-num').textContent  = hhiScore.toFixed(1);
+    document.getElementById('conc-hhi-num').style.color  = hhiColor;
+    const badge = document.getElementById('conc-hhi-badge');
+    badge.textContent  = hhiLabel;
+    badge.style.color  = hhiColor;
+
+    // Animate needle after paint
+    requestAnimationFrame(() => setTimeout(() => {
+      document.getElementById('conc-needle').style.left = (hhiScore / 10 * 100).toFixed(1) + '%';
+    }, 120));
+
+    // ── Segmented bar: top 5 + others
+    const SEG_COLORS = ['#00C46A','#6A80FF','#FFB020','#2DD4BF','#F97316'];
+    const top5 = withW.slice(0, 5);
+    const othersW = withW.slice(5).reduce((s, p) => s + p.w, 0);
+    const cashW   = cashEur / totalPort * 100;
+    const segments = [
+      ...top5.map((p, i) => ({ ticker: p.ticker, w: p.w, color: SEG_COLORS[i] })),
+      ...(othersW > 0.5 ? [{ ticker: 'Otros', w: othersW, color: '#2A2D3E' }] : []),
+      ...(cashW > 0.5   ? [{ ticker: 'Cash',  w: cashW,   color: '#1A3D2E' }] : []),
+    ];
+
+    const track  = document.getElementById('conc-bar-track');
+    const labels = document.getElementById('conc-bar-labels');
+    track.innerHTML = ''; labels.innerHTML = '';
+
+    segments.forEach((seg, i) => {
+      const div = document.createElement('div');
+      div.className = 'conc-seg';
+      div.style.cssText = `width:${seg.w.toFixed(2)}%;background:${seg.color};animation-delay:${i * 0.08}s;flex-shrink:0;`;
+      track.appendChild(div);
+
+      const lbl = document.createElement('div');
+      lbl.className = 'conc-bar-label-item';
+      lbl.style.cssText = `width:${seg.w.toFixed(2)}%;flex-shrink:0;`;
+      lbl.innerHTML = `<span style="font-size:10px;font-weight:700;color:${seg.color === '#2A2D3E' || seg.color === '#1A3D2E' ? 'var(--text-3)' : seg.color};white-space:nowrap;overflow:hidden;text-overflow:clip;">${seg.ticker}</span>` +
+                      `<span style="font-size:9px;color:var(--text-3);">${seg.w.toFixed(1)}%</span>`;
+      labels.appendChild(lbl);
+    });
+
+    // ── Metrics
+    const top3W = withW.slice(0, 3).reduce((s, p) => s + p.w, 0);
+
+    // Currency split
+    const byCur = {};
+    positions.forEach(p => { byCur[p.currency] = (byCur[p.currency] || 0) + p.mkt_eur; });
+    const sortedCur = Object.entries(byCur).sort((a, b) => b[1] - a[1]);
+    const topCurName = sortedCur[0]?.[0] || '—';
+    const topCurPct  = totalMkt > 0 ? sortedCur[0]?.[1] / totalPort * 100 : 0;
+
+    // Sector split
+    const bySec = {};
+    positions.forEach(p => { if (p.sector) bySec[p.sector] = (bySec[p.sector] || 0) + p.mkt_eur; });
+    const sortedSec = Object.entries(bySec).sort((a, b) => b[1] - a[1]);
+    const topSecName = sortedSec[0]?.[0] || '—';
+    const topSecPct  = totalMkt > 0 ? sortedSec[0]?.[1] / totalPort * 100 : 0;
+
+    // ETF vs single stocks
+    const isETF = p => /\.(MI|XGAT|DE|PA|AS|LS)$/i.test(p.ticker) &&
+                       !/OHLA|MC$/i.test(p.ticker);
+    const etfMkt = positions.filter(isETF).reduce((s, p) => s + p.mkt_eur, 0);
+    const etfPct  = totalMkt > 0 ? etfMkt / totalPort * 100 : 0;
+    const stkPct  = totalMkt > 0 ? (totalMkt - etfMkt) / totalPort * 100 : 0;
+
+    // Best / worst contributor
+    const openBreak = breakdown.filter(b => b.is_open && b.ticker !== 'Comisiones');
+    const best  = openBreak.reduce((a, b) => b.contribution_pp > a.contribution_pp ? b : a, openBreak[0] || {});
+    const worst = openBreak.reduce((a, b) => b.contribution_pp < a.contribution_pp ? b : a, openBreak[0] || {});
+
+    const tiles = [
+      {
+        label: 'Concentración top 3',
+        val: top3W.toFixed(1) + '%',
+        sub: (withW[0]?.ticker || '') + ' · ' + (withW[1]?.ticker || '') + ' · ' + (withW[2]?.ticker || ''),
+        accent: top3W > 50 ? 'var(--red)' : top3W > 35 ? 'var(--amber)' : 'var(--green)',
+        color: top3W > 50 ? 'var(--red)' : top3W > 35 ? 'var(--amber)' : 'var(--text-1)',
+      },
+      {
+        label: 'Divisa dominante',
+        val: topCurName,
+        sub: topCurPct.toFixed(1) + '% del portfolio',
+        accent: topCurPct > 70 ? 'var(--amber)' : 'var(--purple)',
+        color: 'var(--text-1)',
+      },
+      {
+        label: 'Sector líder',
+        val: topSecPct.toFixed(1) + '%',
+        sub: topSecName,
+        accent: topSecPct > 40 ? 'var(--amber)' : 'var(--green)',
+        color: topSecPct > 40 ? 'var(--amber)' : 'var(--text-1)',
+      },
+      {
+        label: 'Acciones / ETFs',
+        val: stkPct.toFixed(0) + '% / ' + etfPct.toFixed(0) + '%',
+        sub: 'acciones individuales vs fondos',
+        accent: 'var(--purple)',
+        color: 'var(--text-1)',
+      },
+      {
+        label: 'Buffer de efectivo',
+        val: cashW.toFixed(1) + '%',
+        sub: '€' + Math.round(cashEur).toLocaleString('de-DE') + ' disponible',
+        accent: cashW < 3 ? 'var(--red)' : cashW > 15 ? 'var(--amber)' : 'var(--green)',
+        color: cashW < 3 ? 'var(--red)' : 'var(--text-1)',
+      },
+      {
+        label: 'Mayor drag activo',
+        val: worst?.ticker || '—',
+        sub: (worst?.contribution_pp != null ? (worst.contribution_pp >= 0 ? '+' : '') + worst.contribution_pp.toFixed(2) + ' pp' : ''),
+        accent: 'var(--red)',
+        color: 'var(--red)',
+      },
+    ];
+
+    const grid = document.getElementById('conc-grid');
+    grid.innerHTML = tiles.map(t => `
+      <div class="conc-tile" style="--accent-color:${t.accent}">
+        <p class="conc-tile-label">${t.label}</p>
+        <p class="conc-tile-val" style="color:${t.color}">${t.val}</p>
+        <p class="conc-tile-sub">${t.sub}</p>
+      </div>`).join('');
+  })();
 
   // Signal dividend section with full data payload
   document.dispatchEvent(new CustomEvent('portfolioLoaded', { detail: d }));
