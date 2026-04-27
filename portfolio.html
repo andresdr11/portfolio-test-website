@@ -298,6 +298,48 @@
       #conc-grid { grid-template-columns: repeat(2,1fr) !important; }
     }
 
+    /* ── FISCAL SECTION ── */
+    .fiscal-year-tabs { display:flex; gap:4px; margin-bottom:20px; }
+    .fiscal-tab {
+      padding:5px 14px; font-size:11px; font-weight:700; letter-spacing:0.06em;
+      text-transform:uppercase; border:1px solid var(--border); background:transparent;
+      color:var(--text-3); cursor:pointer; transition:all 0.15s;
+    }
+    .fiscal-tab:hover  { border-color:rgba(255,255,255,0.2); color:var(--text-2); }
+    .fiscal-tab.active { border-color:var(--green); color:var(--green); background:rgba(0,229,118,0.06); }
+    .fiscal-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .fiscal-table th {
+      font-size:9px; font-weight:700; color:var(--text-3); text-transform:uppercase;
+      letter-spacing:0.08em; padding:0 12px 10px; text-align:right; white-space:nowrap;
+    }
+    .fiscal-table th:first-child { text-align:left; padding-left:0; }
+    .fiscal-table td {
+      padding:11px 12px; border-top:1px solid var(--border);
+      color:var(--text-1); text-align:right; font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .fiscal-table td:first-child { text-align:left; padding-left:0; }
+    .fiscal-table tr:hover td { background:rgba(255,255,255,0.025); }
+    .fiscal-table .fiscal-gain-pos { color:var(--green); font-weight:700; }
+    .fiscal-table .fiscal-gain-neg { color:var(--red);   font-weight:700; }
+    .fiscal-holding-badge {
+      font-size:9px; font-weight:700; padding:2px 6px; letter-spacing:0.05em;
+      text-transform:uppercase; border-radius:2px;
+    }
+    .fiscal-summary-row {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:20px;
+      padding-top:18px; border-top:1px solid var(--border);
+    }
+    .fiscal-sum-tile {
+      padding:14px 16px; background:var(--bg-elev); border:1px solid var(--border);
+    }
+    .fiscal-empty {
+      text-align:center; padding:40px 0; color:var(--text-3); font-size:13px;
+    }
+    @media (max-width:640px) {
+      .fiscal-summary-row { grid-template-columns:repeat(2,1fr); }
+    }
+
     /* ── BENCHMARK PILLS ── */
     .bench-pill {
       display:inline-flex; align-items:center; gap:6px;
@@ -832,6 +874,43 @@
 
       <p style="font-size:10px;color:var(--text-3);text-align:center;padding-top:12px;border-top:1px solid var(--border);margin-top:16px;letter-spacing:0.02em;">
         Contribución = ganancia total posición / capital neto aportado · FX aplicado al coste histórico · retorno neto de comisiones · posiciones cerradas en gris
+      </p>
+    </div>
+
+    <!-- ── FISCAL SUMMARY ── -->
+    <div id="fiscalSection" class="card fade-in d5" style="padding:24px;margin-top:20px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Resumen Fiscal · Plusvalías</p>
+          <p style="font-size:11px;color:var(--text-3);">Posiciones cerradas · Base del ahorro · Tramos IRPF 2024</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Impuesto estimado</span>
+          <span id="fiscal-tax-total" style="font-size:18px;font-weight:700;color:var(--amber);">—</span>
+        </div>
+      </div>
+      <div class="fiscal-year-tabs" id="fiscal-year-tabs"></div>
+      <div style="overflow-x:auto;">
+        <table class="fiscal-table">
+          <thead>
+            <tr>
+              <th>Posición</th>
+              <th>1ª Compra</th>
+              <th>Venta</th>
+              <th>Tenencia</th>
+              <th>Coste EUR</th>
+              <th>Venta EUR</th>
+              <th>Ganancia / Pérd.</th>
+              <th>Tipo efectivo</th>
+              <th>Impuesto est.</th>
+            </tr>
+          </thead>
+          <tbody id="fiscal-tbody"></tbody>
+        </table>
+      </div>
+      <div id="fiscal-summary-row" class="fiscal-summary-row"></div>
+      <p style="font-size:10px;color:var(--text-3);text-align:center;padding-top:14px;border-top:1px solid var(--border);margin-top:18px;letter-spacing:0.02em;">
+        Estimación orientativa · Base del ahorro España 2024: 19% hasta €6k · 21% hasta €50k · 23% hasta €200k · 27% hasta €300k · 28% resto · Consulta a tu asesor fiscal
       </p>
     </div>
 
@@ -2152,6 +2231,126 @@ async function loadPortfolio() {
     const sec = document.getElementById('contribReturnSection');
     if (sec) sec.style.display = 'none';
   }
+
+  // ── FISCAL SECTION ──────────────────────────────────────────────────────────
+  (function initFiscal() {
+    const breakdown = (d.pnl_breakdown || []).filter(b =>
+      !b.is_open && b.ticker !== 'Comisiones' && b.sell_date
+    );
+    if (!breakdown.length) return;
+
+    document.getElementById('fiscalSection').style.display = '';
+
+    function calcTax(gain) {
+      if (gain <= 0) return 0;
+      let t = 0, g = gain;
+      const brackets = [[6000,0.19],[44000,0.21],[150000,0.23],[100000,0.27],[Infinity,0.28]];
+      for (const [size, rate] of brackets) {
+        const slice = Math.min(g, size);
+        t += slice * rate; g -= slice;
+        if (g <= 0) break;
+      }
+      return t;
+    }
+    function effectiveRate(gain) {
+      if (gain <= 0) return 0;
+      return calcTax(gain) / gain * 100;
+    }
+    function fmtDate(s) {
+      if (!s) return '—';
+      const [y,m,d] = s.split('-');
+      return `${d}/${m}/${y.slice(2)}`;
+    }
+    function holdingDays(buy, sell) {
+      if (!buy || !sell) return 0;
+      return Math.round((new Date(sell) - new Date(buy)) / 86400000);
+    }
+    function holdingLabel(days) {
+      if (days <= 0) return { text:'—', color:'var(--text-3)' };
+      if (days < 365) return { text: Math.round(days/30) + 'm', color:'var(--amber)' };
+      const y = (days/365).toFixed(1).replace('.0','');
+      return { text: y + 'a', color:'var(--green)' };
+    }
+
+    // Group by year of sell_date
+    const byYear = {};
+    breakdown.forEach(b => {
+      const yr = b.sell_date.slice(0,4);
+      (byYear[yr] = byYear[yr] || []).push(b);
+    });
+    const years = Object.keys(byYear).sort((a,b) => b-a);
+    let activeYear = years[0];
+
+    const tabsEl  = document.getElementById('fiscal-year-tabs');
+    const tbody   = document.getElementById('fiscal-tbody');
+    const sumRow  = document.getElementById('fiscal-summary-row');
+    const taxTotEl = document.getElementById('fiscal-tax-total');
+
+    function renderYear(yr) {
+      activeYear = yr;
+      tabsEl.querySelectorAll('.fiscal-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.yr === yr));
+
+      const rows = byYear[yr] || [];
+      const totalGain = rows.reduce((s,b) => s + b.realized_eur, 0);
+      const totalCost = rows.reduce((s,b) => s + b.cost_eur_invested, 0);
+      const totalProc = rows.reduce((s,b) => s + (b.sell_proceeds_eur || 0), 0);
+      const tax       = calcTax(totalGain);
+      const posGain   = rows.filter(b => b.realized_eur > 0).reduce((s,b) => s + b.realized_eur, 0);
+      const negGain   = rows.filter(b => b.realized_eur < 0).reduce((s,b) => s + b.realized_eur, 0);
+
+      taxTotEl.textContent = tax > 0 ? '−€' + Math.round(tax).toLocaleString('de-DE') : '€0';
+      taxTotEl.style.color = tax > 0 ? 'var(--amber)' : 'var(--green)';
+
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="fiscal-empty">Sin posiciones cerradas en ${yr}</td></tr>`;
+      } else {
+        tbody.innerHTML = rows.map(b => {
+          const days  = holdingDays(b.buy_date, b.sell_date);
+          const hl    = holdingLabel(days);
+          const gain  = b.realized_eur;
+          const rowTax = calcTax(gain);
+          const eff   = effectiveRate(gain);
+          const gainCls = gain >= 0 ? 'fiscal-gain-pos' : 'fiscal-gain-neg';
+          const sign  = gain >= 0 ? '+' : '';
+          const proceeds = b.sell_proceeds_eur || (b.cost_eur_invested + gain);
+          return `<tr>
+            <td><strong>${b.ticker}</strong>${b.description ? `<br><span style="font-size:10px;color:var(--text-3)">${b.description.slice(0,30)}</span>` : ''}</td>
+            <td style="color:var(--text-2)">${fmtDate(b.buy_date)}</td>
+            <td style="color:var(--text-2)">${fmtDate(b.sell_date)}</td>
+            <td><span class="fiscal-holding-badge" style="color:${hl.color};border:1px solid ${hl.color}20;background:${hl.color}10">${hl.text}</span></td>
+            <td>€${Math.round(b.cost_eur_invested).toLocaleString('de-DE')}</td>
+            <td>€${Math.round(proceeds).toLocaleString('de-DE')}</td>
+            <td class="${gainCls}">${sign}€${Math.round(Math.abs(gain)).toLocaleString('de-DE')}</td>
+            <td style="color:var(--text-2)">${gain > 0 ? eff.toFixed(1)+'%' : '—'}</td>
+            <td style="color:var(--amber)">${rowTax > 0 ? '−€'+Math.round(rowTax).toLocaleString('de-DE') : gain < 0 ? '<span style="color:var(--green);font-size:10px">compensa</span>' : '—'}</td>
+          </tr>`;
+        }).join('');
+      }
+
+      const netGain = totalGain;
+      sumRow.innerHTML = [
+        { label:'Ganancias brutas',  val: posGain > 0 ? '+€'+Math.round(posGain).toLocaleString('de-DE') : '€0', color:'var(--green)' },
+        { label:'Pérdidas',          val: negGain < 0 ? '−€'+Math.round(Math.abs(negGain)).toLocaleString('de-DE') : '€0', color:'var(--red)' },
+        { label:'Base imponible neta', val: (netGain>=0?'+':'−')+'€'+Math.round(Math.abs(netGain)).toLocaleString('de-DE'), color: netGain>=0?'var(--text-1)':'var(--red)' },
+        { label:'Impuesto estimado', val: tax > 0 ? '−€'+Math.round(tax).toLocaleString('de-DE') : '€0', color:'var(--amber)' },
+      ].map(t => `
+        <div class="fiscal-sum-tile">
+          <p class="risk-label" style="margin-bottom:8px">${t.label}</p>
+          <p class="risk-val" style="color:${t.color};font-size:20px">${t.val}</p>
+        </div>`).join('');
+    }
+
+    // Build tabs
+    tabsEl.innerHTML = years.map(yr =>
+      `<button class="fiscal-tab${yr===activeYear?' active':''}" data-yr="${yr}">${yr}</button>`
+    ).join('');
+    tabsEl.addEventListener('click', e => {
+      if (e.target.classList.contains('fiscal-tab')) renderYear(e.target.dataset.yr);
+    });
+
+    renderYear(activeYear);
+  })();
 
   // Portfolio Projection
   if (window.initProjection) window.initProjection(d);
