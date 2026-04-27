@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-04-27T17:32:08",
+  "generated_at": "2026-04-27T18:51:04",
   "kpis": {
-    "total_portfolio_eur": 22042.55,
-    "total_mkt_eur": 19536.56,
-    "cash_eur": 2505.99,
-    "total_pnl_eur": 4270.39,
-    "total_pnl_pct": 27.97,
+    "total_portfolio_eur": 21872.88,
+    "total_mkt_eur": 19736.89,
+    "cash_eur": 2135.99,
+    "total_pnl_eur": 4246.26,
+    "total_pnl_pct": 27.41,
     "capital_neto_eur": 19830.46,
     "dividendos_eur": 98.45,
     "dividendos_ytd_eur": 63.82,
     "best": {
       "ticker": "GDX.MI",
-      "pnl_pct": 110.87
+      "pnl_pct": 107.54
     },
     "worst": {
       "ticker": "NOVC.XGAT",
-      "pnl_pct": -12.33
+      "pnl_pct": -10.51
     }
   },
   "positions": [
@@ -23,13 +23,13 @@
       "ticker": "NVDA",
       "description": "NVIDIA Corp",
       "units": 20.0,
-      "price": 202.06,
-      "mkt_eur": 3442.7,
+      "price": 208.27,
+      "mkt_eur": 3550.17,
       "cost_eur": 2133.06,
       "avg_price": 106.653,
-      "pnl_pct": 61.4,
-      "pnl_eur": 1309.64,
-      "weight_pct": 15.62,
+      "pnl_pct": 66.44,
+      "pnl_eur": 1417.11,
+      "weight_pct": 16.23,
       "currency": "USD",
       "sector": "Technology",
       "country": "United States"
@@ -38,58 +38,58 @@
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
       "units": 33.0,
-      "price": 91.84,
-      "mkt_eur": 3030.72,
+      "price": 90.39,
+      "mkt_eur": 2982.87,
       "cost_eur": 1437.25,
       "avg_price": 43.553,
-      "pnl_pct": 110.87,
-      "pnl_eur": 1593.47,
-      "weight_pct": 13.75,
+      "pnl_pct": 107.54,
+      "pnl_eur": 1545.62,
+      "weight_pct": 13.64,
       "currency": "EUR",
       "sector": "Commodities",
+      "country": "United States"
+    },
+    {
+      "ticker": "UNH",
+      "description": "Unitedhealth Group Inc",
+      "units": 7.0,
+      "price": 354.92,
+      "mkt_eur": 2117.49,
+      "cost_eur": 1804.63,
+      "avg_price": 257.8043,
+      "pnl_pct": 17.34,
+      "pnl_eur": 312.86,
+      "weight_pct": 9.68,
+      "currency": "USD",
+      "sector": "Healthcare",
       "country": "United States"
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
       "units": 18.0,
-      "price": 116.3935,
-      "mkt_eur": 2095.08,
+      "price": 116.9395,
+      "mkt_eur": 2104.91,
       "cost_eur": 1708.19,
       "avg_price": 94.8994,
-      "pnl_pct": 22.65,
-      "pnl_eur": 386.89,
-      "weight_pct": 9.5,
+      "pnl_pct": 23.22,
+      "pnl_eur": 396.72,
+      "weight_pct": 9.62,
       "currency": "EUR",
       "sector": "Global Equity",
       "country": "Global"
     },
     {
-      "ticker": "UNH",
-      "description": "Unitedhealth Group Inc",
-      "units": 7.0,
-      "price": 323.48,
-      "mkt_eur": 1929.01,
-      "cost_eur": 1804.63,
-      "avg_price": 257.8043,
-      "pnl_pct": 6.89,
-      "pnl_eur": 124.38,
-      "weight_pct": 8.75,
-      "currency": "USD",
-      "sector": "Healthcare",
-      "country": "United States"
-    },
-    {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
       "units": 52.0,
-      "price": 34.37,
-      "mkt_eur": 1787.24,
+      "price": 35.085,
+      "mkt_eur": 1824.42,
       "cost_eur": 2038.68,
       "avg_price": 39.2054,
-      "pnl_pct": -12.33,
-      "pnl_eur": -251.44,
-      "weight_pct": 8.11,
+      "pnl_pct": -10.51,
+      "pnl_eur": -214.26,
+      "weight_pct": 8.34,
       "currency": "EUR",
       "sector": "Healthcare",
       "country": "Denmark"
@@ -98,43 +98,43 @@
       "ticker": "AMZN",
       "description": "Amazon.com Inc.",
       "units": 8.0,
-      "price": 248.28,
-      "mkt_eur": 1692.08,
+      "price": 263.99,
+      "mkt_eur": 1799.99,
       "cost_eur": 1454.78,
       "avg_price": 181.8475,
-      "pnl_pct": 16.31,
-      "pnl_eur": 237.3,
-      "weight_pct": 7.68,
+      "pnl_pct": 23.73,
+      "pnl_eur": 345.21,
+      "weight_pct": 8.23,
       "currency": "USD",
       "sector": "Technology",
-      "country": "United States"
-    },
-    {
-      "ticker": "HOOD",
-      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
-      "units": 21.0,
-      "price": 91.275,
-      "mkt_eur": 1632.9,
-      "cost_eur": 1142.13,
-      "avg_price": 54.3871,
-      "pnl_pct": 42.97,
-      "pnl_eur": 490.77,
-      "weight_pct": 7.41,
-      "currency": "USD",
-      "sector": "Financials",
       "country": "United States"
     },
     {
       "ticker": "BRK.B",
       "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
       "units": 4.0,
-      "price": 472.08,
-      "mkt_eur": 1608.66,
+      "price": 469.32,
+      "mkt_eur": 1600.01,
       "cost_eur": 1660.0,
       "avg_price": 415.0,
-      "pnl_pct": -3.09,
-      "pnl_eur": -51.34,
-      "weight_pct": 7.3,
+      "pnl_pct": -3.61,
+      "pnl_eur": -59.99,
+      "weight_pct": 7.32,
+      "currency": "USD",
+      "sector": "Financials",
+      "country": "United States"
+    },
+    {
+      "ticker": "HOOD",
+      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
+      "units": 21.0,
+      "price": 84.71,
+      "mkt_eur": 1516.16,
+      "cost_eur": 1366.59,
+      "avg_price": 65.0757,
+      "pnl_pct": 10.94,
+      "pnl_eur": 149.57,
+      "weight_pct": 6.93,
       "currency": "USD",
       "sector": "Financials",
       "country": "United States"
@@ -143,13 +143,13 @@
       "ticker": "BABA",
       "description": "Alibaba Group Holding Ltd - ADR",
       "units": 12.0,
-      "price": 140.17,
-      "mkt_eur": 1432.93,
+      "price": 135.82,
+      "mkt_eur": 1389.11,
       "cost_eur": 1212.45,
       "avg_price": 101.0375,
-      "pnl_pct": 18.18,
-      "pnl_eur": 220.48,
-      "weight_pct": 6.5,
+      "pnl_pct": 14.57,
+      "pnl_eur": 176.66,
+      "weight_pct": 6.35,
       "currency": "USD",
       "sector": "Consumer Discretionary",
       "country": "China"
@@ -158,13 +158,13 @@
       "ticker": "OHLA.MC",
       "description": "Obrascon Huarte Lain",
       "units": 1800.0,
-      "price": 0.4918,
-      "mkt_eur": 885.24,
+      "price": 0.4732,
+      "mkt_eur": 851.76,
       "cost_eur": 675.0,
       "avg_price": 0.375,
-      "pnl_pct": 31.15,
-      "pnl_eur": 210.24,
-      "weight_pct": 4.02,
+      "pnl_pct": 26.19,
+      "pnl_eur": 176.76,
+      "weight_pct": 3.89,
       "currency": "EUR",
       "sector": "Industrials",
       "country": "Spain"
@@ -175,13 +175,13 @@
       "ticker": "NVDA",
       "description": "NVIDIA Corp",
       "units": 20.0,
-      "price": 202.06,
-      "mkt_eur": 3442.7,
+      "price": 208.27,
+      "mkt_eur": 3550.17,
       "cost_eur": 2133.06,
       "avg_price": 106.653,
-      "pnl_pct": 61.4,
-      "pnl_eur": 1309.64,
-      "weight_pct": 15.62,
+      "pnl_pct": 66.44,
+      "pnl_eur": 1417.11,
+      "weight_pct": 16.23,
       "currency": "USD",
       "sector": "Technology",
       "country": "United States"
@@ -190,58 +190,58 @@
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
       "units": 33.0,
-      "price": 91.84,
-      "mkt_eur": 3030.72,
+      "price": 90.39,
+      "mkt_eur": 2982.87,
       "cost_eur": 1437.25,
       "avg_price": 43.553,
-      "pnl_pct": 110.87,
-      "pnl_eur": 1593.47,
-      "weight_pct": 13.75,
+      "pnl_pct": 107.54,
+      "pnl_eur": 1545.62,
+      "weight_pct": 13.64,
       "currency": "EUR",
       "sector": "Commodities",
+      "country": "United States"
+    },
+    {
+      "ticker": "UNH",
+      "description": "Unitedhealth Group Inc",
+      "units": 7.0,
+      "price": 354.92,
+      "mkt_eur": 2117.49,
+      "cost_eur": 1804.63,
+      "avg_price": 257.8043,
+      "pnl_pct": 17.34,
+      "pnl_eur": 312.86,
+      "weight_pct": 9.68,
+      "currency": "USD",
+      "sector": "Healthcare",
       "country": "United States"
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
       "units": 18.0,
-      "price": 116.3935,
-      "mkt_eur": 2095.08,
+      "price": 116.9395,
+      "mkt_eur": 2104.91,
       "cost_eur": 1708.19,
       "avg_price": 94.8994,
-      "pnl_pct": 22.65,
-      "pnl_eur": 386.89,
-      "weight_pct": 9.5,
+      "pnl_pct": 23.22,
+      "pnl_eur": 396.72,
+      "weight_pct": 9.62,
       "currency": "EUR",
       "sector": "Global Equity",
       "country": "Global"
     },
     {
-      "ticker": "UNH",
-      "description": "Unitedhealth Group Inc",
-      "units": 7.0,
-      "price": 323.48,
-      "mkt_eur": 1929.01,
-      "cost_eur": 1804.63,
-      "avg_price": 257.8043,
-      "pnl_pct": 6.89,
-      "pnl_eur": 124.38,
-      "weight_pct": 8.75,
-      "currency": "USD",
-      "sector": "Healthcare",
-      "country": "United States"
-    },
-    {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
       "units": 52.0,
-      "price": 34.37,
-      "mkt_eur": 1787.24,
+      "price": 35.085,
+      "mkt_eur": 1824.42,
       "cost_eur": 2038.68,
       "avg_price": 39.2054,
-      "pnl_pct": -12.33,
-      "pnl_eur": -251.44,
-      "weight_pct": 8.11,
+      "pnl_pct": -10.51,
+      "pnl_eur": -214.26,
+      "weight_pct": 8.34,
       "currency": "EUR",
       "sector": "Healthcare",
       "country": "Denmark"
@@ -250,43 +250,43 @@
       "ticker": "AMZN",
       "description": "Amazon.com Inc.",
       "units": 8.0,
-      "price": 248.28,
-      "mkt_eur": 1692.08,
+      "price": 263.99,
+      "mkt_eur": 1799.99,
       "cost_eur": 1454.78,
       "avg_price": 181.8475,
-      "pnl_pct": 16.31,
-      "pnl_eur": 237.3,
-      "weight_pct": 7.68,
+      "pnl_pct": 23.73,
+      "pnl_eur": 345.21,
+      "weight_pct": 8.23,
       "currency": "USD",
       "sector": "Technology",
-      "country": "United States"
-    },
-    {
-      "ticker": "HOOD",
-      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
-      "units": 21.0,
-      "price": 91.275,
-      "mkt_eur": 1632.9,
-      "cost_eur": 1142.13,
-      "avg_price": 54.3871,
-      "pnl_pct": 42.97,
-      "pnl_eur": 490.77,
-      "weight_pct": 7.41,
-      "currency": "USD",
-      "sector": "Financials",
       "country": "United States"
     },
     {
       "ticker": "BRK.B",
       "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
       "units": 4.0,
-      "price": 472.08,
-      "mkt_eur": 1608.66,
+      "price": 469.32,
+      "mkt_eur": 1600.01,
       "cost_eur": 1660.0,
       "avg_price": 415.0,
-      "pnl_pct": -3.09,
-      "pnl_eur": -51.34,
-      "weight_pct": 7.3,
+      "pnl_pct": -3.61,
+      "pnl_eur": -59.99,
+      "weight_pct": 7.32,
+      "currency": "USD",
+      "sector": "Financials",
+      "country": "United States"
+    },
+    {
+      "ticker": "HOOD",
+      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
+      "units": 21.0,
+      "price": 84.71,
+      "mkt_eur": 1516.16,
+      "cost_eur": 1366.59,
+      "avg_price": 65.0757,
+      "pnl_pct": 10.94,
+      "pnl_eur": 149.57,
+      "weight_pct": 6.93,
       "currency": "USD",
       "sector": "Financials",
       "country": "United States"
@@ -295,13 +295,13 @@
       "ticker": "BABA",
       "description": "Alibaba Group Holding Ltd - ADR",
       "units": 12.0,
-      "price": 140.17,
-      "mkt_eur": 1432.93,
+      "price": 135.82,
+      "mkt_eur": 1389.11,
       "cost_eur": 1212.45,
       "avg_price": 101.0375,
-      "pnl_pct": 18.18,
-      "pnl_eur": 220.48,
-      "weight_pct": 6.5,
+      "pnl_pct": 14.57,
+      "pnl_eur": 176.66,
+      "weight_pct": 6.35,
       "currency": "USD",
       "sector": "Consumer Discretionary",
       "country": "China"
@@ -310,13 +310,13 @@
       "ticker": "OHLA.MC",
       "description": "Obrascon Huarte Lain",
       "units": 1800.0,
-      "price": 0.4918,
-      "mkt_eur": 885.24,
+      "price": 0.4732,
+      "mkt_eur": 851.76,
       "cost_eur": 675.0,
       "avg_price": 0.375,
-      "pnl_pct": 31.15,
-      "pnl_eur": 210.24,
-      "weight_pct": 4.02,
+      "pnl_pct": 26.19,
+      "pnl_eur": 176.76,
+      "weight_pct": 3.89,
       "currency": "EUR",
       "sector": "Industrials",
       "country": "Spain"
@@ -324,10 +324,10 @@
     {
       "ticker": "Cash",
       "description": "Cash disponible",
-      "mkt_eur": 2505.99,
+      "mkt_eur": 2135.99,
       "pnl_pct": 0,
       "pnl_eur": 0,
-      "weight_pct": 11.37,
+      "weight_pct": 9.77,
       "sector": "Cash",
       "country": "—"
     }
@@ -641,7 +641,7 @@
     {
       "date": "2024-06-21",
       "label": "21 Jun 24",
-      "value": 2893.46
+      "value": 2613.46
     },
     {
       "date": "2024-06-21",
@@ -4076,23 +4076,23 @@
     },
     {
       "date": "2026-04-21",
-      "value": 21903.76
+      "value": 21896.15
     },
     {
       "date": "2026-04-22",
-      "value": 22097.98
+      "value": 21876.23
     },
     {
       "date": "2026-04-23",
-      "value": 21910.25
+      "value": 21626.71
     },
     {
       "date": "2026-04-24",
-      "value": 22307.3
+      "value": 21927.17
     },
     {
       "date": "2026-04-27",
-      "value": 22132.17
+      "value": 21848.26
     }
   ],
   "pnl_history": [
@@ -7242,23 +7242,23 @@
     },
     {
       "date": "2026-04-21",
-      "value": 5524.24
+      "value": 5517.81
     },
     {
       "date": "2026-04-22",
-      "value": 5718.46
+      "value": 5717.89
     },
     {
       "date": "2026-04-23",
-      "value": 5530.74
+      "value": 5518.37
     },
     {
       "date": "2026-04-24",
-      "value": 5927.79
+      "value": 5918.84
     },
     {
       "date": "2026-04-27",
-      "value": 5752.66
+      "value": 5839.93
     }
   ],
   "twr_history": [
@@ -10384,23 +10384,23 @@
     },
     {
       "date": "2026-04-21",
-      "value": 64.0883
+      "value": 64.0401
     },
     {
       "date": "2026-04-22",
-      "value": 65.5433
+      "value": 65.5391
     },
     {
       "date": "2026-04-23",
-      "value": 64.137
+      "value": 64.0293
     },
     {
       "date": "2026-04-24",
-      "value": 67.1114
+      "value": 67.0667
     },
     {
       "date": "2026-04-27",
-      "value": 65.7995
+      "value": 66.4655
     }
   ],
   "sp500_history": [
@@ -13542,7 +13542,7 @@
     },
     {
       "date": "2026-04-27",
-      "value": 74.7798
+      "value": 75.1136
     }
   ],
   "monthly_contributions": [
@@ -13680,69 +13680,69 @@
     },
     {
       "month": "2026-04",
-      "amount": 400.0
+      "amount": 30.0
     }
   ],
   "position_contributions": [
     {
-      "ticker": "HOOD",
-      "contrib_pp": 2.769,
-      "ytd_return_pct": 42.97,
-      "pnl_eur": 490.77
-    },
-    {
       "ticker": "NVDA",
-      "contrib_pp": 1.947,
-      "ytd_return_pct": 12.52,
-      "pnl_eur": 1309.64
-    },
-    {
-      "ticker": "GDX.MI",
-      "contrib_pp": 1.486,
-      "ytd_return_pct": 10.85,
-      "pnl_eur": 1593.47
+      "contrib_pp": 2.314,
+      "ytd_return_pct": 14.24,
+      "pnl_eur": 1417.11
     },
     {
       "ticker": "AMZN",
-      "contrib_pp": 1.339,
-      "ytd_return_pct": 16.31,
-      "pnl_eur": 237.3
+      "contrib_pp": 1.948,
+      "ytd_return_pct": 23.73,
+      "pnl_eur": 345.21
+    },
+    {
+      "ticker": "GDX.MI",
+      "contrib_pp": 1.493,
+      "ytd_return_pct": 10.94,
+      "pnl_eur": 1545.62
     },
     {
       "ticker": "OHLA.MC",
-      "contrib_pp": 1.186,
-      "ytd_return_pct": 31.15,
-      "pnl_eur": 210.24
+      "contrib_pp": 0.997,
+      "ytd_return_pct": 26.19,
+      "pnl_eur": 176.76
+    },
+    {
+      "ticker": "HOOD",
+      "contrib_pp": 0.844,
+      "ytd_return_pct": 10.94,
+      "pnl_eur": 149.57
     },
     {
       "ticker": "UNH",
-      "contrib_pp": 0.519,
-      "ytd_return_pct": 5.95,
-      "pnl_eur": 124.38
+      "contrib_pp": 0.605,
+      "ytd_return_pct": 6.25,
+      "pnl_eur": 312.86
     },
     {
       "ticker": "EUNL.XGAT",
-      "contrib_pp": 0.451,
-      "ytd_return_pct": 4.76,
-      "pnl_eur": 386.89
+      "contrib_pp": 0.46,
+      "ytd_return_pct": 4.77,
+      "pnl_eur": 396.72
     },
     {
       "ticker": "BRK.B",
-      "contrib_pp": -0.397,
-      "ytd_return_pct": -5.46,
-      "pnl_eur": -51.34
+      "contrib_pp": -0.404,
+      "ytd_return_pct": -5.52,
+      "pnl_eur": -59.99
     },
     {
       "ticker": "BABA",
-      "contrib_pp": -0.618,
-      "ytd_return_pct": -9.54,
-      "pnl_eur": 220.48
+      "contrib_pp": -0.614,
+      "ytd_return_pct": -9.66,
+      "pnl_eur": 176.66
     },
     {
       "ticker": "NOVC.XGAT",
-      "contrib_pp": -1.513,
-      "ytd_return_pct": -18.74,
-      "pnl_eur": -251.44
+      "contrib_pp": -1.528,
+      "ytd_return_pct": -18.3,
+      "pnl_eur": -214.26
     }
   ],
   "pnl_breakdown": [
@@ -13750,31 +13750,31 @@
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
       "is_open": true,
-      "mkt_eur": 3030.72,
+      "mkt_eur": 2982.87,
       "cost_eur_invested": 1899.4,
-      "unrealized_eur": 1593.47,
-      "unrealized_pct": 110.87,
+      "unrealized_eur": 1545.62,
+      "unrealized_pct": 107.54,
       "realized_eur": 187.11,
       "dividends_eur": 0,
-      "total_pnl_eur": 1780.58,
-      "contribution_pp": 8.98,
-      "position_return_pct": 93.74,
-      "weight_pct": 8.4
+      "total_pnl_eur": 1732.73,
+      "contribution_pp": 8.74,
+      "position_return_pct": 91.23,
+      "weight_pct": 8.3
     },
     {
       "ticker": "NVDA",
       "description": "NVIDIA Corp",
       "is_open": true,
-      "mkt_eur": 3442.7,
+      "mkt_eur": 3550.17,
       "cost_eur_invested": 2133.06,
-      "unrealized_eur": 1309.64,
-      "unrealized_pct": 61.4,
+      "unrealized_eur": 1417.11,
+      "unrealized_pct": 66.44,
       "realized_eur": 0,
       "dividends_eur": 0.73,
-      "total_pnl_eur": 1310.37,
-      "contribution_pp": 6.61,
-      "position_return_pct": 61.43,
-      "weight_pct": 9.4
+      "total_pnl_eur": 1417.84,
+      "contribution_pp": 7.15,
+      "position_return_pct": 66.47,
+      "weight_pct": 9.3
     },
     {
       "ticker": "TSLA",
@@ -13789,7 +13789,7 @@
       "total_pnl_eur": 708.62,
       "contribution_pp": 3.57,
       "position_return_pct": 17.65,
-      "weight_pct": 17.7
+      "weight_pct": 17.5
     },
     {
       "ticker": "G2XJ.DE",
@@ -13804,37 +13804,52 @@
       "total_pnl_eur": 651.53,
       "contribution_pp": 3.29,
       "position_return_pct": 47.99,
-      "weight_pct": 6.0
-    },
-    {
-      "ticker": "HOOD",
-      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
-      "is_open": true,
-      "mkt_eur": 1632.9,
-      "cost_eur_invested": 1142.13,
-      "unrealized_eur": 490.77,
-      "unrealized_pct": 42.97,
-      "realized_eur": 0,
-      "dividends_eur": 0,
-      "total_pnl_eur": 490.77,
-      "contribution_pp": 2.47,
-      "position_return_pct": 42.97,
-      "weight_pct": 5.0
+      "weight_pct": 5.9
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
       "is_open": true,
-      "mkt_eur": 2095.08,
+      "mkt_eur": 2104.91,
       "cost_eur_invested": 2147.92,
-      "unrealized_eur": 386.89,
-      "unrealized_pct": 22.65,
+      "unrealized_eur": 396.72,
+      "unrealized_pct": 23.22,
       "realized_eur": 18.11,
       "dividends_eur": 0,
-      "total_pnl_eur": 405.0,
-      "contribution_pp": 2.04,
-      "position_return_pct": 18.86,
+      "total_pnl_eur": 414.83,
+      "contribution_pp": 2.09,
+      "position_return_pct": 19.31,
       "weight_pct": 9.4
+    },
+    {
+      "ticker": "AMZN",
+      "description": "Amazon.com Inc.",
+      "is_open": true,
+      "mkt_eur": 1799.99,
+      "cost_eur_invested": 1454.78,
+      "unrealized_eur": 345.21,
+      "unrealized_pct": 23.73,
+      "realized_eur": 0,
+      "dividends_eur": 0,
+      "total_pnl_eur": 345.21,
+      "contribution_pp": 1.74,
+      "position_return_pct": 23.73,
+      "weight_pct": 6.3
+    },
+    {
+      "ticker": "UNH",
+      "description": "Unitedhealth Group Inc",
+      "is_open": true,
+      "mkt_eur": 2117.49,
+      "cost_eur_invested": 1804.63,
+      "unrealized_eur": 312.86,
+      "unrealized_pct": 17.34,
+      "realized_eur": 0,
+      "dividends_eur": 24.63,
+      "total_pnl_eur": 337.49,
+      "contribution_pp": 1.7,
+      "position_return_pct": 18.7,
+      "weight_pct": 7.9
     },
     {
       "ticker": "AAPL",
@@ -13855,61 +13870,46 @@
       "ticker": "BABA",
       "description": "Alibaba Group Holding Ltd - ADR",
       "is_open": true,
-      "mkt_eur": 1432.93,
+      "mkt_eur": 1389.11,
       "cost_eur_invested": 1212.45,
-      "unrealized_eur": 220.48,
-      "unrealized_pct": 18.18,
+      "unrealized_eur": 176.66,
+      "unrealized_pct": 14.57,
       "realized_eur": 0,
       "dividends_eur": 17.09,
-      "total_pnl_eur": 237.57,
-      "contribution_pp": 1.2,
-      "position_return_pct": 19.59,
+      "total_pnl_eur": 193.75,
+      "contribution_pp": 0.98,
+      "position_return_pct": 15.98,
       "weight_pct": 5.3
-    },
-    {
-      "ticker": "AMZN",
-      "description": "Amazon.com Inc.",
-      "is_open": true,
-      "mkt_eur": 1692.08,
-      "cost_eur_invested": 1454.78,
-      "unrealized_eur": 237.3,
-      "unrealized_pct": 16.31,
-      "realized_eur": 0,
-      "dividends_eur": 0,
-      "total_pnl_eur": 237.3,
-      "contribution_pp": 1.2,
-      "position_return_pct": 16.31,
-      "weight_pct": 6.4
     },
     {
       "ticker": "OHLA.MC",
       "description": "Obrascon Huarte Lain",
       "is_open": true,
-      "mkt_eur": 885.24,
+      "mkt_eur": 851.76,
       "cost_eur_invested": 675.0,
-      "unrealized_eur": 210.24,
-      "unrealized_pct": 31.15,
+      "unrealized_eur": 176.76,
+      "unrealized_pct": 26.19,
       "realized_eur": 0,
       "dividends_eur": 0,
-      "total_pnl_eur": 210.24,
-      "contribution_pp": 1.06,
-      "position_return_pct": 31.15,
-      "weight_pct": 3.0
+      "total_pnl_eur": 176.76,
+      "contribution_pp": 0.89,
+      "position_return_pct": 26.19,
+      "weight_pct": 2.9
     },
     {
-      "ticker": "UNH",
-      "description": "Unitedhealth Group Inc",
+      "ticker": "HOOD",
+      "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
       "is_open": true,
-      "mkt_eur": 1929.01,
-      "cost_eur_invested": 1804.63,
-      "unrealized_eur": 124.38,
-      "unrealized_pct": 6.89,
+      "mkt_eur": 1516.16,
+      "cost_eur_invested": 1366.59,
+      "unrealized_eur": 149.57,
+      "unrealized_pct": 10.94,
       "realized_eur": 0,
-      "dividends_eur": 24.63,
-      "total_pnl_eur": 149.01,
+      "dividends_eur": 0,
+      "total_pnl_eur": 149.57,
       "contribution_pp": 0.75,
-      "position_return_pct": 8.26,
-      "weight_pct": 7.9
+      "position_return_pct": 10.94,
+      "weight_pct": 5.9
     },
     {
       "ticker": "DEFT",
@@ -13930,40 +13930,58 @@
       "ticker": "BRK.B",
       "description": "Berkshire Hathaway Inc. - Ordinary Shares - Class B",
       "is_open": true,
-      "mkt_eur": 1608.66,
+      "mkt_eur": 1600.01,
       "cost_eur_invested": 1660.0,
-      "unrealized_eur": -51.34,
-      "unrealized_pct": -3.09,
+      "unrealized_eur": -59.99,
+      "unrealized_pct": -3.61,
       "realized_eur": 0,
       "dividends_eur": 0,
-      "total_pnl_eur": -51.34,
-      "contribution_pp": -0.26,
-      "position_return_pct": -3.09,
-      "weight_pct": 7.3
+      "total_pnl_eur": -59.99,
+      "contribution_pp": -0.3,
+      "position_return_pct": -3.61,
+      "weight_pct": 7.2
     },
     {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
       "is_open": true,
-      "mkt_eur": 1787.24,
+      "mkt_eur": 1824.42,
       "cost_eur_invested": 2038.68,
-      "unrealized_eur": -251.44,
-      "unrealized_pct": -12.33,
+      "unrealized_eur": -214.26,
+      "unrealized_pct": -10.51,
       "realized_eur": 0,
       "dividends_eur": 51.06,
-      "total_pnl_eur": -200.38,
-      "contribution_pp": -1.01,
-      "position_return_pct": -9.83,
-      "weight_pct": 9.0
+      "total_pnl_eur": -163.2,
+      "contribution_pp": -0.82,
+      "position_return_pct": -8.01,
+      "weight_pct": 8.9
+    },
+    {
+      "ticker": "Comisiones",
+      "description": "Costes de transaccion + conectividad",
+      "is_open": false,
+      "mkt_eur": 0,
+      "cost_eur_invested": 0,
+      "unrealized_eur": 0,
+      "unrealized_pct": 0,
+      "realized_eur": -267.5,
+      "dividends_eur": 0,
+      "total_pnl_eur": -267.5,
+      "contribution_pp": -1.35,
+      "position_return_pct": 0,
+      "weight_pct": 0
     }
   ],
   "attribution_summary": {
-    "portfolio_return_pct": 31.19,
-    "total_gain_eur": 6185.42,
+    "portfolio_return_pct": 29.72,
+    "gross_return_pct": 31.07,
+    "total_gain_eur": 5893.79,
+    "gross_gain_eur": 6161.29,
     "capital_neto_eur": 19830.46,
-    "unrealized_total_eur": 4270.39,
+    "unrealized_total_eur": 4246.26,
     "realized_total_eur": 1816.57,
-    "dividends_total_eur": 98.46
+    "dividends_total_eur": 98.46,
+    "commissions_eur": 267.5
   },
   "benchmarks": {
     "nasdaq": [
@@ -17045,7 +17063,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 106.3898
+        "value": 106.8334
       }
     ],
     "msciw": [
@@ -20127,7 +20145,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 65.7113
+        "value": 65.9216
       }
     ],
     "dow": [
@@ -23209,7 +23227,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 47.4478
+        "value": 47.7013
       }
     ],
     "stoxx50": [
@@ -26271,7 +26289,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 35.933
+        "value": 35.9372
       }
     ],
     "ibex": [
@@ -29397,7 +29415,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 93.3715
+        "value": 93.2088
       }
     ],
     "em": [
@@ -32479,7 +32497,7 @@
       },
       {
         "date": "2026-04-27",
-        "value": 61.2646
+        "value": 61.2392
       }
     ]
   },
@@ -32644,7 +32662,7 @@
         "cost_eur": 1804.63,
         "currency": "USD",
         "div_rate_local": 8.84,
-        "annual_income_eur": 52.72,
+        "annual_income_eur": 52.74,
         "yield_on_cost_pct": 2.92,
         "next_ex_date": "2026-06-08",
         "paid_total_eur": 24.62
@@ -32656,7 +32674,7 @@
         "cost_eur": 1212.45,
         "currency": "USD",
         "div_rate_local": 2.0,
-        "annual_income_eur": 20.45,
+        "annual_income_eur": 20.46,
         "yield_on_cost_pct": 1.69,
         "next_ex_date": "2026-06-12",
         "paid_total_eur": 17.09
@@ -32701,7 +32719,7 @@
         "ticker": "HOOD",
         "description": "Robinhood Markets Inc - Ordinary Shares - Class A",
         "units": 21.0,
-        "cost_eur": 1142.13,
+        "cost_eur": 1366.59,
         "currency": "USD",
         "div_rate_local": 0.0,
         "annual_income_eur": 0.0,
@@ -32754,7 +32772,7 @@
         "frequency": "quarterly",
         "dps_local": 2.21,
         "currency": "USD",
-        "estimated_eur": 13.18
+        "estimated_eur": 13.19
       },
       {
         "ticker": "NVDA",
@@ -32772,7 +32790,7 @@
         "frequency": "annual",
         "dps_local": 2.0,
         "currency": "USD",
-        "estimated_eur": 20.45
+        "estimated_eur": 20.46
       },
       {
         "ticker": "UNH",
@@ -32781,7 +32799,7 @@
         "frequency": "quarterly",
         "dps_local": 2.21,
         "currency": "USD",
-        "estimated_eur": 13.18
+        "estimated_eur": 13.19
       },
       {
         "ticker": "NVDA",
@@ -32808,7 +32826,7 @@
         "frequency": "quarterly",
         "dps_local": 2.21,
         "currency": "USD",
-        "estimated_eur": 13.18
+        "estimated_eur": 13.19
       },
       {
         "ticker": "NVDA",
@@ -32826,7 +32844,7 @@
         "frequency": "quarterly",
         "dps_local": 2.21,
         "currency": "USD",
-        "estimated_eur": 13.18
+        "estimated_eur": 13.19
       },
       {
         "ticker": "NVDA",
@@ -32847,7 +32865,7 @@
         "estimated_eur": 66.3
       }
     ],
-    "projected_annual_eur": 170.52,
+    "projected_annual_eur": 170.55,
     "ytd_collected_eur": 63.82,
     "total_historical_eur": 98.45
   }
