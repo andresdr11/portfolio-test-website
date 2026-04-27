@@ -1043,10 +1043,12 @@ async function loadPortfolio() {
   set('kpi-day-return', fmtDelta(dailyEur),                       'kpi-value ' + pnlClass(dailyEur));
   set('kpi-day-sub',    fmtPct(dailyPct) + ' · vs previous day',  'kpi-sub '   + pnlClass(dailyEur));
 
-  // 3. Total Profit — from pnl_history (unrealized + realized + dividends - fees)
-  const totalProfitPct = k.capital_neto_eur > 0 ? lastPnlVal / k.capital_neto_eur * 100 : 0;
-  set('kpi-total-profit',     fmtDelta(lastPnlVal),                           'kpi-value ' + pnlClass(lastPnlVal));
-  set('kpi-total-profit-sub', fmtPct(totalProfitPct) + ' over net capital',   'kpi-sub '   + pnlClass(lastPnlVal));
+  // 3. Total Profit — single source of truth: attribution_summary (unrealized+realized+dividends-commissions)
+  const attrS = d.attribution_summary;
+  const totalProfitEur = attrS ? attrS.total_gain_eur   : lastPnlVal;
+  const totalProfitPct = attrS ? attrS.portfolio_return_pct : (k.capital_neto_eur > 0 ? lastPnlVal / k.capital_neto_eur * 100 : 0);
+  set('kpi-total-profit',     fmtDelta(totalProfitEur),                           'kpi-value ' + pnlClass(totalProfitEur));
+  set('kpi-total-profit-sub', fmtPct(totalProfitPct) + ' over net capital',       'kpi-sub '   + pnlClass(totalProfitEur));
 
   // 4. Cash Available
   const cashPct = lastPortVal > 0 ? k.cash_eur / lastPortVal * 100 : 0;
