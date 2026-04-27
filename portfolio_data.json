@@ -13757,6 +13757,9 @@
       "realized_eur": 187.11,
       "dividends_eur": 0,
       "total_pnl_eur": 1732.73,
+      "buy_date": "2023-04-13",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 8.74,
       "position_return_pct": 107.54,
       "weight_pct": 8.3
@@ -13772,6 +13775,9 @@
       "realized_eur": 0,
       "dividends_eur": 0.73,
       "total_pnl_eur": 1417.84,
+      "buy_date": "2025-01-27",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 7.15,
       "position_return_pct": 66.44,
       "weight_pct": 9.3
@@ -13787,6 +13793,9 @@
       "realized_eur": 708.62,
       "dividends_eur": 0,
       "total_pnl_eur": 708.62,
+      "buy_date": "2024-04-03",
+      "sell_date": "2025-12-17",
+      "sell_proceeds_eur": 4724.44,
       "contribution_pp": 3.57,
       "position_return_pct": 17.65,
       "weight_pct": 17.5
@@ -13802,6 +13811,9 @@
       "realized_eur": 651.53,
       "dividends_eur": 0,
       "total_pnl_eur": 651.53,
+      "buy_date": "2023-06-07",
+      "sell_date": "2025-05-27",
+      "sell_proceeds_eur": 2009.2,
       "contribution_pp": 3.29,
       "position_return_pct": 47.99,
       "weight_pct": 5.9
@@ -13817,6 +13829,9 @@
       "realized_eur": 18.11,
       "dividends_eur": 0,
       "total_pnl_eur": 414.83,
+      "buy_date": "2023-04-13",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 2.09,
       "position_return_pct": 23.22,
       "weight_pct": 9.4
@@ -13832,6 +13847,9 @@
       "realized_eur": 0,
       "dividends_eur": 0,
       "total_pnl_eur": 345.21,
+      "buy_date": "2026-03-04",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 1.74,
       "position_return_pct": 23.73,
       "weight_pct": 6.3
@@ -13847,6 +13865,9 @@
       "realized_eur": 0,
       "dividends_eur": 24.63,
       "total_pnl_eur": 337.49,
+      "buy_date": "2025-08-22",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 1.7,
       "position_return_pct": 17.34,
       "weight_pct": 7.9
@@ -13862,6 +13883,9 @@
       "realized_eur": 247.29,
       "dividends_eur": 4.95,
       "total_pnl_eur": 252.24,
+      "buy_date": "2024-04-03",
+      "sell_date": "2026-03-11",
+      "sell_proceeds_eur": 1347.29,
       "contribution_pp": 1.27,
       "position_return_pct": 22.48,
       "weight_pct": 4.8
@@ -13877,6 +13901,9 @@
       "realized_eur": 0,
       "dividends_eur": 17.09,
       "total_pnl_eur": 193.75,
+      "buy_date": "2024-12-17",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 0.98,
       "position_return_pct": 14.57,
       "weight_pct": 5.3
@@ -13892,6 +13919,9 @@
       "realized_eur": 0,
       "dividends_eur": 0,
       "total_pnl_eur": 176.76,
+      "buy_date": "2026-02-12",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 0.89,
       "position_return_pct": 26.19,
       "weight_pct": 2.9
@@ -13907,6 +13937,9 @@
       "realized_eur": 0,
       "dividends_eur": 0,
       "total_pnl_eur": 149.57,
+      "buy_date": "2026-03-06",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": 0.75,
       "position_return_pct": 10.94,
       "weight_pct": 5.9
@@ -13922,6 +13955,9 @@
       "realized_eur": 3.91,
       "dividends_eur": 0,
       "total_pnl_eur": 3.91,
+      "buy_date": "2025-09-12",
+      "sell_date": "2025-09-15",
+      "sell_proceeds_eur": 108.94,
       "contribution_pp": 0.02,
       "position_return_pct": 3.72,
       "weight_pct": 0.5
@@ -13937,6 +13973,9 @@
       "realized_eur": 0,
       "dividends_eur": 0,
       "total_pnl_eur": -59.99,
+      "buy_date": "2025-08-19",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": -0.3,
       "position_return_pct": -3.61,
       "weight_pct": 7.2
@@ -13952,6 +13991,9 @@
       "realized_eur": 0,
       "dividends_eur": 51.06,
       "total_pnl_eur": -163.2,
+      "buy_date": "2025-12-03",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
       "contribution_pp": -0.82,
       "position_return_pct": -10.51,
       "weight_pct": 8.9
