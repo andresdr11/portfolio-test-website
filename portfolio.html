@@ -1780,7 +1780,10 @@ async function loadPortfolio() {
 
 // ── PORTFOLIO PROJECTION ─────────────────────────────────────
 window.initProjection = function(d) {
-  const pv = d.kpis.total_portfolio_eur || 0;
+  const pvEq   = d.kpis.total_mkt_eur       || 0;  // invested positions
+  const pvCash = d.kpis.cash_eur             || 0;  // cash in account
+  const pv     = pvEq + pvCash;                     // total (for KPI reference)
+  const CASH_RATE = 2.5;                            // money-market rate for cash bucket
 
   // Avg monthly contribution — last 12 months positive deposits, rounded to €50
   const contribs = (d.monthly_contributions || []).filter(m => m.amount > 0);
@@ -1825,14 +1828,17 @@ window.initProjection = function(d) {
   }
   function fmtFull(v) { return '€' + Math.round(v).toLocaleString('de-DE'); }
 
-  // project: iterate monthly; push every month if monthly=true, else every 12
-  function project(startPv, pmt, annRate, totalMonths, monthly) {
-    const r = annRate / 100 / 12;
-    const pts = [startPv];
-    let val = startPv;
+  // Two-bucket projection: equity at annRate, cash at CASH_RATE, pmt goes entirely to equity
+  function project(startEq, startCash, pmt, annRate, totalMonths, monthly) {
+    const rEq   = annRate    / 100 / 12;
+    const rCash = CASH_RATE  / 100 / 12;
+    const pts   = [startEq + startCash];
+    let eq   = startEq;
+    let cash = startCash;
     for (let m = 1; m <= totalMonths; m++) {
-      val = val * (1 + r) + pmt;
-      if (monthly || m % 12 === 0) pts.push(val);
+      eq   = eq   * (1 + rEq)   + pmt;
+      cash = cash * (1 + rCash);
+      if (monthly || m % 12 === 0) pts.push(eq + cash);
     }
     return pts;
   }
@@ -1874,7 +1880,7 @@ window.initProjection = function(d) {
       datasets: [
         { // 0 — Base (always on, green solid)
           label: 'Base',
-          data: project(pv, pmt0, baseCagr, hp0.months, hp0.monthly),
+          data: project(pvEq, pvCash, pmt0, baseCagr, hp0.months, hp0.monthly),
           borderColor: '#00E576', borderWidth: 2.5,
           backgroundColor: 'transparent', fill: false, tension: 0.4,
           pointRadius: 0, pointHoverRadius: 5,
@@ -1884,7 +1890,7 @@ window.initProjection = function(d) {
         },
         { // 1 — Comparar (toggled, purple dashed)
           label: 'Comparar',
-          data: project(pv, pmt0, getComp(), hp0.months, hp0.monthly),
+          data: project(pvEq, pvCash, pmt0, getComp(), hp0.months, hp0.monthly),
           borderColor: '#6A80FF', borderWidth: 1.5,
           borderDash: [5, 4],
           backgroundColor: 'transparent', fill: false, tension: 0.4,
@@ -1933,7 +1939,7 @@ window.initProjection = function(d) {
   function updateKPIs(basePts, pmt) {
     const hp   = getHorizonParams();
     const fin  = basePts[basePts.length - 1];
-    const inv  = pv + pmt * hp.months;
+    const inv  = pv + pmt * hp.months;  // pv = pvEq + pvCash = full starting capital
     const gain = fin - inv;
     const mult = inv > 0 ? fin / inv : 0;
     document.getElementById('proj-final').textContent     = fmtFull(fin);
@@ -1947,8 +1953,8 @@ window.initProjection = function(d) {
     const hp  = getHorizonParams();
     const pmt = getPmt();
     projChart.data.labels           = hp.labels;
-    projChart.data.datasets[0].data = project(pv, pmt, baseCagr, hp.months, hp.monthly);
-    projChart.data.datasets[1].data = project(pv, pmt, getComp(), hp.months, hp.monthly);
+    projChart.data.datasets[0].data = project(pvEq, pvCash, pmt, baseCagr, hp.months, hp.monthly);
+    projChart.data.datasets[1].data = project(pvEq, pvCash, pmt, getComp(), hp.months, hp.monthly);
     projChart.update('active');
     updateKPIs(projChart.data.datasets[0].data, pmt);
   }
