@@ -359,6 +359,64 @@
     .proj-kpi-comparing .proj-kpi-col-comp { max-width:180px; opacity:1; padding-left:15px; }
     .proj-kpi-comparing .proj-kpi-col-comp::before { transform:scaleY(1); }
 
+    /* ── PROJECTION GOAL ── */
+    .proj-goal-trigger {
+      display:inline-flex; align-items:center; gap:7px;
+      background:none; border:1px dashed rgba(255,176,32,0.22); border-radius:8px;
+      color:rgba(255,176,32,0.55); font-size:11px; font-weight:600; font-family:inherit;
+      padding:7px 14px; cursor:pointer; transition:all 0.2s; margin-bottom:16px;
+    }
+    .proj-goal-trigger:hover { border-color:rgba(255,176,32,0.50); color:#FFB020; background:rgba(255,176,32,0.04); }
+    .proj-goal-bar {
+      display:none; align-items:center; flex-wrap:wrap; gap:6px;
+      background:rgba(255,176,32,0.04); border:1px solid rgba(255,176,32,0.15);
+      border-radius:10px; padding:12px 16px; margin-bottom:16px;
+    }
+    .proj-goal-bar.visible { display:flex; }
+    .proj-goal-bar-label { font-size:9px; font-weight:700; color:rgba(255,176,32,0.5); text-transform:uppercase; letter-spacing:0.10em; white-space:nowrap; margin-right:2px; }
+    .proj-goal-pill {
+      background:rgba(255,176,32,0.05); border:1px solid rgba(255,176,32,0.18);
+      border-radius:6px; color:rgba(255,176,32,0.65); font-size:11px; font-weight:700; font-family:inherit;
+      padding:5px 11px; cursor:pointer; transition:all 0.15s; white-space:nowrap;
+    }
+    .proj-goal-pill:hover  { background:rgba(255,176,32,0.10); border-color:rgba(255,176,32,0.40); color:#FFB020; }
+    .proj-goal-pill.active { background:rgba(255,176,32,0.15); border-color:rgba(255,176,32,0.55); color:#FFB020; }
+    .proj-goal-input-wrap {
+      display:flex; align-items:center; gap:3px;
+      background:rgba(255,255,255,0.04); border:1px solid rgba(255,176,32,0.20);
+      border-radius:7px; padding:0 10px;
+    }
+    .proj-goal-euro { font-size:12px; color:rgba(255,176,32,0.45); font-weight:600; }
+    .proj-goal-inp {
+      background:none; border:none; outline:none; width:100px;
+      font-size:13px; font-weight:700; font-family:inherit;
+      color:#FFB020; padding:5px 0;
+    }
+    .proj-goal-inp::placeholder { color:rgba(255,176,32,0.22); font-weight:500; }
+    .proj-goal-inp::-webkit-inner-spin-button, .proj-goal-inp::-webkit-outer-spin-button { -webkit-appearance:none; }
+    .proj-goal-bar-dismiss {
+      width:22px; height:22px; border-radius:50%; margin-left:auto; flex-shrink:0;
+      border:1px solid rgba(255,255,255,0.10); background:rgba(255,255,255,0.03);
+      color:var(--text-3); font-size:11px; cursor:pointer; font-family:inherit;
+      display:flex; align-items:center; justify-content:center; transition:all 0.15s;
+    }
+    .proj-goal-bar-dismiss:hover { background:rgba(255,107,107,0.12); border-color:rgba(255,107,107,0.3); color:#FF6B6B; }
+    /* Callout */
+    .proj-goal-callout {
+      display:none;
+      border:1px solid rgba(255,176,32,0.18); border-left:3px solid #FFB020;
+      border-radius:8px; padding:12px 18px; margin-bottom:16px;
+      background:rgba(255,176,32,0.04);
+    }
+    .proj-goal-callout.visible { display:block; animation:callout-drop 0.28s ease; }
+    @keyframes callout-drop { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+    .proj-callout-row { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+    .proj-callout-row + .proj-callout-row { margin-top:6px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.05); }
+    .proj-callout-badge { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; flex-shrink:0; }
+    .proj-callout-eta   { font-size:14px; font-weight:700; }
+    .proj-callout-year  { font-size:12px; font-weight:600; color:var(--text-3); }
+    .proj-callout-delta { font-size:11px; color:var(--text-3); margin-left:auto; }
+
     /* ── DIVIDEND SECTION ── */
     .div-year-pill {
       display:inline-flex; align-items:center; gap:5px;
@@ -728,9 +786,41 @@
         </div>
       </div>
 
+      <!-- Goal trigger + bar -->
+      <button class="proj-goal-trigger" id="proj-goal-add">⊙ Definir meta</button>
+      <div class="proj-goal-bar" id="proj-goal-bar">
+        <span class="proj-goal-bar-label">Meta</span>
+        <button class="proj-goal-pill" id="proj-pill-2x" data-goal="0">×2 —</button>
+        <button class="proj-goal-pill" id="proj-pill-5x" data-goal="0">×5 —</button>
+        <button class="proj-goal-pill" data-goal="250000">€250k</button>
+        <button class="proj-goal-pill" data-goal="500000">€500k</button>
+        <button class="proj-goal-pill" data-goal="1000000">€1M</button>
+        <div class="proj-goal-input-wrap">
+          <span class="proj-goal-euro">€</span>
+          <input id="proj-goal-inp" type="number" class="proj-goal-inp" placeholder="personalizado" min="0" step="1000">
+        </div>
+        <button class="proj-goal-bar-dismiss" id="proj-goal-dismiss" title="Quitar meta">✕</button>
+      </div>
+
       <!-- Chart -->
       <div style="position:relative;height:300px;margin-bottom:20px;">
         <canvas id="projChart"></canvas>
+      </div>
+
+      <!-- Goal callout -->
+      <div class="proj-goal-callout" id="proj-goal-callout">
+        <div class="proj-callout-row" id="proj-callout-base-row">
+          <span class="proj-callout-badge" style="color:rgba(0,229,118,0.6);">Base</span>
+          <span class="proj-callout-eta" id="proj-callout-base-eta" style="color:#00E576;">—</span>
+          <span class="proj-callout-year" id="proj-callout-base-year"></span>
+          <span class="proj-callout-delta" id="proj-callout-base-delta"></span>
+        </div>
+        <div class="proj-callout-row" id="proj-callout-comp-row" style="display:none;">
+          <span class="proj-callout-badge" style="color:rgba(106,128,255,0.6);">Comp.</span>
+          <span class="proj-callout-eta" id="proj-callout-comp-eta" style="color:#6A80FF;">—</span>
+          <span class="proj-callout-year" id="proj-callout-comp-year"></span>
+          <span class="proj-callout-delta" id="proj-callout-comp-delta"></span>
+        </div>
       </div>
 
       <!-- KPI row -->
@@ -1886,6 +1976,10 @@ window.initProjection = function(d) {
   // Comparison line state
   let compVisible = false;
 
+  // Goal state
+  let goalValue  = null;
+  let goalActive = false;
+
   // ── Helpers ──────────────────────────────────────────────────
   function fmtV(v) {
     if (v >= 1e6) return '€' + (v / 1e6).toFixed(2) + 'M';
@@ -1934,6 +2028,56 @@ window.initProjection = function(d) {
     return `en ${horizonYears} año${horizonYears > 1 ? 's' : ''}`;
   }
 
+  // ── Goal line plugin ─────────────────────────────────────────
+  const goalLinePlugin = {
+    id: 'projGoalLine',
+    afterDraw(chart) {
+      if (!goalActive || !goalValue) return;
+      const { ctx: c, chartArea: ca, scales } = chart;
+      const yPx = scales.y.getPixelForValue(goalValue);
+      if (yPx < ca.top - 2 || yPx > ca.bottom + 2) return;
+
+      c.save();
+      // Amber dashed line
+      c.strokeStyle = 'rgba(255,176,32,0.60)';
+      c.lineWidth   = 1.5;
+      c.setLineDash([6, 4]);
+      c.beginPath(); c.moveTo(ca.left, yPx); c.lineTo(ca.right, yPx); c.stroke();
+
+      // Label badge
+      c.setLineDash([]);
+      c.font = '700 10px "Instrument Sans",sans-serif';
+      const lbl = 'Meta ' + fmtV(goalValue);
+      const lw  = c.measureText(lbl).width;
+      c.fillStyle = 'rgba(255,176,32,0.10)';
+      c.fillRect(ca.right - lw - 18, yPx - 13, lw + 14, 16);
+      c.fillStyle = '#FFB020';
+      c.textAlign = 'right';
+      c.textBaseline = 'middle';
+      c.fillText(lbl, ca.right - 5, yPx - 5);
+
+      // Intersection dot helper
+      function drawDot(pts, color) {
+        for (let i = 1; i < pts.length; i++) {
+          if (pts[i - 1] < goalValue && pts[i] >= goalValue) {
+            const t  = (goalValue - pts[i-1]) / (pts[i] - pts[i-1]);
+            const x0 = scales.x.getPixelForValue(i - 1);
+            const x1 = scales.x.getPixelForValue(i);
+            const xPx = x0 + t * (x1 - x0);
+            c.beginPath(); c.arc(xPx, yPx, 5, 0, Math.PI * 2);
+            c.fillStyle = color; c.fill();
+            c.strokeStyle = '#07080F'; c.lineWidth = 1.5; c.stroke();
+            break;
+          }
+        }
+      }
+      drawDot(chart.data.datasets[0].data, '#00E576');
+      if (compVisible && !chart.data.datasets[1].hidden)
+        drawDot(chart.data.datasets[1].data, '#6A80FF');
+      c.restore();
+    },
+  };
+
   // ── Chart ────────────────────────────────────────────────────
   const ctx  = document.getElementById('projChart').getContext('2d');
   const hp0  = getHorizonParams();
@@ -1941,6 +2085,7 @@ window.initProjection = function(d) {
 
   const projChart = new Chart(ctx, {
     type: 'line',
+    plugins: [goalLinePlugin],
     data: {
       labels: hp0.labels,
       datasets: [
@@ -2025,6 +2170,84 @@ window.initProjection = function(d) {
     }
   }
 
+  // ── Goal helpers ─────────────────────────────────────────────
+  function computeMonthsToGoal(pts, isMonthly) {
+    if (!goalValue || goalValue <= pts[0]) return null;
+    for (let i = 1; i < pts.length; i++) {
+      if (pts[i] >= goalValue) {
+        const span = pts[i] - pts[i - 1];
+        const t    = span > 0 ? (goalValue - pts[i - 1]) / span : 0;
+        const idx  = (i - 1) + t;
+        return isMonthly ? idx : idx * 12;
+      }
+    }
+    return null;
+  }
+
+  function fmtETA(months) {
+    const y = Math.floor(months / 12);
+    const m = Math.round(months % 12);
+    if (y === 0) return m + ' mes' + (m !== 1 ? 'es' : '');
+    if (m === 0) return y + ' año' + (y !== 1 ? 's' : '');
+    return y + ' año' + (y !== 1 ? 's' : '') + ' ' + m + ' mes' + (m !== 1 ? 'es' : '');
+  }
+
+  function goalYear(months) {
+    const d = new Date(now.getFullYear(), now.getMonth() + Math.round(months));
+    return d.getFullYear();
+  }
+
+  function updateGoalCallout(basePts, compPts) {
+    const el = document.getElementById('proj-goal-callout');
+    if (!goalActive || !goalValue) { el.classList.remove('visible'); return; }
+    const hp = getHorizonParams();
+
+    const bm = computeMonthsToGoal(basePts, hp.monthly);
+    const baseEta  = document.getElementById('proj-callout-base-eta');
+    const baseYear = document.getElementById('proj-callout-base-year');
+    const baseDelta= document.getElementById('proj-callout-base-delta');
+    if (bm !== null) {
+      baseEta.textContent  = 'en ~' + fmtETA(bm);
+      baseEta.style.color  = '#00E576';
+      baseYear.textContent = '(' + goalYear(bm) + ')';
+      baseDelta.textContent= '';
+    } else {
+      baseEta.textContent  = 'Fuera del horizonte actual';
+      baseEta.style.color  = '#FFB020';
+      baseYear.textContent = '';
+      baseDelta.textContent= '— amplía para visualizarlo';
+    }
+
+    const compRow = document.getElementById('proj-callout-comp-row');
+    if (compVisible && compPts) {
+      compRow.style.display = 'flex';
+      const cm = computeMonthsToGoal(compPts, hp.monthly);
+      const compEta  = document.getElementById('proj-callout-comp-eta');
+      const compYear = document.getElementById('proj-callout-comp-year');
+      const compDelta= document.getElementById('proj-callout-comp-delta');
+      if (cm !== null) {
+        compEta.textContent  = 'en ~' + fmtETA(cm);
+        compEta.style.color  = '#6A80FF';
+        compYear.textContent = '(' + goalYear(cm) + ')';
+        if (bm !== null) {
+          const diff = cm - bm;
+          const sign = diff >= 0 ? '+' : '−';
+          compDelta.textContent = sign + fmtETA(Math.abs(diff)) + (diff >= 0 ? ' más' : ' menos') + ' que base';
+        } else {
+          compDelta.textContent = '';
+        }
+      } else {
+        compEta.textContent  = 'Fuera del horizonte';
+        compEta.style.color  = '#6A80FF';
+        compYear.textContent = '';
+        compDelta.textContent= '';
+      }
+    } else {
+      compRow.style.display = 'none';
+    }
+    el.classList.add('visible');
+  }
+
   function refresh() {
     const hp      = getHorizonParams();
     const pmt     = getPmt();
@@ -2035,6 +2258,7 @@ window.initProjection = function(d) {
     projChart.data.datasets[1].data = compPts;
     projChart.update('active');
     updateKPIs(basePts, compPts, pmt);
+    updateGoalCallout(basePts, compPts);
   }
 
   // Initial KPIs
@@ -2087,6 +2311,56 @@ window.initProjection = function(d) {
     document.getElementById('proj-legend-comp').style.display = 'none';
     document.getElementById('proj-kpi-grid').classList.remove('proj-kpi-comparing');
     projChart.data.datasets[1].hidden = true;
+    projChart.update('active');
+    updateGoalCallout(projChart.data.datasets[0].data, null);
+  });
+
+  // ── Goal feature ─────────────────────────────────────────────
+  // Set dynamic pill labels once pv is known
+  const pill2x = document.getElementById('proj-pill-2x');
+  const pill5x = document.getElementById('proj-pill-5x');
+  pill2x.dataset.goal = String(Math.round(pv * 2));
+  pill5x.dataset.goal = String(Math.round(pv * 5));
+  pill2x.textContent  = '×2  ' + fmtV(pv * 2);
+  pill5x.textContent  = '×5  ' + fmtV(pv * 5);
+
+  function setGoal(val) {
+    goalValue  = (val > 0) ? val : null;
+    goalActive = goalValue !== null;
+    document.querySelectorAll('.proj-goal-pill').forEach(p =>
+      p.classList.toggle('active', parseFloat(p.dataset.goal) === goalValue)
+    );
+    refresh();
+  }
+
+  document.getElementById('proj-goal-add').addEventListener('click', () => {
+    document.getElementById('proj-goal-add').style.display = 'none';
+    document.getElementById('proj-goal-bar').classList.add('visible');
+    // Smart default: ×5 current portfolio
+    setGoal(Math.round(pv * 5));
+  });
+
+  document.querySelectorAll('.proj-goal-pill').forEach(pill =>
+    pill.addEventListener('click', () => {
+      document.getElementById('proj-goal-inp').value = '';
+      setGoal(parseFloat(pill.dataset.goal));
+    })
+  );
+
+  document.getElementById('proj-goal-inp').addEventListener('input', e => {
+    const val = parseFloat(e.target.value);
+    document.querySelectorAll('.proj-goal-pill').forEach(p => p.classList.remove('active'));
+    setGoal(val || 0);
+  });
+
+  document.getElementById('proj-goal-dismiss').addEventListener('click', () => {
+    goalValue  = null;
+    goalActive = false;
+    document.getElementById('proj-goal-bar').classList.remove('visible');
+    document.getElementById('proj-goal-add').style.display  = '';
+    document.getElementById('proj-goal-inp').value          = '';
+    document.querySelectorAll('.proj-goal-pill').forEach(p => p.classList.remove('active'));
+    document.getElementById('proj-goal-callout').classList.remove('visible');
     projChart.update('active');
   });
 };
