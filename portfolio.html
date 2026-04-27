@@ -678,16 +678,45 @@
     </div>
 
 
-    <!-- ── CONTRIBUTION TO RETURN ── -->
+    <!-- ── RETURN ATTRIBUTION ── -->
     <div id="contribReturnSection" class="card fade-in d5" style="padding:24px;margin-top:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
         <div>
-          <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Contribution to Return</p>
-          <p style="font-size:11px;color:var(--text-3);">YTD — % points each position added to portfolio return</p>
+          <p style="font-size:14px;font-weight:600;margin-bottom:3px;">Atribución de Rentabilidad</p>
+          <p style="font-size:11px;color:var(--text-3);">Contribución de cada posición al retorno total · abiertas y cerradas</p>
         </div>
-        <p style="font-size:11px;color:var(--text-2);">TWR YTD: <span id="ctr-ytd-total" style="color:var(--green);font-weight:600;">—</span></p>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Retorno total</span>
+          <span id="attr-total-return" style="font-size:18px;font-weight:700;color:var(--green);">—</span>
+        </div>
       </div>
-      <div style="position:relative;height:300px;"><canvas id="contribReturnChart"></canvas></div>
+
+      <!-- Source breakdown: 3 mini tiles -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;">
+        <div class="risk-tile" style="padding:12px 16px;">
+          <p class="risk-label" style="margin-bottom:6px;">Plusvalía no realizada</p>
+          <p class="risk-val" id="attr-unrealized" style="font-size:20px;color:var(--green);">—</p>
+        </div>
+        <div class="risk-tile" style="padding:12px 16px;">
+          <p class="risk-label" style="margin-bottom:6px;">P&L realizado (cerradas)</p>
+          <p class="risk-val" id="attr-realized" style="font-size:20px;">—</p>
+        </div>
+        <div class="risk-tile" style="padding:12px 16px;">
+          <p class="risk-label" style="margin-bottom:6px;">Dividendos cobrados</p>
+          <p class="risk-val" id="attr-dividends" style="font-size:20px;color:var(--amber);">—</p>
+        </div>
+      </div>
+
+      <!-- Chart — height set dynamically by JS -->
+      <div style="position:relative;" id="attr-chart-wrap">
+        <canvas id="contribReturnChart"></canvas>
+      </div>
+
+      <p style="font-size:10px;color:var(--text-3);text-align:center;padding-top:12px;border-top:1px solid var(--border);margin-top:16px;letter-spacing:0.02em;">
+        Contribución = ganancia total posición / capital neto aportado · FX aplicado al coste histórico · posiciones cerradas en gris
+      </p>
     </div>
 
     <!-- ── MONTHLY CONTRIBUTIONS ── -->
@@ -1849,79 +1878,140 @@ async function loadPortfolio() {
     if (sec) sec.style.display = 'none';
   }
 
-  // ── CONTRIBUTION TO RETURN CHART ─────────────────────────────
-  const ctrData = d.position_contributions;
-  if (ctrData && ctrData.length > 0) {
-    // Update YTD TWR label
-    const twrYTD = twrPts.length > 1 ? (() => {
-      const jan1 = new Date(new Date().getFullYear(), 0, 1);
-      const fil  = twrPts.filter(p => new Date(p.date) >= jan1);
-      if (fil.length < 2) return null;
-      return ((1 + fil[fil.length-1].value/100) / (1 + fil[0].value/100) - 1) * 100;
-    })() : null;
-    if (twrYTD !== null) {
-      const el = document.getElementById('ctr-ytd-total');
-      el.textContent = (twrYTD >= 0 ? '+' : '') + twrYTD.toFixed(2) + '%';
-      el.style.color = twrYTD >= 0 ? 'var(--green)' : 'var(--red)';
+  // ── RETURN ATTRIBUTION ───────────────────────────────────────
+  const attrData = d.pnl_breakdown;
+  const attrSumm = d.attribution_summary;
+  if (attrData && attrData.length > 0 && attrSumm) {
+
+    function fmtAttrEur(v) {
+      const s = v >= 0 ? '+' : '−';
+      return s + '€' + Math.abs(Math.round(v)).toLocaleString('de-DE');
     }
 
-    const ctrReversed = [...ctrData].reverse(); // bottom-up for Chart.js horizontal
-    const ctrLabels  = ctrReversed.map(p => p.ticker);
-    const ctrContrib = ctrReversed.map(p => p.contrib_pp);
-    const ctrColors  = ctrContrib.map(v => v >= 0 ? 'rgba(0,229,118,0.75)' : 'rgba(255,107,107,0.75)');
-    const ctrBorders = ctrContrib.map(v => v >= 0 ? '#00E576' : '#FF6B6B');
+    // Header KPIs
+    const totalRetEl = document.getElementById('attr-total-return');
+    totalRetEl.textContent = (attrSumm.portfolio_return_pct >= 0 ? '+' : '') + attrSumm.portfolio_return_pct.toFixed(2) + '%';
+    totalRetEl.style.color = attrSumm.portfolio_return_pct >= 0 ? 'var(--green)' : 'var(--red)';
+
+    const unrEl = document.getElementById('attr-unrealized');
+    unrEl.textContent = fmtAttrEur(attrSumm.unrealized_total_eur);
+    unrEl.style.color = attrSumm.unrealized_total_eur >= 0 ? 'var(--green)' : 'var(--red)';
+
+    const relEl = document.getElementById('attr-realized');
+    relEl.textContent = fmtAttrEur(attrSumm.realized_total_eur);
+    relEl.style.color = attrSumm.realized_total_eur >= 0 ? 'var(--green)' : 'var(--red)';
+
+    document.getElementById('attr-dividends').textContent = '+€' + Math.round(attrSumm.dividends_total_eur).toLocaleString('de-DE');
+
+    // Chart data — bottom-up for horizontal Chart.js
+    const rev = [...attrData].reverse();
+    const capNet = attrSumm.capital_neto_eur || 1;
+
+    const labels     = rev.map(p => p.is_open ? p.ticker : p.ticker + ' ✕');
+    const capContrib = rev.map(p => parseFloat(((p.unrealized_eur + p.realized_eur) / capNet * 100).toFixed(2)));
+    const divContrib = rev.map(p => parseFloat((p.dividends_eur / capNet * 100).toFixed(2)));
+
+    // Dynamic chart height: 40px per row + margins
+    document.getElementById('attr-chart-wrap').style.height = Math.max(300, rev.length * 42 + 40) + 'px';
 
     new Chart(document.getElementById('contribReturnChart'), {
       type: 'bar',
       data: {
-        labels: ctrLabels,
-        datasets: [{ data: ctrContrib, backgroundColor: ctrColors, borderColor: ctrBorders,
-                     borderWidth: 1, borderRadius: 4, borderSkipped: false, barThickness: 18 }]
+        labels,
+        datasets: [
+          {
+            label: 'Plusvalía',
+            data: capContrib,
+            backgroundColor: rev.map(p => {
+              const pos = (p.unrealized_eur + p.realized_eur) >= 0;
+              return p.is_open
+                ? (pos ? 'rgba(0,229,118,0.72)'  : 'rgba(255,107,107,0.72)')
+                : (pos ? 'rgba(0,229,118,0.35)'  : 'rgba(255,107,107,0.35)');
+            }),
+            borderColor: rev.map(p => {
+              const pos = (p.unrealized_eur + p.realized_eur) >= 0;
+              return pos ? '#00E576' : '#FF6B6B';
+            }),
+            borderWidth: 1, borderSkipped: false,
+            borderRadius: { topRight: 3, bottomRight: 3 },
+            barThickness: 20, stack: 'attr',
+          },
+          {
+            label: 'Dividendos',
+            data: divContrib,
+            backgroundColor: rev.map(p => p.is_open ? 'rgba(255,176,32,0.55)' : 'rgba(255,176,32,0.25)'),
+            borderColor: '#FFB020',
+            borderWidth: 1, borderSkipped: false,
+            borderRadius: { topRight: 3, bottomRight: 3 },
+            barThickness: 20, stack: 'attr',
+          },
+        ],
       },
       options: {
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        animation: { duration: 600 },
         plugins: {
           legend: { display: false },
           datalabels: {
-            anchor: ctx => ctrContrib[ctx.dataIndex] >= 0 ? 'end' : 'start',
-            align:  ctx => ctrContrib[ctx.dataIndex] >= 0 ? 'right' : 'left',
-            color:  ctx => ctrContrib[ctx.dataIndex] >= 0 ? '#00E576' : '#FF6B6B',
+            display: ctx => ctx.datasetIndex === 1,
+            anchor: ctx => rev[ctx.dataIndex].contribution_pp >= 0 ? 'end' : 'start',
+            align:  ctx => rev[ctx.dataIndex].contribution_pp >= 0 ? 'right' : 'left',
+            color:  ctx => rev[ctx.dataIndex].is_open
+              ? (rev[ctx.dataIndex].contribution_pp >= 0 ? '#00E576' : '#FF6B6B')
+              : '#8B8FA8',
             font: { size: 11, weight: '600' },
-            formatter: (v, ctx) => {
-              const p   = ctrReversed[ctx.dataIndex];
-              const s   = v >= 0 ? '+' : '';
-              const rs  = p.ytd_return_pct >= 0 ? '+' : '';
-              return `${s}${v.toFixed(2)}pp   (${rs}${p.ytd_return_pct.toFixed(1)}%)`;
+            formatter: (_, ctx) => {
+              const p  = rev[ctx.dataIndex];
+              const cs = p.contribution_pp >= 0 ? '+' : '';
+              const rs = p.position_return_pct >= 0 ? '+' : '';
+              return `${cs}${p.contribution_pp.toFixed(2)}pp  (${rs}${p.position_return_pct.toFixed(1)}%)`;
             },
             clip: false,
           },
           tooltip: {
-            backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)', borderWidth: 1, padding: 12, displayColors: false,
+            backgroundColor: '#14151F', borderColor: 'rgba(255,255,255,0.12)',
+            borderWidth: 1, padding: 12, displayColors: false,
             callbacks: {
-              title: items => items[0].label,
+              title: items => {
+                const p = rev[items[0].dataIndex];
+                return p.ticker + (p.description ? '  ·  ' + p.description.slice(0, 28) : '') + (p.is_open ? '' : '  (cerrada)');
+              },
               label: ctx => {
-                const p = ctrReversed[ctx.dataIndex];
-                const s = p.contrib_pp >= 0 ? '+' : '';
-                const rs = p.ytd_return_pct >= 0 ? '+' : '';
-                return [
-                  `  Contribution: ${s}${p.contrib_pp.toFixed(3)}pp`,
-                  `  YTD return:   ${rs}${p.ytd_return_pct.toFixed(2)}%`,
-                  `  P&L:          ${p.pnl_eur >= 0 ? '+' : ''}€${Math.abs(p.pnl_eur).toLocaleString('de-DE', {maximumFractionDigits:0})}`
+                const p = rev[ctx.dataIndex];
+                const lines = [
+                  `  Contribución total:  ${p.contribution_pp >= 0 ? '+' : ''}${p.contribution_pp.toFixed(2)} pp`,
+                  `  Retorno posición:    ${p.position_return_pct >= 0 ? '+' : ''}${p.position_return_pct.toFixed(2)} %`,
+                  `  ──────────────────────────`,
+                  `  No realizado:        ${fmtAttrEur(p.unrealized_eur)}`,
                 ];
+                if (Math.abs(p.realized_eur) > 0.01) lines.push(`  Realizado:           ${fmtAttrEur(p.realized_eur)}`);
+                if (p.dividends_eur > 0.01)          lines.push(`  Dividendos:          +€${Math.round(p.dividends_eur).toLocaleString('de-DE')}`);
+                lines.push(`  Invertido total:     €${Math.round(p.cost_eur_invested).toLocaleString('de-DE')}`);
+                lines.push(`  Peso en cartera:     ${p.weight_pct.toFixed(1)} %`);
+                return lines;
               }
             }
           }
         },
-        layout: { padding: { right: 160 } },
+        layout: { padding: { right: 175 } },
         scales: {
           x: {
+            stacked: true,
             grid: { color: 'rgba(255,255,255,0.04)' }, border: { dash: [3,3] },
-            ticks: { color: '#FFFFFF', font: { size: 11 }, callback: v => (v>=0?'+':'')+v+'pp' }
+            ticks: { color: '#8B8FA8', font: { size: 11 }, callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + 'pp' }
           },
-          y: { grid: { display: false }, ticks: { color: '#FFFFFF', font: { size: 12, weight: '600' } } }
+          y: {
+            stacked: true,
+            grid: { display: false },
+            ticks: {
+              color: ctx => rev[ctx.index]?.is_open ? '#FFFFFF' : '#8B8FA8',
+              font: { size: 12, weight: '600' }
+            }
+          }
         }
       }
     });
+
   } else {
     const sec = document.getElementById('contribReturnSection');
     if (sec) sec.style.display = 'none';
