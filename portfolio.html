@@ -317,6 +317,48 @@
     .proj-pct { font-size:14px; font-weight:700; }
     @media(max-width:768px) { .proj-ctrl-div { display:none; } .proj-ctrl-group { padding:8px 0; border-top:1px solid var(--border); } .proj-ctrl-group:first-child { border-top:none; padding-top:0; } }
 
+    /* ── PROJECTION KPI DUAL-VALUE ── */
+    .proj-kpi-split {
+      display:flex; align-items:flex-start; gap:0; overflow:hidden;
+    }
+    .proj-kpi-col-base {
+      flex:1 1 auto; min-width:0; display:flex; flex-direction:column;
+    }
+    /* Scenario micro-tag — hidden by default */
+    .proj-scenario-tag {
+      display:block; font-size:9px; font-weight:700;
+      letter-spacing:0.10em; text-transform:uppercase;
+      height:0; overflow:hidden; opacity:0; margin-bottom:0;
+      transition:height 0.28s ease, opacity 0.22s ease, margin-bottom 0.28s ease;
+    }
+    .proj-tag-base { color:rgba(0,229,118,0.65); }
+    .proj-tag-comp { color:rgba(106,128,255,0.65); }
+    /* Smooth font resize on the base value */
+    .proj-kpi-splittable .risk-val { transition:font-size 0.3s ease; }
+    /* Comparison column — collapsed */
+    .proj-kpi-col-comp {
+      flex:0 0 auto; max-width:0; overflow:hidden; opacity:0; padding-left:0;
+      position:relative; display:flex; flex-direction:column;
+      transition:max-width 0.38s cubic-bezier(0.34,1.05,0.64,1),
+                 opacity 0.28s ease 0.12s,
+                 padding-left 0.38s cubic-bezier(0.34,1.05,0.64,1);
+    }
+    /* Divider */
+    .proj-kpi-col-comp::before {
+      content:''; position:absolute; left:0; top:4px; bottom:4px; width:1px;
+      background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.10) 30%, rgba(255,255,255,0.13) 55%, rgba(255,255,255,0.10) 75%, transparent);
+      transform:scaleY(0); transform-origin:center;
+      transition:transform 0.32s ease 0.22s;
+    }
+    .proj-comp-val { color:#6A80FF !important; white-space:nowrap; }
+    .proj-comp-sub { white-space:nowrap; }
+    /* ── ACTIVE: .proj-kpi-comparing on the grid ── */
+    .proj-kpi-comparing .proj-kpi-splittable { border-color:rgba(255,255,255,0.10); }
+    .proj-kpi-comparing .proj-kpi-splittable .risk-val { font-size:19px; }
+    .proj-kpi-comparing .proj-scenario-tag { height:13px; opacity:1; margin-bottom:5px; }
+    .proj-kpi-comparing .proj-kpi-col-comp { max-width:180px; opacity:1; padding-left:15px; }
+    .proj-kpi-comparing .proj-kpi-col-comp::before { transform:scaleY(1); }
+
     /* ── DIVIDEND SECTION ── */
     .div-year-pill {
       display:inline-flex; align-items:center; gap:5px;
@@ -692,22 +734,46 @@
       </div>
 
       <!-- KPI row -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
-        <div class="risk-tile">
+      <div id="proj-kpi-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;">
+
+        <div class="risk-tile proj-kpi-splittable">
           <p class="risk-label">Valor final estimado</p>
-          <p class="risk-val" id="proj-final" style="color:#00E576;">—</p>
-          <p class="risk-sub" id="proj-final-sub">escenario base</p>
+          <div class="proj-kpi-split">
+            <div class="proj-kpi-col-base">
+              <span class="proj-scenario-tag proj-tag-base">Base</span>
+              <p class="risk-val" id="proj-final" style="color:#00E576;">—</p>
+              <p class="risk-sub" id="proj-final-sub">escenario base</p>
+            </div>
+            <div class="proj-kpi-col-comp">
+              <span class="proj-scenario-tag proj-tag-comp">Comp.</span>
+              <p class="risk-val proj-comp-val" id="proj-final-comp">—</p>
+              <p class="risk-sub proj-comp-sub" id="proj-final-comp-sub">escenario comparar</p>
+            </div>
+          </div>
         </div>
+
         <div class="risk-tile">
           <p class="risk-label">Capital aportado</p>
           <p class="risk-val" id="proj-invested">—</p>
           <p class="risk-sub">cartera actual + aportaciones</p>
         </div>
-        <div class="risk-tile">
+
+        <div class="risk-tile proj-kpi-splittable">
           <p class="risk-label">Ganancia de mercado</p>
-          <p class="risk-val" id="proj-gain" style="color:#00E576;">—</p>
-          <p class="risk-sub" id="proj-gain-sub">generado por interés compuesto</p>
+          <div class="proj-kpi-split">
+            <div class="proj-kpi-col-base">
+              <span class="proj-scenario-tag proj-tag-base">Base</span>
+              <p class="risk-val" id="proj-gain" style="color:#00E576;">—</p>
+              <p class="risk-sub" id="proj-gain-sub">interés compuesto</p>
+            </div>
+            <div class="proj-kpi-col-comp">
+              <span class="proj-scenario-tag proj-tag-comp">Comp.</span>
+              <p class="risk-val proj-comp-val" id="proj-gain-comp">—</p>
+              <p class="risk-sub proj-comp-sub" id="proj-gain-comp-sub">interés compuesto</p>
+            </div>
+          </div>
         </div>
+
       </div>
 
       <p style="font-size:10px;color:var(--text-3);text-align:center;padding-top:12px;border-top:1px solid var(--border);letter-spacing:0.02em;">
@@ -1936,31 +2002,43 @@ window.initProjection = function(d) {
   });
 
   // ── KPI update ───────────────────────────────────────────────
-  function updateKPIs(basePts, pmt) {
+  function updateKPIs(basePts, compPts, pmt) {
     const hp   = getHorizonParams();
     const fin  = basePts[basePts.length - 1];
-    const inv  = pv + pmt * hp.months;  // pv = pvEq + pvCash = full starting capital
+    const inv  = pv + pmt * hp.months;
     const gain = fin - inv;
     const mult = inv > 0 ? fin / inv : 0;
     document.getElementById('proj-final').textContent     = fmtFull(fin);
-    document.getElementById('proj-final-sub').textContent = `${periodLabel()} · escenario base`;
+    document.getElementById('proj-final-sub').textContent = `${periodLabel()} · base`;
     document.getElementById('proj-invested').textContent  = fmtFull(inv);
     document.getElementById('proj-gain').textContent      = fmtFull(Math.max(0, gain));
-    document.getElementById('proj-gain-sub').textContent  = `×${mult.toFixed(1)} sobre lo invertido`;
+    document.getElementById('proj-gain-sub').textContent  = `×${mult.toFixed(1)} vs. invertido`;
+
+    if (compPts && compVisible) {
+      const finC  = compPts[compPts.length - 1];
+      const gainC = finC - inv;
+      const multC = inv > 0 ? finC / inv : 0;
+      document.getElementById('proj-final-comp').textContent     = fmtFull(finC);
+      document.getElementById('proj-final-comp-sub').textContent = `${periodLabel()} · comp.`;
+      document.getElementById('proj-gain-comp').textContent      = fmtFull(Math.max(0, gainC));
+      document.getElementById('proj-gain-comp-sub').textContent  = `×${multC.toFixed(1)} vs. invertido`;
+    }
   }
 
   function refresh() {
-    const hp  = getHorizonParams();
-    const pmt = getPmt();
+    const hp      = getHorizonParams();
+    const pmt     = getPmt();
+    const basePts = project(pvEq, pvCash, pmt, baseCagr,  hp.months, hp.monthly);
+    const compPts = project(pvEq, pvCash, pmt, getComp(), hp.months, hp.monthly);
     projChart.data.labels           = hp.labels;
-    projChart.data.datasets[0].data = project(pvEq, pvCash, pmt, baseCagr, hp.months, hp.monthly);
-    projChart.data.datasets[1].data = project(pvEq, pvCash, pmt, getComp(), hp.months, hp.monthly);
+    projChart.data.datasets[0].data = basePts;
+    projChart.data.datasets[1].data = compPts;
     projChart.update('active');
-    updateKPIs(projChart.data.datasets[0].data, pmt);
+    updateKPIs(basePts, compPts, pmt);
   }
 
   // Initial KPIs
-  updateKPIs(projChart.data.datasets[0].data, pmt0);
+  updateKPIs(projChart.data.datasets[0].data, null, pmt0);
 
   // ── Events ───────────────────────────────────────────────────
   document.getElementById('proj-pmt-minus').addEventListener('click', () => {
@@ -1998,6 +2076,7 @@ window.initProjection = function(d) {
     document.getElementById('proj-comp-row').classList.add('visible');
     document.getElementById('proj-comp-add').style.display = 'none';
     document.getElementById('proj-legend-comp').style.display = 'flex';
+    document.getElementById('proj-kpi-grid').classList.add('proj-kpi-comparing');
     projChart.data.datasets[1].hidden = false;
     refresh();
   });
@@ -2006,6 +2085,7 @@ window.initProjection = function(d) {
     document.getElementById('proj-comp-row').classList.remove('visible');
     document.getElementById('proj-comp-add').style.display = '';
     document.getElementById('proj-legend-comp').style.display = 'none';
+    document.getElementById('proj-kpi-grid').classList.remove('proj-kpi-comparing');
     projChart.data.datasets[1].hidden = true;
     projChart.update('active');
   });
