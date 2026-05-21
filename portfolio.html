@@ -5694,6 +5694,12 @@ async function loadPortfolio() {
     const sumRow  = document.getElementById('fiscal-summary-row');
     const taxTotEl = document.getElementById('fiscal-tax-total');
 
+    // ✅ DEFENSIVE: Skip fiscal section if elements don't exist
+    if (!tabsEl || !tbody || !sumRow || !taxTotEl) {
+      console.warn('⚠️ FISCAL: Elements not found, skipping fiscal calculations');
+      return;
+    }
+
     function renderYear(yr) {
       activeYear = yr;
       tabsEl.querySelectorAll('.fiscal-tab').forEach(t =>
