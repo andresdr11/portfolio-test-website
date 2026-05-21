@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-20T16:01:31",
+  "generated_at": "2026-05-21T16:10:53",
   "kpis": {
-    "total_portfolio_eur": 23242.38,
-    "total_mkt_eur": 21186.04,
+    "total_portfolio_eur": 23274.12,
+    "total_mkt_eur": 21217.78,
     "cash_eur": 2056.34,
-    "total_pnl_eur": 4858.62,
-    "total_pnl_pct": 29.22,
+    "total_pnl_eur": 4855.41,
+    "total_pnl_pct": 29.2,
     "capital_neto_eur": 21230.46,
     "dividendos_eur": 98.45,
     "dividendos_ytd_eur": 63.97,
@@ -26,17 +26,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 20.0,
-      "price": 222.155,
-      "mkt_eur": 3832.62,
-      "pnl_eur": 1699.56,
-      "pnl_pct": 79.68,
+      "price": 224.03,
+      "mkt_eur": 3864.07,
+      "pnl_eur": 1731.01,
+      "pnl_pct": 81.15,
       "cost_eur": 2133.06,
       "avg_price": 116.2893,
-      "weight_pct": 16.49,
+      "weight_pct": 16.6,
       "sector": "Technology",
       "country": "United States",
       "spark": [
-        183.91,
         188.63,
         189.31,
         196.51,
@@ -65,7 +64,8 @@
         225.32,
         222.32,
         220.61,
-        222.155
+        223.47,
+        224.03
       ]
     },
     {
@@ -75,17 +75,16 @@
       "type": "ETF",
       "currency": "EUR",
       "units": 33.0,
-      "price": 82.2,
-      "mkt_eur": 2712.6,
-      "pnl_eur": 1275.35,
-      "pnl_pct": 88.74,
+      "price": 83.35,
+      "mkt_eur": 2750.55,
+      "pnl_eur": 1313.3,
+      "pnl_pct": 91.38,
       "cost_eur": 1437.25,
       "avg_price": 43.5532,
-      "weight_pct": 11.67,
+      "weight_pct": 11.82,
       "sector": "Commodities",
       "country": "United States",
       "spark": [
-        95.32,
         95.13,
         96.27,
         94.03,
@@ -114,7 +113,8 @@
         85.1,
         84.7,
         81.72,
-        82.2
+        84.08,
+        83.35
       ]
     },
     {
@@ -124,17 +124,16 @@
       "type": "ETF",
       "currency": "EUR",
       "units": 21.0,
-      "price": 120.995,
-      "mkt_eur": 2540.89,
-      "pnl_eur": 474.93,
-      "pnl_pct": 22.99,
+      "price": 121.71,
+      "mkt_eur": 2555.91,
+      "pnl_eur": 489.95,
+      "pnl_pct": 23.72,
       "cost_eur": 2065.96,
       "avg_price": 98.3795,
-      "weight_pct": 10.93,
+      "weight_pct": 10.98,
       "sector": "Global Equity",
       "country": "Global",
       "spark": [
-        112.49,
         112.685,
         112.95,
         112.945,
@@ -163,7 +162,8 @@
         121.06,
         120.41,
         120.29,
-        120.995
+        121.355,
+        121.71
       ]
     },
     {
@@ -173,17 +173,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 7.0,
-      "price": 389.55,
-      "mkt_eur": 2352.18,
-      "pnl_eur": 547.55,
-      "pnl_pct": 30.34,
+      "price": 382.625,
+      "mkt_eur": 2309.83,
+      "pnl_eur": 505.2,
+      "pnl_pct": 27.99,
       "cost_eur": 1804.63,
       "avg_price": 301.4807,
-      "weight_pct": 10.12,
+      "weight_pct": 9.92,
       "sector": "Healthcare",
       "country": "United States",
       "spark": [
-        306.91,
         304.33,
         313.0,
         314.19,
@@ -212,7 +211,8 @@
         393.85,
         391.13,
         389.24,
-        389.55
+        383.3,
+        382.625
       ]
     },
     {
@@ -222,17 +222,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 10.0,
-      "price": 261.36,
-      "mkt_eur": 2254.49,
-      "pnl_eur": 341.57,
-      "pnl_pct": 17.86,
+      "price": 263.365,
+      "mkt_eur": 2271.26,
+      "pnl_eur": 358.34,
+      "pnl_pct": 18.73,
       "cost_eur": 1912.92,
       "avg_price": 221.9864,
-      "weight_pct": 9.7,
+      "weight_pct": 9.76,
       "sector": "Technology",
       "country": "United States",
       "spark": [
-        233.65,
         238.38,
         239.89,
         249.02,
@@ -261,7 +260,8 @@
         264.14,
         264.86,
         259.34,
-        261.36
+        265.01,
+        263.365
       ]
     },
     {
@@ -271,17 +271,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 5.0,
-      "price": 480.82,
-      "mkt_eur": 2073.78,
-      "pnl_eur": 9.09,
-      "pnl_pct": 0.44,
+      "price": 477.96,
+      "mkt_eur": 2060.96,
+      "pnl_eur": -3.73,
+      "pnl_pct": -0.18,
       "cost_eur": 2064.69,
       "avg_price": 482.25,
-      "weight_pct": 8.92,
+      "weight_pct": 8.86,
       "sector": "Financials",
       "country": "United States",
       "spark": [
-        485.2,
         479.9,
         480.19,
         477.54,
@@ -310,7 +309,8 @@
         482.7,
         488.38,
         480.46,
-        480.82
+        480.9,
+        477.96
       ]
     },
     {
@@ -320,17 +320,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 26.0,
-      "price": 74.53,
-      "mkt_eur": 1671.53,
-      "pnl_eur": -3.47,
-      "pnl_pct": -0.21,
+      "price": 76.16,
+      "mkt_eur": 1707.69,
+      "pnl_eur": 32.69,
+      "pnl_pct": 1.95,
       "cost_eur": 1675.0,
       "avg_price": 74.8998,
-      "weight_pct": 7.19,
+      "weight_pct": 7.34,
       "sector": "Financials",
       "country": "United States",
       "spark": [
-        70.12,
         69.19,
         71.67,
         79.09,
@@ -359,7 +358,8 @@
         77.14,
         77.15,
         74.16,
-        74.53
+        75.76,
+        76.16
       ]
     },
     {
@@ -369,17 +369,16 @@
       "type": "Common Stock",
       "currency": "EUR",
       "units": 42.0,
-      "price": 288.85,
-      "mkt_eur": 1621.89,
-      "pnl_eur": -24.74,
-      "pnl_pct": -1.5,
+      "price": 285.2,
+      "mkt_eur": 1601.39,
+      "pnl_eur": -45.24,
+      "pnl_pct": -2.75,
       "cost_eur": 1646.63,
       "avg_price": 39.2054,
-      "weight_pct": 6.98,
+      "weight_pct": 6.88,
       "sector": "Healthcare",
       "country": "Denmark",
       "spark": [
-        235.1,
         240.1,
         238.1,
         240.65,
@@ -408,7 +407,8 @@
         299.2,
         286.0,
         287.5,
-        288.85
+        288.4,
+        285.2
       ]
     },
     {
@@ -418,17 +418,16 @@
       "type": "Common Stock",
       "currency": "USD",
       "units": 12.0,
-      "price": 133.2621,
-      "mkt_eur": 1379.42,
-      "pnl_eur": 166.97,
-      "pnl_pct": 13.77,
+      "price": 129.5994,
+      "mkt_eur": 1341.2,
+      "pnl_eur": 128.75,
+      "pnl_pct": 10.62,
       "cost_eur": 1212.45,
       "avg_price": 110.1629,
-      "weight_pct": 5.93,
+      "weight_pct": 5.76,
       "sector": "Consumer Discretionary",
       "country": "China",
       "spark": [
-        127.68,
         127.33,
         128.01,
         131.35,
@@ -457,7 +456,8 @@
         132.59,
         133.26,
         135.64,
-        133.2621
+        134.47,
+        129.5994
       ]
     },
     {
@@ -467,17 +467,16 @@
       "type": "Common Stock",
       "currency": "EUR",
       "units": 1800.0,
-      "price": 0.4148,
-      "mkt_eur": 746.64,
-      "pnl_eur": 71.64,
-      "pnl_pct": 10.61,
+      "price": 0.4194,
+      "mkt_eur": 754.92,
+      "pnl_eur": 79.92,
+      "pnl_pct": 11.84,
       "cost_eur": 675.0,
       "avg_price": 0.375,
-      "weight_pct": 3.21,
+      "weight_pct": 3.24,
       "sector": "Industrials",
       "country": "Spain",
       "spark": [
-        0.4526,
         0.467,
         0.4868,
         0.491,
@@ -506,7 +505,8 @@
         0.4432,
         0.4338,
         0.413,
-        0.4148
+        0.42,
+        0.4194
       ]
     }
   ],
@@ -516,11 +516,11 @@
       "description": "NVIDIA Corporation",
       "units": 20.0,
       "price": 225.32,
-      "mkt_eur": 3887.22,
+      "mkt_eur": 3886.32,
       "cost_eur": 2133.06,
       "avg_price": 106.653,
-      "pnl_pct": 82.24,
-      "pnl_eur": 1754.16,
+      "pnl_pct": 82.19,
+      "pnl_eur": 1753.26,
       "weight_pct": 16.51,
       "currency": "USD",
       "sector": "Technology",
@@ -561,11 +561,11 @@
       "description": "UnitedHealth Group Incorporated",
       "units": 7.0,
       "price": 393.85,
-      "mkt_eur": 2378.15,
+      "mkt_eur": 2377.59,
       "cost_eur": 1804.63,
       "avg_price": 257.8043,
-      "pnl_pct": 31.78,
-      "pnl_eur": 573.52,
+      "pnl_pct": 31.75,
+      "pnl_eur": 572.96,
       "weight_pct": 10.1,
       "currency": "USD",
       "sector": "Healthcare",
@@ -576,11 +576,11 @@
       "description": "Amazon.com, Inc.",
       "units": 10.0,
       "price": 264.14,
-      "mkt_eur": 2278.47,
+      "mkt_eur": 2277.94,
       "cost_eur": 1912.92,
       "avg_price": 191.292,
-      "pnl_pct": 19.11,
-      "pnl_eur": 365.55,
+      "pnl_pct": 19.08,
+      "pnl_eur": 365.02,
       "weight_pct": 9.68,
       "currency": "USD",
       "sector": "Technology",
@@ -591,11 +591,11 @@
       "description": "Berkshire Hathaway Inc. Class B",
       "units": 5.0,
       "price": 482.7,
-      "mkt_eur": 2081.89,
+      "mkt_eur": 2081.4,
       "cost_eur": 2064.69,
       "avg_price": 412.938,
-      "pnl_pct": 0.83,
-      "pnl_eur": 17.2,
+      "pnl_pct": 0.81,
+      "pnl_eur": 16.71,
       "weight_pct": 8.84,
       "currency": "USD",
       "sector": "Financials",
@@ -606,11 +606,11 @@
       "description": "Robinhood Markets, Inc.",
       "units": 26.0,
       "price": 77.14,
-      "mkt_eur": 1730.07,
+      "mkt_eur": 1729.66,
       "cost_eur": 1675.0,
       "avg_price": 64.4231,
-      "pnl_pct": 3.29,
-      "pnl_eur": 55.07,
+      "pnl_pct": 3.26,
+      "pnl_eur": 54.66,
       "weight_pct": 7.35,
       "currency": "USD",
       "sector": "Financials",
@@ -636,11 +636,11 @@
       "description": "Alibaba Group Holding Limited SP ADR",
       "units": 12.0,
       "price": 132.59,
-      "mkt_eur": 1372.47,
+      "mkt_eur": 1372.15,
       "cost_eur": 1212.45,
       "avg_price": 101.0375,
-      "pnl_pct": 13.2,
-      "pnl_eur": 160.02,
+      "pnl_pct": 13.17,
+      "pnl_eur": 159.7,
       "weight_pct": 5.83,
       "currency": "USD",
       "sector": "Consumer Discretionary",
@@ -667,7 +667,7 @@
       "mkt_eur": 2056.34,
       "pnl_pct": 0,
       "pnl_eur": 0,
-      "weight_pct": 8.73,
+      "weight_pct": 8.74,
       "sector": "Cash",
       "country": "—"
     }
@@ -706,7 +706,7 @@
     {
       "date": "2023-06-13",
       "label": "13 Jun 23",
-      "value": 1279.0
+      "value": 1277.0
     },
     {
       "date": "2023-06-13",
@@ -746,7 +746,7 @@
     {
       "date": "2023-09-11",
       "label": "11 Sep 23",
-      "value": 2701.0
+      "value": 2511.0
     },
     {
       "date": "2023-09-11",
@@ -761,7 +761,7 @@
     {
       "date": "2023-09-13",
       "label": "13 Sep 23",
-      "value": 2606.0
+      "value": 206.0
     },
     {
       "date": "2023-09-13",
@@ -826,7 +826,7 @@
     {
       "date": "2023-12-04",
       "label": "04 Dec 23",
-      "value": 3381.0
+      "value": 3241.0
     },
     {
       "date": "2023-12-04",
@@ -856,7 +856,7 @@
     {
       "date": "2023-12-14",
       "label": "14 Dec 23",
-      "value": 3181.0
+      "value": 3021.0
     },
     {
       "date": "2023-12-14",
@@ -906,7 +906,7 @@
     {
       "date": "2024-03-18",
       "label": "18 Mar 24",
-      "value": 2961.0
+      "value": 3061.0
     },
     {
       "date": "2024-03-18",
@@ -1325,7 +1325,7 @@
       "type": "buy",
       "description": "Compra 1 Berkshire Hathaway Inc Class B@472,87 USD (US0846707026)",
       "ticker": "BRK.B",
-      "amount_eur": -407.9,
+      "amount_eur": -407.8,
       "currency": "USD",
       "amount_orig": -472.87
     },
@@ -1343,7 +1343,7 @@
       "type": "buy",
       "description": "Compra 2 Robinhood Markets Inc Class A@72,1001 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -124.39,
+      "amount_eur": -124.36,
       "currency": "USD",
       "amount_orig": -144.2
     },
@@ -1361,7 +1361,7 @@
       "type": "buy",
       "description": "Compra 2 Amazon.com Inc@267,665 USD (US0231351067)",
       "ticker": "AMZN",
-      "amount_eur": -461.78,
+      "amount_eur": -461.67,
       "currency": "USD",
       "amount_orig": -535.33
     },
@@ -1379,7 +1379,7 @@
       "type": "buy",
       "description": "Compra 3 Robinhood Markets Inc Class A@72,26 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -186.99,
+      "amount_eur": -186.95,
       "currency": "USD",
       "amount_orig": -216.78
     },
@@ -1406,7 +1406,7 @@
       "type": "buy",
       "description": "Compra 3 Robinhood Markets Inc Class A@88,17 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -228.17,
+      "amount_eur": -228.11,
       "currency": "USD",
       "amount_orig": -264.51
     },
@@ -1532,7 +1532,7 @@
       "type": "buy",
       "description": "Compra 1 Amazon.com Inc@200,33 USD (US0231351067)",
       "ticker": "AMZN",
-      "amount_eur": -172.8,
+      "amount_eur": -172.76,
       "currency": "USD",
       "amount_orig": -200.33
     },
@@ -1559,7 +1559,7 @@
       "type": "buy",
       "description": "Compra 3 Robinhood Markets Inc Class A@67,035 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -173.47,
+      "amount_eur": -173.43,
       "currency": "USD",
       "amount_orig": -201.1
     },
@@ -1577,18 +1577,9 @@
       "type": "buy",
       "description": "Compra 3 Robinhood Markets Inc Class A@66,38 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -171.78,
+      "amount_eur": -171.74,
       "currency": "USD",
       "amount_orig": -199.14
-    },
-    {
-      "date": "2026-03-27",
-      "type": "buy",
-      "description": "Compra 2 Amazon.com Inc@201,5894 USD (US0231351067)",
-      "ticker": "AMZN",
-      "amount_eur": -347.78,
-      "currency": "USD",
-      "amount_orig": -403.18
     },
     {
       "date": "2026-03-27",
@@ -1598,6 +1589,15 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
+    },
+    {
+      "date": "2026-03-27",
+      "type": "buy",
+      "description": "Compra 2 Amazon.com Inc@201,5894 USD (US0231351067)",
+      "ticker": "AMZN",
+      "amount_eur": -347.7,
+      "currency": "USD",
+      "amount_orig": -403.18
     },
     {
       "date": "2026-03-23",
@@ -1613,36 +1613,27 @@
       "type": "buy",
       "description": "Compra 2 Robinhood Markets Inc Class A@72,38 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -124.87,
+      "amount_eur": -124.84,
       "currency": "USD",
       "amount_orig": -144.76
-    },
-    {
-      "date": "2026-03-20",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "BABA",
-      "amount_eur": -2.0,
-      "currency": "EUR",
-      "amount_orig": -2.0
     },
     {
       "date": "2026-03-20",
       "type": "buy",
       "description": "Compra 1 ADR on Alibaba Group Holding Ltd@125,08 USD (US01609W1027)",
       "ticker": "BABA",
-      "amount_eur": -107.89,
+      "amount_eur": -107.87,
       "currency": "USD",
       "amount_orig": -125.08
     },
     {
       "date": "2026-03-20",
-      "type": "buy",
-      "description": "Compra 1 UnitedHealth Group Inc@279,115 USD (US91324P1021)",
-      "ticker": "UNH",
-      "amount_eur": -240.76,
-      "currency": "USD",
-      "amount_orig": -279.11
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "BABA",
+      "amount_eur": -2.0,
+      "currency": "EUR",
+      "amount_orig": -2.0
     },
     {
       "date": "2026-03-20",
@@ -1652,6 +1643,15 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
+    },
+    {
+      "date": "2026-03-20",
+      "type": "buy",
+      "description": "Compra 1 UnitedHealth Group Inc@279,115 USD (US91324P1021)",
+      "ticker": "UNH",
+      "amount_eur": -240.7,
+      "currency": "USD",
+      "amount_orig": -279.11
     },
     {
       "date": "2026-03-18",
@@ -1673,21 +1673,21 @@
     },
     {
       "date": "2026-03-11",
-      "type": "sell",
-      "description": "Venta 6 Apple Inc@260,73 USD (US0378331005)",
-      "ticker": "AAPL",
-      "amount_eur": 1349.43,
-      "currency": "USD",
-      "amount_orig": 1564.38
-    },
-    {
-      "date": "2026-03-11",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "AAPL",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
+    },
+    {
+      "date": "2026-03-11",
+      "type": "sell",
+      "description": "Venta 6 Apple Inc@260,73 USD (US0378331005)",
+      "ticker": "AAPL",
+      "amount_eur": 1349.12,
+      "currency": "USD",
+      "amount_orig": 1564.38
     },
     {
       "date": "2026-03-06",
@@ -1703,7 +1703,7 @@
       "type": "buy",
       "description": "Compra 10 Robinhood Markets Inc Class A@77,69 USD (US7707001027)",
       "ticker": "HOOD",
-      "amount_eur": -670.15,
+      "amount_eur": -670.0,
       "currency": "USD",
       "amount_orig": -776.9
     },
@@ -1721,7 +1721,7 @@
       "type": "buy",
       "description": "Compra 5 Amazon.com Inc@216,205 USD (US0231351067)",
       "ticker": "AMZN",
-      "amount_eur": -932.49,
+      "amount_eur": -932.27,
       "currency": "USD",
       "amount_orig": -1081.02
     },
@@ -1748,18 +1748,9 @@
       "type": "buy",
       "description": "Compra 1 Berkshire Hathaway Inc Class B@487,55 USD (US0846707026)",
       "ticker": "BRK.B",
-      "amount_eur": -420.56,
+      "amount_eur": -420.46,
       "currency": "USD",
       "amount_orig": -487.55
-    },
-    {
-      "date": "2026-02-23",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "NOVC.XGAT",
-      "amount_eur": -3.9,
-      "currency": "EUR",
-      "amount_orig": -3.9
     },
     {
       "date": "2026-02-23",
@@ -1772,12 +1763,12 @@
     },
     {
       "date": "2026-02-23",
-      "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2026 (Tradegate AG - TDG)",
-      "ticker": "",
-      "amount_eur": -2.5,
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "NOVC.XGAT",
+      "amount_eur": -3.9,
       "currency": "EUR",
-      "amount_orig": -2.5
+      "amount_orig": -3.9
     },
     {
       "date": "2026-02-23",
@@ -1801,6 +1792,15 @@
       "date": "2026-02-23",
       "type": "fee",
       "description": "Comisión de conectividad con el mercado 2026 (Euronext Milan - MIL)",
+      "ticker": "",
+      "amount_eur": -2.5,
+      "currency": "EUR",
+      "amount_orig": -2.5
+    },
+    {
+      "date": "2026-02-23",
+      "type": "fee",
+      "description": "Comisión de conectividad con el mercado 2026 (Tradegate AG - TDG)",
       "ticker": "",
       "amount_eur": -2.5,
       "currency": "EUR",
@@ -1910,7 +1910,7 @@
       "type": "buy",
       "description": "Compra 1 UnitedHealth Group Inc@281,85 USD (US91324P1021)",
       "ticker": "UNH",
-      "amount_eur": -243.12,
+      "amount_eur": -243.07,
       "currency": "USD",
       "amount_orig": -281.85
     },
@@ -1955,18 +1955,9 @@
       "type": "buy",
       "description": "Compra 1 UnitedHealth Group Inc@284,06 USD (US91324P1021)",
       "ticker": "UNH",
-      "amount_eur": -245.03,
+      "amount_eur": -244.97,
       "currency": "USD",
       "amount_orig": -284.06
-    },
-    {
-      "date": "2026-01-21",
-      "type": "buy",
-      "description": "Compra 3 Novo Nordisk A/S Class B@50,96 EUR (DK0062498333)",
-      "ticker": "NOVC.XGAT",
-      "amount_eur": -152.88,
-      "currency": "EUR",
-      "amount_orig": -152.88
     },
     {
       "date": "2026-01-21",
@@ -1976,6 +1967,15 @@
       "amount_eur": -3.9,
       "currency": "EUR",
       "amount_orig": -3.9
+    },
+    {
+      "date": "2026-01-21",
+      "type": "buy",
+      "description": "Compra 3 Novo Nordisk A/S Class B@50,96 EUR (DK0062498333)",
+      "ticker": "NOVC.XGAT",
+      "amount_eur": -152.88,
+      "currency": "EUR",
+      "amount_orig": -152.88
     },
     {
       "date": "2026-01-05",
@@ -2018,7 +2018,7 @@
       "type": "sell",
       "description": "Venta 3 Tesla Inc@473,54 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": 1225.43,
+      "amount_eur": 1225.14,
       "currency": "USD",
       "amount_orig": 1420.62
     },
@@ -2027,7 +2027,7 @@
       "type": "div",
       "description": "Dividendo",
       "ticker": "UNH",
-      "amount_eur": 7.63,
+      "amount_eur": 7.62,
       "currency": "USD",
       "amount_orig": 8.84
     },
@@ -2042,21 +2042,21 @@
     },
     {
       "date": "2025-12-12",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "NOVC.XGAT",
-      "amount_eur": -3.9,
-      "currency": "EUR",
-      "amount_orig": -3.9
-    },
-    {
-      "date": "2025-12-12",
       "type": "buy",
       "description": "Compra 4 Novo Nordisk A/S Class B@43,33 EUR (DK0062498333)",
       "ticker": "NOVC.XGAT",
       "amount_eur": -173.32,
       "currency": "EUR",
       "amount_orig": -173.32
+    },
+    {
+      "date": "2025-12-12",
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "NOVC.XGAT",
+      "amount_eur": -3.9,
+      "currency": "EUR",
+      "amount_orig": -3.9
     },
     {
       "date": "2025-12-03",
@@ -2180,7 +2180,7 @@
       "type": "buy",
       "description": "Compra 1 ADR on Alibaba Group Holding Ltd@173,3992 USD (US01609W1027)",
       "ticker": "BABA",
-      "amount_eur": -149.57,
+      "amount_eur": -149.54,
       "currency": "USD",
       "amount_orig": -173.4
     },
@@ -2243,7 +2243,7 @@
       "type": "sell",
       "description": "Venta 2 Tesla Inc@426,44 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": 735.69,
+      "amount_eur": 735.52,
       "currency": "USD",
       "amount_orig": 852.88
     },
@@ -2261,7 +2261,7 @@
       "type": "buy",
       "description": "Compra 1 UnitedHealth Group Inc@339,57 USD (US91324P1021)",
       "ticker": "UNH",
-      "amount_eur": -292.91,
+      "amount_eur": -292.85,
       "currency": "USD",
       "amount_orig": -339.57
     },
@@ -2279,45 +2279,45 @@
       "type": "buy",
       "description": "Compra 2 Apple Inc@235,895 USD (US0378331005)",
       "ticker": "AAPL",
-      "amount_eur": -406.97,
+      "amount_eur": -406.87,
       "currency": "USD",
       "amount_orig": -471.79
+    },
+    {
+      "date": "2025-09-15",
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "DEFT",
+      "amount_eur": -2.0,
+      "currency": "EUR",
+      "amount_orig": -2.0
     },
     {
       "date": "2025-09-15",
       "type": "sell",
       "description": "Venta 50 DeFi Technologies Inc@2,555 USD (CA2449161025)",
       "ticker": "DEFT",
-      "amount_eur": 110.2,
+      "amount_eur": 110.17,
       "currency": "USD",
       "amount_orig": 127.75
-    },
-    {
-      "date": "2025-09-15",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "DEFT",
-      "amount_eur": -2.0,
-      "currency": "EUR",
-      "amount_orig": -2.0
-    },
-    {
-      "date": "2025-09-12",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "DEFT",
-      "amount_eur": -2.0,
-      "currency": "EUR",
-      "amount_orig": -2.0
     },
     {
       "date": "2025-09-12",
       "type": "buy",
       "description": "Compra 50 DeFi Technologies Inc@2,465 USD (CA2449161025)",
       "ticker": "DEFT",
-      "amount_eur": -106.32,
+      "amount_eur": -106.29,
       "currency": "USD",
       "amount_orig": -123.25
+    },
+    {
+      "date": "2025-09-12",
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "DEFT",
+      "amount_eur": -2.0,
+      "currency": "EUR",
+      "amount_orig": -2.0
     },
     {
       "date": "2025-09-08",
@@ -2342,7 +2342,7 @@
       "type": "buy",
       "description": "Compra 2 NVIDIA Corp@174,055 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -300.28,
+      "amount_eur": -300.21,
       "currency": "USD",
       "amount_orig": -348.11
     },
@@ -2369,9 +2369,18 @@
       "type": "buy",
       "description": "Compra 1 Berkshire Hathaway Inc Class B@490,83 USD (US0846707026)",
       "ticker": "BRK.B",
-      "amount_eur": -423.39,
+      "amount_eur": -423.29,
       "currency": "USD",
       "amount_orig": -490.83
+    },
+    {
+      "date": "2025-08-22",
+      "type": "buy",
+      "description": "Compra 3 UnitedHealth Group Inc@308,59 USD (US91324P1021)",
+      "ticker": "UNH",
+      "amount_eur": -798.38,
+      "currency": "USD",
+      "amount_orig": -925.77
     },
     {
       "date": "2025-08-22",
@@ -2381,15 +2390,6 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-08-22",
-      "type": "buy",
-      "description": "Compra 3 UnitedHealth Group Inc@308,59 USD (US91324P1021)",
-      "ticker": "UNH",
-      "amount_eur": -798.57,
-      "currency": "USD",
-      "amount_orig": -925.77
     },
     {
       "date": "2025-08-22",
@@ -2405,9 +2405,18 @@
       "type": "sell",
       "description": "Venta 10 Tesla Inc@324,31 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": 2797.5,
+      "amount_eur": 2796.85,
       "currency": "USD",
       "amount_orig": 3243.1
+    },
+    {
+      "date": "2025-08-19",
+      "type": "buy",
+      "description": "Compra 2 Berkshire Hathaway Inc Class B@480 USD (US0846707026)",
+      "ticker": "BRK.B",
+      "amount_eur": -827.9,
+      "currency": "USD",
+      "amount_orig": -960.0
     },
     {
       "date": "2025-08-19",
@@ -2417,15 +2426,6 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-08-19",
-      "type": "buy",
-      "description": "Compra 2 Berkshire Hathaway Inc Class B@480 USD (US0846707026)",
-      "ticker": "BRK.B",
-      "amount_eur": -828.1,
-      "currency": "USD",
-      "amount_orig": -960.0
     },
     {
       "date": "2025-08-15",
@@ -2648,7 +2648,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@284,78 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -245.65,
+      "amount_eur": -245.59,
       "currency": "USD",
       "amount_orig": -284.78
     },
@@ -2666,7 +2666,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@305,6199 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -263.63,
+      "amount_eur": -263.57,
       "currency": "USD",
       "amount_orig": -305.62
     },
@@ -2774,7 +2774,7 @@
       "type": "buy",
       "description": "Compra 2 Apple Inc@195,9793 USD (US0378331005)",
       "ticker": "AAPL",
-      "amount_eur": -338.1,
+      "amount_eur": -338.03,
       "currency": "USD",
       "amount_orig": -391.96
     },
@@ -2792,7 +2792,7 @@
       "type": "buy",
       "description": "Compra 2 ADR on Alibaba Group Holding Ltd@121,32 USD (US01609W1027)",
       "ticker": "BABA",
-      "amount_eur": -209.3,
+      "amount_eur": -209.25,
       "currency": "USD",
       "amount_orig": -242.64
     },
@@ -2852,19 +2852,10 @@
     },
     {
       "date": "2025-04-21",
-      "type": "commission",
-      "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "NVDA",
-      "amount_eur": -2.0,
-      "currency": "EUR",
-      "amount_orig": -2.0
-    },
-    {
-      "date": "2025-04-21",
       "type": "buy",
       "description": "Compra 2 NVIDIA Corp@98,1253 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -169.29,
+      "amount_eur": -169.25,
       "currency": "USD",
       "amount_orig": -196.25
     },
@@ -2872,7 +2863,7 @@
       "date": "2025-04-21",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
-      "ticker": "TSLA",
+      "ticker": "NVDA",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
@@ -2882,16 +2873,25 @@
       "type": "buy",
       "description": "Compra 2 Tesla Inc@228,85 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -394.81,
+      "amount_eur": -394.72,
       "currency": "USD",
       "amount_orig": -457.7
+    },
+    {
+      "date": "2025-04-21",
+      "type": "commission",
+      "description": "Costes de transacción y/o externos de DEGIRO",
+      "ticker": "TSLA",
+      "amount_eur": -2.0,
+      "currency": "EUR",
+      "amount_orig": -2.0
     },
     {
       "date": "2025-04-16",
       "type": "buy",
       "description": "Compra 1 NVIDIA Corp@105,9 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -91.35,
+      "amount_eur": -91.33,
       "currency": "USD",
       "amount_orig": -105.9
     },
@@ -2906,21 +2906,21 @@
     },
     {
       "date": "2025-04-04",
+      "type": "buy",
+      "description": "Compra 3 NVIDIA Corp@95,835 USD (US67066G1040)",
+      "ticker": "NVDA",
+      "amount_eur": -247.94,
+      "currency": "USD",
+      "amount_orig": -287.5
+    },
+    {
+      "date": "2025-04-04",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "NVDA",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-04-04",
-      "type": "buy",
-      "description": "Compra 3 NVIDIA Corp@95,835 USD (US67066G1040)",
-      "ticker": "NVDA",
-      "amount_eur": -248.0,
-      "currency": "USD",
-      "amount_orig": -287.5
     },
     {
       "date": "2025-04-03",
@@ -2972,7 +2972,7 @@
       "type": "buy",
       "description": "Compra 3 NVIDIA Corp@108,945 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -281.92,
+      "amount_eur": -281.86,
       "currency": "USD",
       "amount_orig": -326.83
     },
@@ -3005,21 +3005,21 @@
     },
     {
       "date": "2025-03-18",
-      "type": "buy",
-      "description": "Compra 2 NVIDIA Corp@115,475 USD (US67066G1040)",
-      "ticker": "NVDA",
-      "amount_eur": -199.22,
-      "currency": "USD",
-      "amount_orig": -230.95
-    },
-    {
-      "date": "2025-03-18",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "NVDA",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
+    },
+    {
+      "date": "2025-03-18",
+      "type": "buy",
+      "description": "Compra 2 NVIDIA Corp@115,475 USD (US67066G1040)",
+      "ticker": "NVDA",
+      "amount_eur": -199.17,
+      "currency": "USD",
+      "amount_orig": -230.95
     },
     {
       "date": "2025-03-18",
@@ -3035,9 +3035,18 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@227,9 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -196.59,
+      "amount_eur": -196.54,
       "currency": "USD",
       "amount_orig": -227.9
+    },
+    {
+      "date": "2025-03-18",
+      "type": "buy",
+      "description": "Compra 1 ADR on Alibaba Group Holding Ltd@143,97 USD (US01609W1027)",
+      "ticker": "BABA",
+      "amount_eur": -124.16,
+      "currency": "USD",
+      "amount_orig": -143.97
     },
     {
       "date": "2025-03-18",
@@ -3047,15 +3056,6 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-03-18",
-      "type": "buy",
-      "description": "Compra 1 ADR on Alibaba Group Holding Ltd@143,97 USD (US01609W1027)",
-      "ticker": "BABA",
-      "amount_eur": -124.19,
-      "currency": "USD",
-      "amount_orig": -143.97
     },
     {
       "date": "2025-03-18",
@@ -3068,6 +3068,15 @@
     },
     {
       "date": "2025-03-14",
+      "type": "buy",
+      "description": "Compra 1 Tesla Inc@242,49 USD (US88160R1014)",
+      "ticker": "TSLA",
+      "amount_eur": -209.12,
+      "currency": "USD",
+      "amount_orig": -242.49
+    },
+    {
+      "date": "2025-03-14",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "TSLA",
@@ -3078,18 +3087,9 @@
     {
       "date": "2025-03-14",
       "type": "buy",
-      "description": "Compra 1 Tesla Inc@242,49 USD (US88160R1014)",
-      "ticker": "TSLA",
-      "amount_eur": -209.17,
-      "currency": "USD",
-      "amount_orig": -242.49
-    },
-    {
-      "date": "2025-03-14",
-      "type": "buy",
       "description": "Compra 1 Apple Inc@210,1 USD (US0378331005)",
       "ticker": "AAPL",
-      "amount_eur": -181.23,
+      "amount_eur": -181.19,
       "currency": "USD",
       "amount_orig": -210.1
     },
@@ -3113,21 +3113,21 @@
     },
     {
       "date": "2025-03-04",
+      "type": "buy",
+      "description": "Compra 1 ADR on Alibaba Group Holding Ltd@129,085 USD (US01609W1027)",
+      "ticker": "BABA",
+      "amount_eur": -111.32,
+      "currency": "USD",
+      "amount_orig": -129.08
+    },
+    {
+      "date": "2025-03-04",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "BABA",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-03-04",
-      "type": "buy",
-      "description": "Compra 1 ADR on Alibaba Group Holding Ltd@129,085 USD (US01609W1027)",
-      "ticker": "BABA",
-      "amount_eur": -111.34,
-      "currency": "USD",
-      "amount_orig": -129.08
     },
     {
       "date": "2025-03-04",
@@ -3143,7 +3143,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@268,31 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -231.44,
+      "amount_eur": -231.39,
       "currency": "USD",
       "amount_orig": -268.31
     },
@@ -3161,7 +3161,7 @@
       "type": "buy",
       "description": "Compra 2 NVIDIA Corp@110,71 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -191.0,
+      "amount_eur": -190.95,
       "currency": "USD",
       "amount_orig": -221.42
     },
@@ -3197,7 +3197,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@300,73 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -259.41,
+      "amount_eur": -259.35,
       "currency": "USD",
       "amount_orig": -300.73
     },
@@ -3212,21 +3212,21 @@
     },
     {
       "date": "2025-02-25",
+      "type": "buy",
+      "description": "Compra 1 Tesla Inc@311,57 USD (US88160R1014)",
+      "ticker": "TSLA",
+      "amount_eur": -268.7,
+      "currency": "USD",
+      "amount_orig": -311.57
+    },
+    {
+      "date": "2025-02-25",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "TSLA",
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-02-25",
-      "type": "buy",
-      "description": "Compra 1 Tesla Inc@311,57 USD (US88160R1014)",
-      "ticker": "TSLA",
-      "amount_eur": -268.76,
-      "currency": "USD",
-      "amount_orig": -311.57
     },
     {
       "date": "2025-02-17",
@@ -3269,14 +3269,14 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@326,41 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -281.56,
+      "amount_eur": -281.5,
       "currency": "USD",
       "amount_orig": -326.41
     },
     {
       "date": "2025-02-06",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2025 (Euronext Milan - MIL)",
+      "description": "Comisión de conectividad con el mercado 2025 (Nasdaq - NDQ)",
       "ticker": "",
       "amount_eur": -2.5,
       "currency": "EUR",
@@ -3294,15 +3294,6 @@
     {
       "date": "2025-02-06",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2025 (Xetra - XET)",
-      "ticker": "",
-      "amount_eur": -2.5,
-      "currency": "EUR",
-      "amount_orig": -2.5
-    },
-    {
-      "date": "2025-02-06",
-      "type": "fee",
       "description": "Comisión de conectividad con el mercado 2025 (New York Stock Exchange - NSY)",
       "ticker": "",
       "amount_eur": -2.5,
@@ -3312,7 +3303,16 @@
     {
       "date": "2025-02-06",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2025 (Nasdaq - NDQ)",
+      "description": "Comisión de conectividad con el mercado 2025 (Euronext Milan - MIL)",
+      "ticker": "",
+      "amount_eur": -2.5,
+      "currency": "EUR",
+      "amount_orig": -2.5
+    },
+    {
+      "date": "2025-02-06",
+      "type": "fee",
+      "description": "Comisión de conectividad con el mercado 2025 (Xetra - XET)",
       "ticker": "",
       "amount_eur": -2.5,
       "currency": "EUR",
@@ -3332,9 +3332,18 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@384,62 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -331.77,
+      "amount_eur": -331.7,
       "currency": "USD",
       "amount_orig": -384.62
+    },
+    {
+      "date": "2025-02-03",
+      "type": "buy",
+      "description": "Compra 1 NVIDIA Corp@115,565 USD (US67066G1040)",
+      "ticker": "NVDA",
+      "amount_eur": -99.66,
+      "currency": "USD",
+      "amount_orig": -115.56
     },
     {
       "date": "2025-02-03",
@@ -3344,15 +3353,6 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
-    },
-    {
-      "date": "2025-02-03",
-      "type": "buy",
-      "description": "Compra 1 NVIDIA Corp@115,565 USD (US67066G1040)",
-      "ticker": "NVDA",
-      "amount_eur": -99.68,
-      "currency": "USD",
-      "amount_orig": -115.56
     },
     {
       "date": "2025-02-03",
@@ -3386,7 +3386,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@395,21 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -340.91,
+      "amount_eur": -340.83,
       "currency": "USD",
       "amount_orig": -395.21
     },
@@ -3404,18 +3404,9 @@
       "type": "buy",
       "description": "Compra 4 NVIDIA Corp@123,3125 USD (US67066G1040)",
       "ticker": "NVDA",
-      "amount_eur": -425.48,
+      "amount_eur": -425.38,
       "currency": "USD",
       "amount_orig": -493.25
-    },
-    {
-      "date": "2025-01-08",
-      "type": "buy",
-      "description": "Compra 4 VanEck Gold Miners UCITS ETF USD A@38,495 EUR (IE00BQQP9F84)",
-      "ticker": "GDX.MI",
-      "amount_eur": -153.98,
-      "currency": "EUR",
-      "amount_orig": -153.98
     },
     {
       "date": "2025-01-08",
@@ -3425,6 +3416,15 @@
       "amount_eur": -3.0,
       "currency": "EUR",
       "amount_orig": -3.0
+    },
+    {
+      "date": "2025-01-08",
+      "type": "buy",
+      "description": "Compra 4 VanEck Gold Miners UCITS ETF USD A@38,495 EUR (IE00BQQP9F84)",
+      "ticker": "GDX.MI",
+      "amount_eur": -153.98,
+      "currency": "EUR",
+      "amount_orig": -153.98
     },
     {
       "date": "2025-01-02",
@@ -3440,7 +3440,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@383,215 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -330.56,
+      "amount_eur": -330.48,
       "currency": "USD",
       "amount_orig": -383.21
     },
@@ -3512,18 +3512,9 @@
       "type": "buy",
       "description": "Compra 3 ADR on Alibaba Group Holding Ltd@82,08 USD (US01609W1027)",
       "ticker": "BABA",
-      "amount_eur": -212.41,
+      "amount_eur": -212.36,
       "currency": "USD",
       "amount_orig": -246.24
-    },
-    {
-      "date": "2024-12-17",
-      "type": "buy",
-      "description": "Compra 3 ADR on Alibaba Group Holding Ltd@87,18 USD (US01609W1027)",
-      "ticker": "BABA",
-      "amount_eur": -225.6,
-      "currency": "USD",
-      "amount_orig": -261.54
     },
     {
       "date": "2024-12-17",
@@ -3533,6 +3524,15 @@
       "amount_eur": -2.0,
       "currency": "EUR",
       "amount_orig": -2.0
+    },
+    {
+      "date": "2024-12-17",
+      "type": "buy",
+      "description": "Compra 3 ADR on Alibaba Group Holding Ltd@87,18 USD (US01609W1027)",
+      "ticker": "BABA",
+      "amount_eur": -225.55,
+      "currency": "USD",
+      "amount_orig": -261.54
     },
     {
       "date": "2024-12-11",
@@ -3593,7 +3593,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@252,31 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -217.64,
+      "amount_eur": -217.59,
       "currency": "USD",
       "amount_orig": -252.31
     },
@@ -4034,7 +4034,7 @@
       "type": "buy",
       "description": "Compra 1 Tesla Inc@164,11 USD (US88160R1014)",
       "ticker": "TSLA",
-      "amount_eur": -141.56,
+      "amount_eur": -141.53,
       "currency": "USD",
       "amount_orig": -164.11
     },
@@ -4052,7 +4052,7 @@
       "type": "buy",
       "description": "Compra 1 Apple Inc@168,75 USD (US0378331005)",
       "ticker": "AAPL",
-      "amount_eur": -145.56,
+      "amount_eur": -145.53,
       "currency": "USD",
       "amount_orig": -168.75
     },
@@ -4077,20 +4077,20 @@
     {
       "date": "2024-03-18",
       "type": "wdw",
-      "description": "flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": -50.0,
-      "currency": "EUR",
-      "amount_orig": -50.0
-    },
-    {
-      "date": "2024-03-18",
-      "type": "wdw",
       "description": "Processed Flatex Withdrawal",
       "ticker": "",
       "amount_eur": 50.0,
       "currency": "EUR",
       "amount_orig": 50.0
+    },
+    {
+      "date": "2024-03-18",
+      "type": "wdw",
+      "description": "flatex Withdrawal",
+      "ticker": "",
+      "amount_eur": -50.0,
+      "currency": "EUR",
+      "amount_orig": -50.0
     },
     {
       "date": "2024-03-17",
@@ -4212,20 +4212,20 @@
     {
       "date": "2023-12-14",
       "type": "wdw",
-      "description": "Processed Flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": 80.0,
-      "currency": "EUR",
-      "amount_orig": 80.0
-    },
-    {
-      "date": "2023-12-14",
-      "type": "wdw",
       "description": "flatex Withdrawal",
       "ticker": "",
       "amount_eur": -80.0,
       "currency": "EUR",
       "amount_orig": -80.0
+    },
+    {
+      "date": "2023-12-14",
+      "type": "wdw",
+      "description": "Processed Flatex Withdrawal",
+      "ticker": "",
+      "amount_eur": 80.0,
+      "currency": "EUR",
+      "amount_orig": 80.0
     },
     {
       "date": "2023-12-13",
@@ -4266,20 +4266,20 @@
     {
       "date": "2023-12-04",
       "type": "wdw",
-      "description": "Processed Flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": 70.0,
-      "currency": "EUR",
-      "amount_orig": 70.0
-    },
-    {
-      "date": "2023-12-04",
-      "type": "wdw",
       "description": "flatex Withdrawal",
       "ticker": "",
       "amount_eur": -70.0,
       "currency": "EUR",
       "amount_orig": -70.0
+    },
+    {
+      "date": "2023-12-04",
+      "type": "wdw",
+      "description": "Processed Flatex Withdrawal",
+      "ticker": "",
+      "amount_eur": 70.0,
+      "currency": "EUR",
+      "amount_orig": 70.0
     },
     {
       "date": "2023-12-04",
@@ -4392,20 +4392,20 @@
     {
       "date": "2023-09-13",
       "type": "wdw",
-      "description": "Processed Flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": 1200.0,
-      "currency": "EUR",
-      "amount_orig": 1200.0
-    },
-    {
-      "date": "2023-09-13",
-      "type": "wdw",
       "description": "flatex Withdrawal",
       "ticker": "",
       "amount_eur": -1200.0,
       "currency": "EUR",
       "amount_orig": -1200.0
+    },
+    {
+      "date": "2023-09-13",
+      "type": "wdw",
+      "description": "Processed Flatex Withdrawal",
+      "ticker": "",
+      "amount_eur": 1200.0,
+      "currency": "EUR",
+      "amount_orig": 1200.0
     },
     {
       "date": "2023-09-12",
@@ -4419,20 +4419,20 @@
     {
       "date": "2023-09-11",
       "type": "wdw",
-      "description": "Processed Flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": 95.0,
-      "currency": "EUR",
-      "amount_orig": 95.0
-    },
-    {
-      "date": "2023-09-11",
-      "type": "wdw",
       "description": "flatex Withdrawal",
       "ticker": "",
       "amount_eur": -95.0,
       "currency": "EUR",
       "amount_orig": -95.0
+    },
+    {
+      "date": "2023-09-11",
+      "type": "wdw",
+      "description": "Processed Flatex Withdrawal",
+      "ticker": "",
+      "amount_eur": 95.0,
+      "currency": "EUR",
+      "amount_orig": 95.0
     },
     {
       "date": "2023-09-11",
@@ -4563,6 +4563,15 @@
     {
       "date": "2023-07-03",
       "type": "fee",
+      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
+      "ticker": "",
+      "amount_eur": -0.28,
+      "currency": "EUR",
+      "amount_orig": -0.28
+    },
+    {
+      "date": "2023-07-03",
+      "type": "fee",
       "description": "Comisión de conectividad con el mercado 2023 (Euronext Milan - MIL)",
       "ticker": "",
       "amount_eur": -0.28,
@@ -4579,13 +4588,13 @@
       "amount_orig": -2.5
     },
     {
-      "date": "2023-07-03",
-      "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
+      "date": "2023-06-13",
+      "type": "wdw",
+      "description": "flatex Withdrawal",
       "ticker": "",
-      "amount_eur": -0.28,
+      "amount_eur": -1.0,
       "currency": "EUR",
-      "amount_orig": -0.28
+      "amount_orig": -1.0
     },
     {
       "date": "2023-06-13",
@@ -4595,15 +4604,6 @@
       "amount_eur": 1.0,
       "currency": "EUR",
       "amount_orig": 1.0
-    },
-    {
-      "date": "2023-06-13",
-      "type": "wdw",
-      "description": "flatex Withdrawal",
-      "ticker": "",
-      "amount_eur": -1.0,
-      "currency": "EUR",
-      "amount_orig": -1.0
     },
     {
       "date": "2023-06-13",
@@ -4643,21 +4643,21 @@
     },
     {
       "date": "2023-06-06",
-      "type": "sell",
-      "description": "Venta 6 iShares Core MSCI World UCITS ETF USD (Acc)@76,306 EUR (IE00B4L5Y983)",
-      "ticker": "EUNL.XGAT",
-      "amount_eur": 457.84,
-      "currency": "EUR",
-      "amount_orig": 457.84
-    },
-    {
-      "date": "2023-06-06",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "EUNL.XGAT",
       "amount_eur": -3.0,
       "currency": "EUR",
       "amount_orig": -3.0
+    },
+    {
+      "date": "2023-06-06",
+      "type": "sell",
+      "description": "Venta 6 iShares Core MSCI World UCITS ETF USD (Acc)@76,306 EUR (IE00B4L5Y983)",
+      "ticker": "EUNL.XGAT",
+      "amount_eur": 457.84,
+      "currency": "EUR",
+      "amount_orig": 457.84
     },
     {
       "date": "2023-06-02",
@@ -4671,7 +4671,7 @@
     {
       "date": "2023-06-01",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2023 (Euronext Milan - MIL)",
+      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
       "ticker": "",
       "amount_eur": -1.22,
       "currency": "EUR",
@@ -4680,7 +4680,7 @@
     {
       "date": "2023-06-01",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
+      "description": "Comisión de conectividad con el mercado 2023 (Euronext Milan - MIL)",
       "ticker": "",
       "amount_eur": -1.22,
       "currency": "EUR",
@@ -4734,7 +4734,7 @@
     {
       "date": "2023-05-02",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2023 (Euronext Milan - MIL)",
+      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
       "ticker": "",
       "amount_eur": -1.0,
       "currency": "EUR",
@@ -4743,7 +4743,7 @@
     {
       "date": "2023-05-02",
       "type": "fee",
-      "description": "Comisión de conectividad con el mercado 2023 (Tradegate AG - TDG)",
+      "description": "Comisión de conectividad con el mercado 2023 (Euronext Milan - MIL)",
       "ticker": "",
       "amount_eur": -1.0,
       "currency": "EUR",
@@ -4760,21 +4760,21 @@
     },
     {
       "date": "2023-05-02",
-      "type": "buy",
-      "description": "Compra 3 iShares Core MSCI World UCITS ETF USD (Acc)@73,004 EUR (IE00B4L5Y983)",
-      "ticker": "EUNL.XGAT",
-      "amount_eur": -219.01,
-      "currency": "EUR",
-      "amount_orig": -219.01
-    },
-    {
-      "date": "2023-05-02",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "EUNL.XGAT",
       "amount_eur": -3.9,
       "currency": "EUR",
       "amount_orig": -3.9
+    },
+    {
+      "date": "2023-05-02",
+      "type": "buy",
+      "description": "Compra 3 iShares Core MSCI World UCITS ETF USD (Acc)@73,004 EUR (IE00B4L5Y983)",
+      "ticker": "EUNL.XGAT",
+      "amount_eur": -219.01,
+      "currency": "EUR",
+      "amount_orig": -219.01
     },
     {
       "date": "2023-04-14",
@@ -4796,21 +4796,21 @@
     },
     {
       "date": "2023-04-13",
-      "type": "buy",
-      "description": "Compra 3 iShares Core MSCI World UCITS ETF USD (Acc)@72,194 EUR (IE00B4L5Y983)",
-      "ticker": "EUNL.XGAT",
-      "amount_eur": -216.58,
-      "currency": "EUR",
-      "amount_orig": -216.58
-    },
-    {
-      "date": "2023-04-13",
       "type": "commission",
       "description": "Costes de transacción y/o externos de DEGIRO",
       "ticker": "EUNL.XGAT",
       "amount_eur": -3.9,
       "currency": "EUR",
       "amount_orig": -3.9
+    },
+    {
+      "date": "2023-04-13",
+      "type": "buy",
+      "description": "Compra 3 iShares Core MSCI World UCITS ETF USD (Acc)@72,194 EUR (IE00B4L5Y983)",
+      "ticker": "EUNL.XGAT",
+      "amount_eur": -216.58,
+      "currency": "EUR",
+      "amount_orig": -216.58
     },
     {
       "date": "2023-04-13",
@@ -8053,7 +8053,11 @@
     },
     {
       "date": "2026-05-20",
-      "value": 23242.36
+      "value": 23360.38
+    },
+    {
+      "date": "2026-05-21",
+      "value": 23274.1
     }
   ],
   "pnl_history": [
@@ -11287,7 +11291,11 @@
     },
     {
       "date": "2026-05-20",
-      "value": 6167.31
+      "value": 6285.33
+    },
+    {
+      "date": "2026-05-21",
+      "value": 6199.05
     }
   ],
   "twr_history": [
@@ -14497,7 +14505,11 @@
     },
     {
       "date": "2026-05-20",
-      "value": 68.6015
+      "value": 69.4576
+    },
+    {
+      "date": "2026-05-21",
+      "value": 68.8317
     }
   ],
   "sp500_history": [
@@ -17707,7 +17719,11 @@
     },
     {
       "date": "2026-05-20",
-      "value": 80.2102
+      "value": 81.6486
+    },
+    {
+      "date": "2026-05-21",
+      "value": 81.3529
     }
   ],
   "monthly_contributions": [
@@ -17855,63 +17871,63 @@
   "position_contributions": [
     {
       "ticker": "NVDA",
-      "contrib_pp": 3.151,
-      "ytd_return_pct": 19.11,
-      "pnl_eur": 1699.56
+      "contrib_pp": 3.34,
+      "ytd_return_pct": 20.12,
+      "pnl_eur": 1731.01
     },
     {
       "ticker": "AMZN",
-      "contrib_pp": 1.928,
-      "ytd_return_pct": 17.86,
-      "pnl_eur": 341.57
+      "contrib_pp": 2.023,
+      "ytd_return_pct": 18.73,
+      "pnl_eur": 358.34
     },
     {
       "ticker": "UNH",
-      "contrib_pp": 1.818,
-      "ytd_return_pct": 17.96,
-      "pnl_eur": 547.55
+      "contrib_pp": 1.583,
+      "ytd_return_pct": 15.95,
+      "pnl_eur": 505.2
     },
     {
       "ticker": "EUNL.XGAT",
-      "contrib_pp": 0.951,
-      "ytd_return_pct": 8.7,
-      "pnl_eur": 474.93
+      "contrib_pp": 1.025,
+      "ytd_return_pct": 9.33,
+      "pnl_eur": 489.95
     },
     {
       "ticker": "OHLA.MC",
-      "contrib_pp": 0.404,
-      "ytd_return_pct": 10.61,
-      "pnl_eur": 71.64
+      "contrib_pp": 0.451,
+      "ytd_return_pct": 11.84,
+      "pnl_eur": 79.92
     },
     {
       "ticker": "GDX.MI",
-      "contrib_pp": 0.266,
-      "ytd_return_pct": 2.28,
-      "pnl_eur": 1275.35
+      "contrib_pp": 0.438,
+      "ytd_return_pct": 3.71,
+      "pnl_eur": 1313.3
     },
     {
       "ticker": "HOOD",
-      "contrib_pp": -0.02,
-      "ytd_return_pct": -0.21,
-      "pnl_eur": -3.47
+      "contrib_pp": 0.185,
+      "ytd_return_pct": 1.95,
+      "pnl_eur": 32.69
     },
     {
       "ticker": "BRK.B",
-      "contrib_pp": -0.387,
-      "ytd_return_pct": -4.34,
-      "pnl_eur": 9.09
+      "contrib_pp": -0.434,
+      "ytd_return_pct": -4.9,
+      "pnl_eur": -3.73
     },
     {
       "ticker": "BABA",
-      "contrib_pp": -0.54,
-      "ytd_return_pct": -9.09,
-      "pnl_eur": 166.97
+      "contrib_pp": -0.668,
+      "ytd_return_pct": -11.59,
+      "pnl_eur": 128.75
     },
     {
       "ticker": "NOVC.XGAT",
-      "contrib_pp": -0.875,
-      "ytd_return_pct": -12.54,
-      "pnl_eur": -24.74
+      "contrib_pp": -0.937,
+      "ytd_return_pct": -13.61,
+      "pnl_eur": -45.24
     }
   ],
   "pnl_breakdown": [
@@ -17919,36 +17935,36 @@
       "ticker": "NVDA",
       "description": "NVIDIA Corporation",
       "is_open": true,
-      "mkt_eur": 3832.62,
+      "mkt_eur": 3864.07,
       "cost_eur_invested": 2133.06,
-      "unrealized_eur": 1699.56,
-      "unrealized_pct": 79.68,
+      "unrealized_eur": 1731.01,
+      "unrealized_pct": 81.15,
       "realized_eur": 0,
       "dividends_eur": 0.73,
-      "total_pnl_eur": 1700.29,
+      "total_pnl_eur": 1731.74,
       "buy_date": "2025-01-27",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 8.01,
-      "position_return_pct": 79.68,
+      "contribution_pp": 8.16,
+      "position_return_pct": 81.15,
       "weight_pct": 8.7
     },
     {
       "ticker": "GDX.MI",
       "description": "VanEck Gold Miners UCITS ETF",
       "is_open": true,
-      "mkt_eur": 2712.6,
+      "mkt_eur": 2750.55,
       "cost_eur_invested": 1899.4,
-      "unrealized_eur": 1275.35,
-      "unrealized_pct": 88.74,
+      "unrealized_eur": 1313.3,
+      "unrealized_pct": 91.38,
       "realized_eur": 187.11,
       "dividends_eur": 0,
-      "total_pnl_eur": 1462.46,
+      "total_pnl_eur": 1500.41,
       "buy_date": "2023-04-13",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 6.89,
-      "position_return_pct": 88.74,
+      "contribution_pp": 7.07,
+      "position_return_pct": 91.38,
       "weight_pct": 7.8
     },
     {
@@ -17991,54 +18007,54 @@
       "ticker": "UNH",
       "description": "UnitedHealth Group Incorporated",
       "is_open": true,
-      "mkt_eur": 2352.18,
+      "mkt_eur": 2309.83,
       "cost_eur_invested": 1804.63,
-      "unrealized_eur": 547.55,
-      "unrealized_pct": 30.34,
+      "unrealized_eur": 505.2,
+      "unrealized_pct": 27.99,
       "realized_eur": 0,
       "dividends_eur": 24.63,
-      "total_pnl_eur": 572.18,
+      "total_pnl_eur": 529.83,
       "buy_date": "2025-08-22",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 2.7,
-      "position_return_pct": 30.34,
+      "contribution_pp": 2.5,
+      "position_return_pct": 27.99,
       "weight_pct": 7.4
     },
     {
       "ticker": "EUNL.XGAT",
       "description": "iShares Core MSCI World UCITS ETF USD (Acc)",
       "is_open": true,
-      "mkt_eur": 2540.89,
+      "mkt_eur": 2555.91,
       "cost_eur_invested": 2505.69,
-      "unrealized_eur": 474.93,
-      "unrealized_pct": 22.99,
+      "unrealized_eur": 489.95,
+      "unrealized_pct": 23.72,
       "realized_eur": 18.11,
       "dividends_eur": 0,
-      "total_pnl_eur": 493.04,
+      "total_pnl_eur": 508.06,
       "buy_date": "2023-04-13",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 2.32,
-      "position_return_pct": 22.99,
+      "contribution_pp": 2.39,
+      "position_return_pct": 23.72,
       "weight_pct": 10.2
     },
     {
       "ticker": "AMZN",
       "description": "Amazon.com, Inc.",
       "is_open": true,
-      "mkt_eur": 2254.49,
+      "mkt_eur": 2271.26,
       "cost_eur_invested": 1912.92,
-      "unrealized_eur": 341.57,
-      "unrealized_pct": 17.86,
+      "unrealized_eur": 358.34,
+      "unrealized_pct": 18.73,
       "realized_eur": 0,
       "dividends_eur": 0,
-      "total_pnl_eur": 341.57,
+      "total_pnl_eur": 358.34,
       "buy_date": "2026-03-04",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 1.61,
-      "position_return_pct": 17.86,
+      "contribution_pp": 1.69,
+      "position_return_pct": 18.73,
       "weight_pct": 7.8
     },
     {
@@ -18063,73 +18079,73 @@
       "ticker": "BABA",
       "description": "Alibaba Group Holding Limited SP ADR",
       "is_open": true,
-      "mkt_eur": 1379.42,
+      "mkt_eur": 1341.2,
       "cost_eur_invested": 1212.45,
-      "unrealized_eur": 166.97,
-      "unrealized_pct": 13.77,
+      "unrealized_eur": 128.75,
+      "unrealized_pct": 10.62,
       "realized_eur": 0,
       "dividends_eur": 17.09,
-      "total_pnl_eur": 184.06,
+      "total_pnl_eur": 145.84,
       "buy_date": "2024-12-17",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 0.87,
-      "position_return_pct": 13.77,
+      "contribution_pp": 0.69,
+      "position_return_pct": 10.62,
       "weight_pct": 4.9
     },
     {
       "ticker": "OHLA.MC",
       "description": "Obrascón Huarte Lain, S.A.",
       "is_open": true,
-      "mkt_eur": 746.64,
+      "mkt_eur": 754.92,
       "cost_eur_invested": 675.0,
-      "unrealized_eur": 71.64,
-      "unrealized_pct": 10.61,
+      "unrealized_eur": 79.92,
+      "unrealized_pct": 11.84,
       "realized_eur": 0,
       "dividends_eur": 0,
-      "total_pnl_eur": 71.64,
+      "total_pnl_eur": 79.92,
       "buy_date": "2026-02-12",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 0.34,
-      "position_return_pct": 10.61,
+      "contribution_pp": 0.38,
+      "position_return_pct": 11.84,
       "weight_pct": 2.8
+    },
+    {
+      "ticker": "HOOD",
+      "description": "Robinhood Markets, Inc.",
+      "is_open": true,
+      "mkt_eur": 1707.69,
+      "cost_eur_invested": 1675.0,
+      "unrealized_eur": 32.69,
+      "unrealized_pct": 1.95,
+      "realized_eur": 0,
+      "dividends_eur": 0,
+      "total_pnl_eur": 32.69,
+      "buy_date": "2026-03-06",
+      "sell_date": "",
+      "sell_proceeds_eur": 0,
+      "contribution_pp": 0.15,
+      "position_return_pct": 1.95,
+      "weight_pct": 6.8
     },
     {
       "ticker": "NOVC.XGAT",
       "description": "Novo Nordisk A/S",
       "is_open": true,
-      "mkt_eur": 1621.89,
+      "mkt_eur": 1601.39,
       "cost_eur_invested": 2038.68,
-      "unrealized_eur": -24.74,
-      "unrealized_pct": -1.5,
+      "unrealized_eur": -45.24,
+      "unrealized_pct": -2.75,
       "realized_eur": 3.5,
       "dividends_eur": 51.06,
-      "total_pnl_eur": 29.82,
+      "total_pnl_eur": 9.32,
       "buy_date": "2025-12-03",
       "sell_date": "",
       "sell_proceeds_eur": 0,
-      "contribution_pp": 0.14,
-      "position_return_pct": -1.5,
-      "weight_pct": 8.3
-    },
-    {
-      "ticker": "BRK.B",
-      "description": "Berkshire Hathaway Inc. Class B",
-      "is_open": true,
-      "mkt_eur": 2073.78,
-      "cost_eur_invested": 2064.69,
-      "unrealized_eur": 9.09,
-      "unrealized_pct": 0.44,
-      "realized_eur": 0,
-      "dividends_eur": 0,
-      "total_pnl_eur": 9.09,
-      "buy_date": "2025-08-19",
-      "sell_date": "",
-      "sell_proceeds_eur": 0,
       "contribution_pp": 0.04,
-      "position_return_pct": 0.44,
-      "weight_pct": 8.4
+      "position_return_pct": -2.75,
+      "weight_pct": 8.3
     },
     {
       "ticker": "DEFT",
@@ -18150,22 +18166,22 @@
       "weight_pct": 0.4
     },
     {
-      "ticker": "HOOD",
-      "description": "Robinhood Markets, Inc.",
+      "ticker": "BRK.B",
+      "description": "Berkshire Hathaway Inc. Class B",
       "is_open": true,
-      "mkt_eur": 1671.53,
-      "cost_eur_invested": 1675.0,
-      "unrealized_eur": -3.47,
-      "unrealized_pct": -0.21,
+      "mkt_eur": 2060.96,
+      "cost_eur_invested": 2064.69,
+      "unrealized_eur": -3.73,
+      "unrealized_pct": -0.18,
       "realized_eur": 0,
       "dividends_eur": 0,
-      "total_pnl_eur": -3.47,
-      "buy_date": "2026-03-06",
+      "total_pnl_eur": -3.73,
+      "buy_date": "2025-08-19",
       "sell_date": "",
       "sell_proceeds_eur": 0,
       "contribution_pp": -0.02,
-      "position_return_pct": -0.21,
-      "weight_pct": 6.8
+      "position_return_pct": -0.18,
+      "weight_pct": 8.4
     },
     {
       "ticker": "Comisiones",
@@ -18184,10 +18200,10 @@
     }
   ],
   "attribution_summary": {
-    "portfolio_return_pct": 29.05,
-    "total_gain_eur": 6167.31,
+    "portfolio_return_pct": 29.2,
+    "total_gain_eur": 6199.05,
     "capital_neto_eur": 21230.46,
-    "unrealized_total_eur": 4558.46,
+    "unrealized_total_eur": 4590.2,
     "realized_total_eur": 1820.08,
     "dividends_total_eur": 98.45,
     "commissions_eur": 309.68
@@ -21340,7 +21356,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 120.082
+        "value": 122.2663
+      },
+      {
+        "date": "2026-05-21",
+        "value": 121.752
       }
     ],
     "msciw": [
@@ -24490,7 +24510,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 69.7289
+        "value": 71.2331
+      },
+      {
+        "date": "2026-05-21",
+        "value": 70.8719
       }
     ],
     "dow": [
@@ -27640,7 +27664,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 48.3362
+        "value": 50.2949
+      },
+      {
+        "date": "2026-05-21",
+        "value": 50.2952
       }
     ],
     "stoxx50": [
@@ -30762,7 +30790,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 37.0849
+        "value": 38.6221
+      },
+      {
+        "date": "2026-05-21",
+        "value": 38.676
       }
     ],
     "ibex": [
@@ -33952,7 +33984,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 94.4668
+        "value": 97.1269
+      },
+      {
+        "date": "2026-05-21",
+        "value": 97.2973
       }
     ],
     "em": [
@@ -37102,7 +37138,11 @@
       },
       {
         "date": "2026-05-20",
-        "value": 63.8115
+        "value": 65.8895
+      },
+      {
+        "date": "2026-05-21",
+        "value": 65.9655
       }
     ]
   },
@@ -37214,8 +37254,8 @@
         "month_label": "Dec 25",
         "total_eur": 7.69,
         "by_ticker": {
-          "UNH": 7.52,
-          "NVDA": 0.17
+          "NVDA": 0.17,
+          "UNH": 7.52
         }
       },
       {
@@ -37267,7 +37307,7 @@
         "cost_eur": 1804.63,
         "currency": "USD",
         "div_rate_local": 8.84,
-        "annual_income_eur": 53.38,
+        "annual_income_eur": 53.37,
         "yield_on_cost_pct": 2.96,
         "next_ex_date": "2026-06-08",
         "paid_total_eur": 24.62
@@ -37497,7 +37537,7 @@
         "estimated_eur": 20.7
       }
     ],
-    "projected_annual_eur": 566.17,
+    "projected_annual_eur": 566.16,
     "ytd_collected_eur": 63.97,
     "total_historical_eur": 98.45
   },
@@ -37517,128 +37557,128 @@
     "matrix": [
       [
         1.0,
-        0.522,
-        0.38,
-        0.274,
-        0.052,
-        0.497,
-        0.157,
+        0.524,
+        0.381,
+        0.276,
+        0.049,
+        0.5,
+        0.16,
         0.027,
-        0.283,
-        0.219
+        0.281,
+        0.218
       ],
       [
-        0.522,
+        0.524,
         1.0,
-        0.33,
-        0.089,
-        0.07,
+        0.331,
+        0.09,
+        0.068,
         0.362,
-        -0.019,
-        0.082,
+        -0.014,
+        0.084,
         0.23,
-        0.159
+        0.161
       ],
       [
-        0.38,
-        0.33,
+        0.381,
+        0.331,
         1.0,
-        0.207,
-        0.084,
+        0.208,
+        0.083,
         0.491,
-        0.169,
+        0.17,
         -0.124,
-        0.245,
-        0.223
+        0.243,
+        0.224
       ],
       [
-        0.274,
-        0.089,
-        0.207,
+        0.276,
+        0.09,
+        0.208,
         1.0,
-        0.002,
-        0.194,
-        0.098,
-        -0.147,
-        0.062,
-        0.08
+        0.001,
+        0.193,
+        0.1,
+        -0.146,
+        0.061,
+        0.081
       ],
       [
-        0.052,
-        0.07,
-        0.084,
-        0.002,
+        0.049,
+        0.068,
+        0.083,
+        0.001,
         1.0,
         -0.04,
-        0.13,
-        0.148,
-        0.122,
+        0.128,
+        0.147,
+        0.123,
         0.215
       ],
       [
-        0.497,
+        0.5,
         0.362,
         0.491,
-        0.194,
+        0.193,
         -0.04,
         1.0,
-        0.078,
-        -0.182,
-        0.271,
-        0.109
+        0.08,
+        -0.181,
+        0.269,
+        0.113
       ],
       [
-        0.157,
-        -0.019,
-        0.169,
-        0.098,
-        0.13,
-        0.078,
+        0.16,
+        -0.014,
+        0.17,
+        0.1,
+        0.128,
+        0.08,
         1.0,
-        -0.046,
-        0.21,
+        -0.045,
+        0.211,
         0.13
       ],
       [
         0.027,
-        0.082,
+        0.084,
         -0.124,
-        -0.147,
-        0.148,
-        -0.182,
-        -0.046,
+        -0.146,
+        0.147,
+        -0.181,
+        -0.045,
         1.0,
-        -0.027,
+        -0.023,
         0.001
       ],
       [
-        0.283,
+        0.281,
         0.23,
-        0.245,
-        0.062,
-        0.122,
-        0.271,
-        0.21,
-        -0.027,
+        0.243,
+        0.061,
+        0.123,
+        0.269,
+        0.211,
+        -0.023,
         1.0,
-        0.118
+        0.122
       ],
       [
-        0.219,
-        0.159,
-        0.223,
-        0.08,
+        0.218,
+        0.161,
+        0.224,
+        0.081,
         0.215,
-        0.109,
+        0.113,
         0.13,
         0.001,
-        0.118,
+        0.122,
         1.0
       ]
     ],
     "period_days": 251,
-    "date_from": "2025-04-25",
-    "date_to": "2026-05-20",
+    "date_from": "2025-04-28",
+    "date_to": "2026-05-21",
     "clusters": [
       [
         0,
