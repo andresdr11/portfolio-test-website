@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Background Effects Demo</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #07080F;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── GRAIN ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 9999;
+    opacity: 0; transition: opacity 0.5s ease;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 180px 180px;
+  }
+  body.grain-on::before { opacity: 0.045; }
+
+  /* ── STATIC GLOW ── */
+  .glow-tl {
+    position: fixed; top: -280px; left: -280px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,118,0.09) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  .glow-br {
+    position: fixed; bottom: -200px; right: -200px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(106,128,255,0.07) 0%, transparent 65%);
+    pointer-events: none; z-index: 0;
+    opacity: 0; transition: opacity 0.6s ease;
+  }
+  body.glow-on .glow-tl,
+  body.glow-on .glow-br { opacity: 1; }
+
+  /* ── SPOTLIGHT ── */
+  #spotlight {
+    position: fixed; pointer-events: none; z-index: 1;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,118,0.07) 0%, rgba(0,229,118,0.02) 35%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  body.spotlight-on #spotlight { opacity: 1; }
+
+  /* Cards */
+  .cards { display: flex; gap: 16px; position: relative; z-index: 2; }
+  .card {
+    width: 200px; height: 130px;
+    background: #14151F;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px; padding: 18px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; color: #8B8FA8; text-transform: uppercase; }
+  .card-value { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+  .card-sub   { font-size: 11px; color: #00E576; }
+
+  /* Controls */
+  .controls { display: flex; gap: 10px; position: relative; z-index: 2; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    background: #14151F; border: 1px solid rgba(255,255,255,0.1);
+    color: #8B8FA8; font-size: 12px; font-weight: 600;
+    padding: 9px 20px; border-radius: 4px; cursor: pointer;
+    transition: all 0.15s; letter-spacing: 0.03em;
+  }
+  .btn:hover { color: #fff; border-color: rgba(255,255,255,0.2); }
+  .btn.on { border-color: rgba(0,229,118,0.5); color: #00E576; background: rgba(0,229,118,0.05); }
+
+  .hint { font-size: 11px; color: #4A4D62; position: relative; z-index: 2; text-align: center; line-height: 1.8; max-width: 420px; }
+  .badge { display:inline-block; background:rgba(0,229,118,0.1); color:#00E576; font-size:10px; font-weight:700; padding:1px 6px; border-radius:2px; letter-spacing:0.03em; }
+</style>
+</head>
+<body>
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+  <div id="spotlight"></div>
+
+  <div class="cards">
+    <div class="card">
+      <span class="card-label">Portfolio Value</span>
+      <span class="card-value">€20.502</span>
+      <span class="card-sub">+€4.565 · +45.79%</span>
+    </div>
+    <div class="card">
+      <span class="card-label">Total Profit</span>
+      <span class="card-value">€5.414</span>
+      <span class="card-sub">+25.50% all time</span>
+    </div>
+    <div class="card">
+      <span class="card-label">CAGR</span>
+      <span class="card-value">38.2%</span>
+      <span class="card-sub">annualized return</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="btn-none"      onclick="toggle('none')">NONE</button>
+    <button class="btn" id="btn-glow"      onclick="toggle('glow')">GLOW</button>
+    <button class="btn" id="btn-spotlight" onclick="toggle('spotlight')">SPOTLIGHT ✦</button>
+    <button class="btn" id="btn-both"      onclick="toggle('both')">SPOTLIGHT + GRAIN</button>
+  </div>
+
+  <p class="hint">
+    <span class="badge">SPOTLIGHT</span> sigue tu cursor — mueve el mouse lentamente por el fondo<br>
+    Lo usa Apple, Resend, Clerk — responde al usuario, se siente vivo
+  </p>
+
+<script>
+  const spotlight = document.getElementById('spotlight');
+  let mode = 'none';
+
+  document.addEventListener('mousemove', e => {
+    if (mode !== 'spotlight' && mode !== 'both') return;
+    spotlight.style.left = e.clientX + 'px';
+    spotlight.style.top  = e.clientY + 'px';
+  });
+
+  function toggle(m) {
+    mode = m;
+    document.body.classList.remove('grain-on', 'glow-on', 'spotlight-on');
+    if (m === 'glow')      document.body.classList.add('glow-on');
+    if (m === 'spotlight') document.body.classList.add('spotlight-on');
+    if (m === 'both')      document.body.classList.add('spotlight-on', 'grain-on');
+    document.querySelectorAll('.btn').forEach(b => b.classList.remove('on'));
+    document.getElementById('btn-' + m).classList.add('on');
+  }
+  toggle('none');
+</script>
+</body>
+</html>

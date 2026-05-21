@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Line Chart Demo — Before vs After</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #07080F;
+    color: #E8EDF5;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 { font-size: 13px; font-weight: 600; color: #4A4D62; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 32px; }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .demo-card {
+    background: #0F1020;
+    border: 1px solid rgba(120,140,210,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .demo-label {
+    padding: 16px 20px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(120,140,210,0.08);
+  }
+
+  .demo-label.before { color: #FF6B6B; }
+  .demo-label.after  { color: #00E576; }
+
+  .demo-label span {
+    font-weight: 400;
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #4A4D62;
+    margin-left: 8px;
+  }
+
+  .kpi-strip {
+    padding: 20px 20px 0;
+  }
+  .kpi-val {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-family: 'JetBrains Mono', monospace;
+    color: #E8EDF5;
+  }
+  .kpi-delta {
+    font-size: 13px;
+    font-weight: 600;
+    color: #00E576;
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+
+  .chart-wrap {
+    padding: 0 20px 20px;
+    height: 220px;
+    position: relative;
+  }
+
+  .note {
+    max-width: 1200px;
+    margin: 24px auto 0;
+    background: rgba(106,128,255,0.06);
+    border: 1px solid rgba(106,128,255,0.18);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 12px;
+    color: #8B8FA8;
+    line-height: 1.7;
+  }
+  .note strong { color: #E8EDF5; }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .badge-red   { background: rgba(255,107,107,0.12); color: #FF6B6B; border: 1px solid rgba(255,107,107,0.25); }
+  .badge-green { background: rgba(0,229,118,0.10);  color: #00E576; border: 1px solid rgba(0,229,118,0.25); }
+</style>
+</head>
+<body>
+
+<h1>Line Chart Demo — Value mode coloring</h1>
+
+<div class="demo-grid">
+  <!-- BEFORE -->
+  <div class="demo-card">
+    <div class="demo-label before">Before <span>segment.borderColor based on p1 (endpoint only)</span></div>
+    <div class="kpi-strip">
+      <div class="kpi-val">€22.855</div>
+      <div class="kpi-delta">+€844 (+3.84%) ↑ 6 months</div>
+    </div>
+    <div class="chart-wrap"><canvas id="chartBefore"></canvas></div>
+  </div>
+
+  <!-- AFTER -->
+  <div class="demo-card">
+    <div class="demo-label after">After <span>crossing interpolation + dual-gradient fill</span></div>
+    <div class="kpi-strip">
+      <div class="kpi-val">€22.855</div>
+      <div class="kpi-delta">+€844 (+3.84%) ↑ 6 months</div>
+    </div>
+    <div class="chart-wrap"><canvas id="chartAfter"></canvas></div>
+  </div>
+</div>
+
+<div class="note">
+  <strong>What changed:</strong><br>
+  <strong>Layer 1 — Crossing interpolation:</strong> synthetic data points are inserted at every baseline crossing using linear interpolation. Each segment is now guaranteed to be 100% above or 100% below the reference line — no more half-red segments that appear above the dashed line.<br><br>
+  <strong>Layer 2 — Dual-gradient fill:</strong> The canvas fill is split at the baseline pixel using canvas <code>clip()</code>. Above baseline → green gradient (20%→0%). Below baseline → red gradient (15%→0%). The fill area matches the line color exactly.<br><br>
+  <strong>Layer 3 — Reference line label:</strong> The dashed baseline now shows its value at the right edge, making the UX self-explanatory.
+</div>
+
+<script>
+// ── Sample portfolio data (6M-style, with crossings above/below baseline) ──
+const rawLabels = [
+  '2025-11-01','2025-11-05','2025-11-10','2025-11-14','2025-11-19',
+  '2025-11-25','2025-12-02','2025-12-08','2025-12-13','2025-12-19',
+  '2025-12-24','2025-12-30','2026-01-05','2026-01-09','2026-01-14',
+  '2026-01-20','2026-01-23','2026-01-27','2026-02-03','2026-02-07',
+  '2026-02-12','2026-02-18','2026-02-24','2026-03-02','2026-03-07',
+  '2026-03-13','2026-03-18','2026-03-24','2026-03-28','2026-04-02',
+  '2026-04-07','2026-04-11','2026-04-16','2026-04-22','2026-04-28',
+  '2026-05-01'
+];
+const rawValues = [
+  18011, 17850, 17920, 18100, 17780,
+  17640, 17580, 17900, 18250, 18400,
+  18200, 18050, 18300, 18600, 18900,
+  19100, 17200, 16800, 16950, 17400,
+  17100, 17600, 18100, 18400, 19200,
+  19800, 19500, 20100, 20400, 20800,
+  21200, 21600, 21900, 22100, 22600,
+  22855
+];
+
+const startVal = rawValues[0]; // baseline = first value of period
+
+// ── Format labels ──
+function fmtLabel(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+}
+const labels = rawLabels.map(fmtLabel);
+
+// ─────────────────────────────────────────────────────────────
+// BEFORE chart — original approach (p1 only, single gradient)
+// ─────────────────────────────────────────────────────────────
+const ctxBefore = document.getElementById('chartBefore').getContext('2d');
+
+const gradBefore = ctxBefore.createLinearGradient(0, 0, 0, 220);
+gradBefore.addColorStop(0,   'rgba(0,229,118,0.12)');
+gradBefore.addColorStop(0.7, 'rgba(0,229,118,0.02)');
+gradBefore.addColorStop(1,   'rgba(0,0,0,0)');
+
+const _pluginRefLineBefore = {
+  id: 'refLineBefore',
+  afterDraw(chart) {
+    const data = chart.data.datasets[0].data;
+    if (!data || data.length < 2) return;
+    const yScale = chart.scales.y;
+    const xScale = chart.scales.x;
+    const y = yScale.getPixelForValue(startVal);
+    if (y < yScale.top || y > yScale.bottom) return;
+    const c = chart.ctx;
+    c.save();
+    c.beginPath();
+    c.setLineDash([3, 6]);
+    c.strokeStyle = 'rgba(255,255,255,0.14)';
+    c.lineWidth = 1;
+    c.moveTo(xScale.left, y);
+    c.lineTo(xScale.right, y);
+    c.stroke();
+    c.restore();
+  }
+};
+
+new Chart(ctxBefore, {
+  type: 'line',
+  plugins: [_pluginRefLineBefore],
+  data: {
+    labels,
+    datasets: [{
+      data: rawValues,
+      borderColor: '#00E576',
+      borderWidth: 2,
+      backgroundColor: gradBefore,
+      fill: true,
+      tension: 0,
+      pointRadius: 0,
+      pointStyle: false,
+      segment: {
+        borderColor: ctx => {
+          // OLD: uses p1 (endpoint) only — causes wrong coloring at crossings
+          return ctx.p1.parsed.y >= startVal ? '#00E576' : '#FF6B6B';
+        }
+      }
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    animation: false,
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: {
+          maxTicksLimit: 6, maxRotation: 0,
+          color: '#4A4D62',
+          font: { size: 10, family: "'DM Sans', sans-serif" },
+          callback: function(value, index, ticks) {
+            const lbl = this.getLabelForValue(value);
+            if (!lbl) return '';
+            const d = new Date(lbl.replace(/(\w+ \d+), '(\d+)/, '$1 20$2'));
+            return lbl;
+          }
+        }
+      },
+      y: {
+        position: 'right',
+        grid: { color: 'rgba(120,140,210,0.06)', drawBorder: false },
+        border: { display: false },
+        ticks: {
+          maxTicksLimit: 5, color: '#4A4D62',
+          font: { size: 10, family: "'DM Sans', sans-serif" },
+          callback: v => '€' + Math.round(v / 1000) + 'k'
+        }
+      }
+    }
+  }
+});
+
+
+// ─────────────────────────────────────────────────────────────
+// AFTER chart — interpolated crossings + dual-gradient fill
+// ─────────────────────────────────────────────────────────────
+
+// Layer 1: Insert synthetic crossing points
+function interpolateCrossings(rawLabels, rawValues, baseline) {
+  const outLabels = [];
+  const outValues = [];
+  for (let i = 0; i < rawValues.length; i++) {
+    outLabels.push(rawLabels[i]);
+    outValues.push(rawValues[i]);
+    if (i < rawValues.length - 1) {
+      const v0 = rawValues[i], v1 = rawValues[i + 1];
+      const crossed = (v0 >= baseline) !== (v1 >= baseline);
+      if (crossed) {
+        // Linear interpolation: find t where value == baseline
+        const t = (baseline - v0) / (v1 - v0);
+        // Interpolate date (milliseconds)
+        const d0 = new Date(rawLabels[i] + 'T00:00:00').getTime();
+        const d1 = new Date(rawLabels[i+1] + 'T00:00:00').getTime();
+        const crossMs = d0 + t * (d1 - d0);
+        const crossDate = new Date(crossMs).toISOString().slice(0, 10);
+        outLabels.push(crossDate);
+        outValues.push(baseline);
+      }
+    }
+  }
+  return { labels: outLabels.map(fmtLabel), values: outValues };
+}
+
+const { labels: interpLabels, values: interpValues } = interpolateCrossings(rawLabels, rawValues, startVal);
+
+// Layer 2: Dual-gradient fill plugin
+const _pluginDualFill = {
+  id: 'dualFill',
+  beforeDatasetsDraw(chart) {
+    const { ctx, scales, chartArea } = chart;
+    const yScale = scales.y;
+    const xScale = scales.x;
+    const meta   = chart.getDatasetMeta(0);
+    const pts    = meta.data;
+    if (!pts || pts.length < 2) return;
+
+    const baselineY = yScale.getPixelForValue(startVal);
+
+    // Build the path of the line (top edge of fill area)
+    const linePath = new Path2D();
+    linePath.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) linePath.lineTo(pts[i].x, pts[i].y);
+
+    // Close the fill shape along the bottom
+    const fillPath = new Path2D();
+    fillPath.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) fillPath.lineTo(pts[i].x, pts[i].y);
+    fillPath.lineTo(pts[pts.length - 1].x, chartArea.bottom);
+    fillPath.lineTo(pts[0].x, chartArea.bottom);
+    fillPath.closePath();
+
+    // ── Green fill (above baseline) ──
+    ctx.save();
+    // Clip to the region ABOVE the baseline
+    ctx.beginPath();
+    ctx.rect(chartArea.left, chartArea.top, chartArea.width, baselineY - chartArea.top);
+    ctx.clip();
+    const gGreen = ctx.createLinearGradient(0, chartArea.top, 0, baselineY);
+    gGreen.addColorStop(0,   'rgba(0,229,118,0.22)');
+    gGreen.addColorStop(0.6, 'rgba(0,229,118,0.06)');
+    gGreen.addColorStop(1,   'rgba(0,229,118,0.00)');
+    ctx.fillStyle = gGreen;
+    ctx.fill(fillPath);
+    ctx.restore();
+
+    // ── Red fill (below baseline) ──
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(chartArea.left, baselineY, chartArea.width, chartArea.bottom - baselineY);
+    ctx.clip();
+    const gRed = ctx.createLinearGradient(0, baselineY, 0, chartArea.bottom);
+    gRed.addColorStop(0,   'rgba(255,107,107,0.18)');
+    gRed.addColorStop(0.7, 'rgba(255,107,107,0.04)');
+    gRed.addColorStop(1,   'rgba(255,107,107,0.00)');
+    ctx.fillStyle = gRed;
+    ctx.fill(fillPath);
+    ctx.restore();
+  }
+};
+
+// Layer 3: Reference line WITH label
+const _pluginRefLineAfter = {
+  id: 'refLineAfter',
+  afterDraw(chart) {
+    const yScale = chart.scales.y;
+    const xScale = chart.scales.x;
+    const y = yScale.getPixelForValue(startVal);
+    if (y < yScale.top || y > yScale.bottom) return;
+    const c = chart.ctx;
+
+    // Dashed line
+    c.save();
+    c.beginPath();
+    c.setLineDash([3, 6]);
+    c.strokeStyle = 'rgba(255,255,255,0.14)';
+    c.lineWidth = 1;
+    c.moveTo(xScale.left, y);
+    c.lineTo(xScale.right, y);
+    c.stroke();
+    c.setLineDash([]);
+
+    // Label at right edge
+    const valStr = '€' + Math.round(startVal / 1000) + 'k start';
+    c.font = "500 9px 'DM Sans', sans-serif";
+    const tw = c.measureText(valStr).width;
+    const lx = xScale.right - tw - 4;
+    const ly = y - 5;
+    c.fillStyle = 'rgba(255,255,255,0.18)';
+    c.fillText(valStr, lx, ly);
+    c.restore();
+  }
+};
+
+// End dot plugin
+const _pluginEndDotAfter = {
+  id: 'endDotAfter',
+  afterDraw(chart) {
+    const meta = chart.getDatasetMeta(0);
+    const pts  = meta.data;
+    if (!pts || pts.length === 0) return;
+    const last = pts[pts.length - 1];
+    const c = chart.ctx;
+    c.save();
+    c.beginPath();
+    c.arc(last.x, last.y, 4, 0, Math.PI * 2);
+    c.fillStyle = '#00E576';
+    c.fill();
+    c.beginPath();
+    c.arc(last.x, last.y, 2, 0, Math.PI * 2);
+    c.fillStyle = '#07080F';
+    c.fill();
+    c.restore();
+  }
+};
+
+const ctxAfter = document.getElementById('chartAfter').getContext('2d');
+
+new Chart(ctxAfter, {
+  type: 'line',
+  plugins: [_pluginDualFill, _pluginRefLineAfter, _pluginEndDotAfter],
+  data: {
+    labels: interpLabels,
+    datasets: [{
+      data: interpValues,
+      borderWidth: 2,
+      fill: false,       // fill handled by _pluginDualFill
+      tension: 0,
+      pointRadius: 0,
+      pointStyle: false,
+      segment: {
+        // After interpolation, every segment is fully above or below — p0 is accurate
+        borderColor: ctx => ctx.p0.parsed.y >= startVal ? '#00E576' : '#FF6B6B'
+      }
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    animation: false,
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    scales: {
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: {
+          maxTicksLimit: 6, maxRotation: 0,
+          color: '#4A4D62',
+          font: { size: 10, family: "'DM Sans', sans-serif" }
+        }
+      },
+      y: {
+        position: 'right',
+        grid: { color: 'rgba(120,140,210,0.06)', drawBorder: false },
+        border: { display: false },
+        ticks: {
+          maxTicksLimit: 5, color: '#4A4D62',
+          font: { size: 10, family: "'DM Sans', sans-serif" },
+          callback: v => '€' + Math.round(v / 1000) + 'k'
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

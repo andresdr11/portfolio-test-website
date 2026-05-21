@@ -46,6 +46,13 @@
 - **Spacing:** Use intentional, consistent spacing tokens — not random Tailwind steps.
 - **Depth:** Surfaces should have a layering system (base → elevated → floating), not all sit at the same z-plane.
 
+## Git / Deploy Workflow
+- **Never run `git push` without explicit user approval.** The agreed flow is:
+  1. Build or change things locally
+  2. User tests on `localhost:3001`
+  3. User says "push it" (or equivalent) — only then run `git push`
+- Do not push "to save work", "just in case", or after any task unless the user explicitly asks.
+
 ## Hard Rules
 - Do not add sections, features, or content not in the reference
 - Do not "improve" a reference design — match it

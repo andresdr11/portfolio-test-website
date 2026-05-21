@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attribution Demo — Orion Performance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green:    #00E576;
+      --red:      #FF6B6B;
+      --purple:   #6A80FF;
+      --amber:    #FFB020;
+      --teal:     #00C9B1;
+      --bg:       #07080F;
+      --bg-card:  #0F1020;
+      --bg-elev:  #131525;
+      --text-1:   #E8EDF5;
+      --text-2:   #8B8FA8;
+      --text-3:   #4A4D62;
+      --border:   rgba(120,140,210,0.08);
+      --border-hi:rgba(120,140,210,0.15);
+      --sans:     'DM Sans', sans-serif;
+      --mono:     'JetBrains Mono', monospace;
+      --r:        4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 48px 32px;
+    }
+
+    /* ─── PAGE CONTEXT LABEL ─────────────────────────── */
+    .page-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-label span { color: var(--text-2); }
+
+    /* ─── CARD ───────────────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      border-left: 3px solid var(--green);
+      padding: 28px 32px;
+      max-width: 880px;
+    }
+
+    /* ─── CARD HEADER ────────────────────────────────── */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .card-sub {
+      font-size: 11px;
+      color: var(--text-2);
+    }
+    .total-block { text-align: right; }
+    .total-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-3);
+      margin-bottom: 5px;
+    }
+    .total-val {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      font-family: var(--mono);
+      line-height: 1;
+      color: var(--green);
+    }
+
+    /* ─── QUICK STATS STRIP ──────────────────────────── */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .stat-item {
+      padding: 11px 16px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+      margin-bottom: 5px;
+    }
+    .stat-val {
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--mono);
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── BUTTERFLY ──────────────────────────────────── */
+    .butterfly {
+      display: grid;
+      grid-template-columns: 1fr 32px 1fr;
+      margin-bottom: 6px;
+    }
+
+    .butterfly-col-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    /* Detractors (left) — layout reversed */
+    .detractors-col { padding-right: 16px; }
+    .detractors-col .butterfly-col-label {
+      color: var(--red);
+      text-align: right;
+    }
+    .det-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0;
+      height: 28px;
+    }
+    .det-pp {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--red);
+      min-width: 48px;
+      text-align: right;
+      padding-right: 10px;
+    }
+    .det-lollipop {
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+    }
+    .lp-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .lp-line { height: 1.5px; }
+    .det-ticker {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-2);
+      min-width: 62px;
+      text-align: right;
+      padding-right: 12px;
+    }
+    .det-name {
+      font-size: 9px;
+      color: var(--text-3);
+    }
+
+    /* Center axis */
+    .butterfly-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 22px;
+    }
+    .center-zero {
+      font-size: 8px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--text-3);
+      margin-bottom: 4px;
+    }
+    .center-axis-line {
+      flex: 1;
+      width: 1px;
+      background: var(--border-hi);
+    }
+
+    /* Contributors (right) */
+    .contributors-col { padding-left: 16px; }
+    .contributors-col .butterfly-col-label { color: var(--green); }
+    .con-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 28px;
+    }
+    .con-ticker {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-2);
+      min-width: 62px;
+      padding-right: 12px;
+    }
+    .con-lollipop {
+      display: flex;
+      align-items: center;
+    }
+    .con-pp {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      color: var(--green);
+      min-width: 48px;
+      padding-left: 10px;
+    }
+
+    /* ─── EXPAND BUTTON ──────────────────────────────── */
+    .expand-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      margin-top: 10px;
+    }
+    .expand-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 7px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+      letter-spacing: 0.01em;
+    }
+    .expand-btn:hover {
+      color: var(--text-1);
+      border-color: var(--border-hi);
+      background: rgba(255,255,255,0.025);
+    }
+    .expand-btn .chevron { transition: transform 0.22s ease; }
+    .expand-btn.open .chevron { transform: rotate(180deg); }
+
+    /* ─── FULL RANKED LIST ───────────────────────────── */
+    .full-list {
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 0.18s ease;
+    }
+    .full-list.visible { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:none; } }
+
+    .list-head {
+      display: grid;
+      grid-template-columns: 22px 130px 1fr 52px 56px;
+      gap: 0 14px;
+      padding: 0 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2px;
+    }
+    .list-head span {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-3);
+    }
+    .list-head .r { text-align: right; }
+
+    .list-row {
+      display: grid;
+      grid-template-columns: 22px 130px 1fr 52px 56px;
+      gap: 0 14px;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+      border-radius: 2px;
+    }
+    .list-row:last-child { border-bottom: none; }
+    .list-row.total {
+      border-top: 1px solid var(--border-hi);
+      margin-top: 4px;
+      border-bottom: none;
+      padding-top: 10px;
+    }
+    .list-row:hover { background: rgba(255,255,255,0.02); }
+
+    .row-rank {
+      font-size: 10px;
+      color: var(--text-3);
+      font-weight: 600;
+      font-family: var(--mono);
+      text-align: right;
+    }
+    .row-pos {}
+    .row-ticker { font-size: 12px; font-weight: 700; letter-spacing: -0.01em; }
+    .row-name   { font-size: 9px; color: var(--text-3); margin-top: 1px; }
+
+    /* Bar track */
+    .bar-track {
+      position: relative;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.04);
+      overflow: visible;
+    }
+    .bar-axis {
+      position: absolute;
+      left: 50%;
+      top: -2px;
+      bottom: -2px;
+      width: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .bar-fill.pos { background: var(--green); left: 50%; }
+    .bar-fill.neg { background: var(--red);   right: 50%; }
+    .bar-fill.zero { display: none; }
+
+    .row-weight {
+      font-size: 10px;
+      color: var(--text-3);
+      font-family: var(--mono);
+      text-align: right;
+    }
+    .row-pp {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--mono);
+      text-align: right;
+    }
+    .row-pp.pos  { color: var(--green); }
+    .row-pp.neg  { color: var(--red); }
+    .row-pp.zero { color: var(--text-3); }
+  </style>
+</head>
+<body>
+
+  <p class="page-label">Orion · <span>Performance</span> · Attribution</p>
+
+  <div class="card">
+
+    <!-- Header -->
+    <div class="card-header">
+      <div>
+        <p class="card-title">Atribución de Rentabilidad</p>
+        <p class="card-sub">Contribución de cada posición al retorno total · en puntos porcentuales</p>
+      </div>
+      <div class="total-block">
+        <p class="total-label">Retorno total</p>
+        <p class="total-val" id="total-val">—</p>
+      </div>
+    </div>
+
+    <!-- Quick stats strip -->
+    <div class="stats-strip">
+      <div class="stat-item">
+        <p class="stat-label">Ganadores</p>
+        <p class="stat-val" id="stat-winners" style="color:var(--green)">—</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-label">Mayor contribución</p>
+        <p class="stat-val" id="stat-best" style="color:var(--green)">—</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-label">Mayor detractor</p>
+        <p class="stat-val" id="stat-worst" style="color:var(--red)">—</p>
+      </div>
+    </div>
+
+    <!-- Butterfly -->
+    <div class="butterfly" id="butterfly"></div>
+
+    <!-- Expand -->
+    <div class="expand-wrap">
+      <button class="expand-btn" id="expand-btn">
+        Ver todas las posiciones
+        <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Full list -->
+    <div class="full-list" id="full-list">
+      <div class="list-head">
+        <span></span>
+        <span>Posición</span>
+        <span style="text-align:center; padding-left:24px;">← Detractores · Contribuidores →</span>
+        <span class="r">Peso</span>
+        <span class="r">pp</span>
+      </div>
+      <div id="list-rows"></div>
+    </div>
+
+  </div>
+
+<script>
+  // ── Mock data (realistic portfolio) ──────────────────────
+  const DATA = [
+    { ticker: 'NVDA',   name: 'Nvidia Corp.',       weight: 18.2, pp: +4.80 },
+    { ticker: 'MSFT',   name: 'Microsoft',          weight: 12.3, pp: +2.10 },
+    { ticker: 'AMZN',   name: 'Amazon.com',         weight:  9.4, pp: +1.60 },
+    { ticker: 'GDX.MI', name: 'VanEck Gold Miners', weight:  8.5, pp: +1.20 },
+    { ticker: 'HOOD',   name: 'Robinhood Markets',  weight:  4.1, pp: +0.90 },
+    { ticker: 'AAPL',   name: 'Apple Inc.',         weight: 10.1, pp: +0.80 },
+    { ticker: 'VWCE',   name: 'Vanguard FTSE',      weight:  8.9, pp: +0.40 },
+    { ticker: 'META',   name: 'Meta Platforms',     weight:  7.8, pp: +0.30 },
+    { ticker: 'XGAT',   name: 'iShares Core MSCI',  weight:  5.2, pp: +0.20 },
+    { ticker: 'Cash',   name: 'Cash EUR',           weight:  3.5, pp:  0.00 },
+    { ticker: 'ASML',   name: 'ASML Holding',       weight:  5.8, pp: -0.70 },
+    { ticker: 'NOVO.B', name: 'Novo Nordisk',       weight:  6.2, pp: -2.40 },
+  ];
+
+  const sorted  = [...DATA].sort((a, b) => b.pp - a.pp);
+  const maxAbs  = Math.max(...DATA.map(d => Math.abs(d.pp)));
+  const total   = DATA.reduce((s, d) => s + d.pp, 0);
+  const winners = DATA.filter(d => d.pp > 0);
+  const losers  = DATA.filter(d => d.pp < 0);
+
+  // ── Quick stats ───────────────────────────────────────────
+  document.getElementById('total-val').textContent =
+    (total >= 0 ? '+' : '') + total.toFixed(1) + 'pp';
+  document.getElementById('stat-winners').textContent =
+    `${winners.length} de ${DATA.length}`;
+
+  const best  = sorted[0];
+  const worst = sorted[sorted.length - 1];
+  document.getElementById('stat-best').textContent  = `${best.ticker} · +${best.pp.toFixed(1)}pp`;
+  document.getElementById('stat-worst').textContent = `${worst.ticker} · ${worst.pp.toFixed(1)}pp`;
+
+  // ── Butterfly ─────────────────────────────────────────────
+  const MAX_BAR   = 150; // px — max lollipop line length
+  const top5win   = sorted.filter(d => d.pp > 0).slice(0, 5);
+  const top5los   = [...sorted].reverse().filter(d => d.pp < 0).slice(0, 5);
+  const maxRows   = Math.max(top5win.length, top5los.length);
+
+  function detRow(d) {
+    if (!d) return `<div style="height:28px;"></div>`;
+    const len = Math.round(Math.abs(d.pp) / maxAbs * MAX_BAR);
+    return `
+      <div class="det-row">
+        <span class="det-pp">${d.pp.toFixed(1)}pp</span>
+        <div class="det-lollipop">
+          <div class="lp-dot" style="background:var(--red);box-shadow:0 0 5px rgba(255,107,107,0.45);"></div>
+          <div class="lp-line" style="width:${len}px;background:linear-gradient(to left,var(--red),rgba(255,107,107,0.15));"></div>
+        </div>
+        <div style="padding-left:12px;">
+          <div class="det-ticker" style="text-align:left;">${d.ticker}</div>
+          <div class="det-name">${d.name}</div>
+        </div>
+      </div>`;
+  }
+
+  function conRow(d) {
+    if (!d) return `<div style="height:28px;"></div>`;
+    const len = Math.round(d.pp / maxAbs * MAX_BAR);
+    return `
+      <div class="con-row">
+        <div style="padding-right:12px;text-align:right;">
+          <div class="con-ticker" style="text-align:right;min-width:62px;">${d.ticker}</div>
+          <div class="det-name" style="text-align:right;">${d.name}</div>
+        </div>
+        <div class="con-lollipop">
+          <div class="lp-line" style="width:${len}px;background:linear-gradient(to right,var(--green),rgba(0,229,118,0.15));"></div>
+          <div class="lp-dot" style="background:var(--green);box-shadow:0 0 5px rgba(0,229,118,0.45);"></div>
+        </div>
+        <span class="con-pp">+${d.pp.toFixed(1)}pp</span>
+      </div>`;
+  }
+
+  let detHTML = `<div class="detractors-col">
+    <p class="butterfly-col-label" style="color:var(--red);text-align:right;">Detractores</p>`;
+  let conHTML = `<div class="contributors-col">
+    <p class="butterfly-col-label" style="color:var(--green);">Contribuidores</p>`;
+
+  for (let i = 0; i < maxRows; i++) {
+    detHTML += detRow(top5los[i]);
+    conHTML += conRow(top5win[i]);
+  }
+
+  detHTML += `</div>`;
+  conHTML += `</div>`;
+
+  const centerHTML = `
+    <div class="butterfly-center">
+      <span class="center-zero">0</span>
+      <div class="center-axis-line"></div>
+    </div>`;
+
+  document.getElementById('butterfly').innerHTML = detHTML + centerHTML + conHTML;
+
+  // ── Full list ─────────────────────────────────────────────
+  const listRows = document.getElementById('list-rows');
+
+  let html = '';
+  sorted.forEach((d, i) => {
+    const isPos   = d.pp > 0;
+    const isNeg   = d.pp < 0;
+    const cls     = isPos ? 'pos' : isNeg ? 'neg' : 'zero';
+    const sign    = isPos ? '+' : '';
+    const barPct  = (Math.abs(d.pp) / maxAbs * 50).toFixed(1);
+
+    html += `
+      <div class="list-row">
+        <span class="row-rank">${i + 1}</span>
+        <div class="row-pos">
+          <div class="row-ticker">${d.ticker}</div>
+          <div class="row-name">${d.name}</div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-axis"></div>
+          <div class="bar-fill ${cls}" style="width:${barPct}%;"></div>
+        </div>
+        <span class="row-weight">${d.weight.toFixed(1)}%</span>
+        <span class="row-pp ${cls}">${sign}${d.pp.toFixed(1)}</span>
+      </div>`;
+  });
+
+  // Total row
+  const totalSign = total >= 0 ? '+' : '';
+  const totalCls  = total >= 0 ? 'pos' : 'neg';
+  html += `
+    <div class="list-row total">
+      <span class="row-rank"></span>
+      <div class="row-pos">
+        <div class="row-ticker" style="font-size:11px;color:var(--text-2);">TOTAL</div>
+      </div>
+      <div></div>
+      <span class="row-weight">100%</span>
+      <span class="row-pp ${totalCls}">${totalSign}${total.toFixed(1)}</span>
+    </div>`;
+
+  listRows.innerHTML = html;
+
+  // ── Toggle ────────────────────────────────────────────────
+  const btn  = document.getElementById('expand-btn');
+  const list = document.getElementById('full-list');
+  const btnText = btn.childNodes[0];
+
+  btn.addEventListener('click', () => {
+    const open = list.classList.toggle('visible');
+    btn.classList.toggle('open', open);
+    btnText.textContent = open ? 'Ocultar lista ' : 'Ver todas las posiciones ';
+  });
+</script>
+</body>
+</html>

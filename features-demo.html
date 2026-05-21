@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Features Demo</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#07080F;color:#fff;font-family:system-ui,sans-serif;padding:32px;display:flex;flex-direction:column;gap:32px;}
+  h2{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4A4D62;margin-bottom:12px;}
+  .card{background:#14151F;border:1px solid rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;}
+
+  /* ── MOVERS ── */
+  .movers{display:flex;gap:1px;background:rgba(255,255,255,0.04);}
+  .mover{flex:1;padding:14px 18px;background:#14151F;display:flex;flex-direction:column;gap:4px;}
+  .mover-tag{font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4A4D62;}
+  .mover-name{font-size:12px;font-weight:600;color:#fff;}
+  .mover-ticker{font-size:10px;color:#8B8FA8;}
+  .mover-val{font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-top:2px;}
+  .pos{color:#00E576;} .neg{color:#FF6B6B;} .neu{color:#6A80FF;}
+
+  /* ── SPARKLINE TABLE ── */
+  table{width:100%;border-collapse:collapse;}
+  th{font-size:10px;font-weight:700;letter-spacing:0.04em;color:#8B8FA8;text-transform:uppercase;padding:8px 16px;text-align:right;border-bottom:1px solid rgba(255,255,255,0.06);}
+  th:first-child{text-align:left;}
+  td{padding:10px 16px;text-align:right;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
+  td:first-child{text-align:left;}
+  .name{font-weight:600;font-size:13px;}
+  .sub{font-size:10px;color:#8B8FA8;margin-top:1px;}
+  .spark-cell{display:flex;align-items:center;justify-content:flex-end;}
+</style>
+</head>
+<body>
+
+<!-- FEATURE 1: MOVERS WIDGET -->
+<div>
+  <h2>Feature 1 — Today's Movers</h2>
+  <div class="card">
+    <div class="movers">
+      <div class="mover">
+        <span class="mover-tag">Best today</span>
+        <span class="mover-name">VanEck Gold Miners</span>
+        <span class="mover-ticker">GDX.MI</span>
+        <span class="mover-val pos">+3.42%</span>
+      </div>
+      <div class="mover" style="border-left:1px solid rgba(255,255,255,0.05);">
+        <span class="mover-tag">Worst today</span>
+        <span class="mover-name">Novo Nordisk A/S</span>
+        <span class="mover-ticker">NOVC.XGAT</span>
+        <span class="mover-val neg">−2.18%</span>
+      </div>
+      <div class="mover" style="border-left:1px solid rgba(255,255,255,0.05);">
+        <span class="mover-tag">Largest position</span>
+        <span class="mover-name">NVIDIA Corporation</span>
+        <span class="mover-ticker">NVDA · 14.9%</span>
+        <span class="mover-val pos">+1.07%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE 2: SPARKLINES TABLE -->
+<div>
+  <h2>Feature 2 — Sparklines (30d) en positions table</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>30d trend</th>
+          <th>Value</th>
+          <th>P/L</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// Mock data with fake 30d price series
+const rows = [
+  { name:'NVIDIA Corporation',  ticker:'NVDA',     val:'€3.398', pnl:'+€1.265', pct:'+59.30%', pos:true,  trend:[100,105,108,103,110,118,115,120,125,122,130,128,135,140,138,145,150,148,155,158,160,155,162,165,168,170,166,172,175,178] },
+  { name:'VanEck Gold Miners',  ticker:'GDX.MI',   val:'€2.815', pnl:'+€1.378', pct:'+95.85%', pos:true,  trend:[100,98,102,105,103,108,106,110,112,109,115,118,114,120,122,119,125,128,124,130,133,129,135,138,134,140,143,139,145,148] },
+  { name:'Amazon.com, Inc.',    ticker:'AMZN',     val:'€2.256', pnl:'+€344',   pct:'+17.96%', pos:true,  trend:[100,102,101,103,105,104,106,105,107,108,107,109,108,110,111,110,112,111,113,114,113,115,114,116,115,117,116,118,117,119] },
+  { name:'Berkshire Hathaway',  ticker:'BRK.B',    val:'€2.016', pnl:'−€49',    pct:'−2.36%',  pos:false, trend:[100,101,99,100,98,99,97,98,96,97,95,96,94,95,93,94,92,93,91,92,90,91,89,90,88,89,87,88,86,87] },
+  { name:'Novo Nordisk A/S',    ticker:'NOVC.XGAT',val:'€1.871', pnl:'−€167',   pct:'−8.20%',  pos:false, trend:[100,98,96,97,95,93,94,92,90,91,89,87,88,86,84,85,83,81,82,80,78,79,77,75,76,74,72,73,71,70] },
+];
+
+function sparklineSVG(data, positive) {
+  const w = 72, h = 28;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h;
+    return `${x},${y}`;
+  });
+  const color = positive ? '#00E576' : '#FF6B6B';
+  const fill  = positive ? 'rgba(0,229,118,0.08)' : 'rgba(255,107,107,0.08)';
+  const lastX = (data.length-1)/(data.length-1)*w;
+  const lastY = h - ((data[data.length-1]-min)/range)*h;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="g${positive?'p':'n'}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <polygon points="${pts.join(' ')} ${w},${h} 0,${h}" fill="url(#g${positive?'p':'n'})"/>
+    <polyline points="${pts.join(' ')}" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX}" cy="${lastY}" r="2" fill="${color}"/>
+  </svg>`;
+}
+
+const tbody = document.getElementById('tbody');
+rows.forEach(r => {
+  const pclass = r.pos ? 'pos' : 'neg';
+  tbody.innerHTML += `<tr>
+    <td><div class="name">${r.name}</div><div class="sub">${r.ticker}</div></td>
+    <td><div class="spark-cell">${sparklineSVG(r.trend, r.pos)}</div></td>
+    <td>${r.val}</td>
+    <td class="${pclass}"><div>${r.pnl}</div><div class="sub ${pclass}">${r.pct}</div></td>
+  </tr>`;
+});
+</script>
+</body>
+</html>

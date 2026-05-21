@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark Comparison — Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:         #07080F;
+      --bg-card:    #14151F;
+      --bg-elev:    #111220;
+      --text-1:     #FFFFFF;
+      --text-2:     #8B8FA8;
+      --text-3:     #4A4D62;
+      --border:     rgba(255,255,255,0.07);
+      --green:      #00E576;
+      --green-dim:  rgba(0,229,118,0.10);
+      --green-bdr:  rgba(0,229,118,0.28);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: 'Instrument Sans', sans-serif;
+      padding: 48px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .slicer-btn {
+      background: none; border: 1px solid transparent;
+      color: var(--text-3); font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      padding: 5px 13px; border-radius: 7px;
+      transition: all 0.18s; letter-spacing: 0.02em;
+    }
+    .slicer-btn:hover { color: var(--text-2); background: rgba(255,255,255,0.05); }
+    .slicer-btn.active {
+      color: var(--green);
+      background: var(--green-dim);
+      border-color: var(--green-bdr);
+    }
+    .bench-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-3);
+      cursor: pointer;
+      transition: all 0.18s;
+      user-select: none;
+      font-family: inherit;
+    }
+    .bench-pill:hover { border-color: rgba(255,255,255,0.14); color: var(--text-2); }
+    .bench-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; transition: background 0.18s; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ── Header ── -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <p style="font-size:14px;font-weight:600;margin-bottom:4px;">Portfolio TWR</p>
+      <p id="perf-sub" style="font-size:11px;color:var(--text-3);">Time-weighted return · rebased to period start</p>
+    </div>
+    <div id="slicer" style="display:flex;gap:3px;background:var(--bg-elev);padding:4px;border-radius:9px;">
+      <button class="slicer-btn" data-range="1M">1M</button>
+      <button class="slicer-btn" data-range="3M">3M</button>
+      <button class="slicer-btn" data-range="6M">6M</button>
+      <button class="slicer-btn active" data-range="1Y">1Y</button>
+      <button class="slicer-btn" data-range="ALL">ALL</button>
+    </div>
+  </div>
+
+  <!-- ── Chart ── -->
+  <div style="position:relative;height:280px;margin-bottom:20px;">
+    <canvas id="benchChart"></canvas>
+  </div>
+
+  <!-- ── Benchmark toggles ── -->
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding-top:14px;border-top:1px solid var(--border);">
+    <span style="font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:0.07em;text-transform:uppercase;margin-right:6px;">Compare</span>
+    <div id="bench-pills" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+  </div>
+
+</div>
+
+<script>
+// ── Seeded RNG ────────────────────────────────────────────────
+function lcg(seed) {
+  let s = seed >>> 0;
+  return () => { s = (Math.imul(1664525, s) + 1013904223) >>> 0; return s / 0x100000000; };
+}
+function bm(rng) {
+  const u1 = Math.max(rng(), 1e-10), u2 = rng();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+// ── Trading days from Apr 2023 ────────────────────────────────
+function tradingDays(n) {
+  const out = []; const d = new Date('2023-04-03');
+  while (out.length < n) { if (d.getDay() % 6) out.push(new Date(d)); d.setDate(d.getDate()+1); }
+  return out;
+}
+const DAYS = 760;
+const DATES = tradingDays(DAYS);
+
+// Market factor (correlated noise)
+const mRng = lcg(999);
+const MKT = Array.from({length: DAYS}, () => bm(mRng));
+
+// Cumulative % return series
+function genSeries(annRet, vol, beta, seed) {
+  const rng = lcg(seed);
+  const dr = annRet / 252, dv = vol / Math.sqrt(252);
+  const bv = Math.sqrt(Math.max(0, 1 - beta * beta));
+  let cum = 0; const out = [0];
+  for (let i = 1; i < DAYS; i++) {
+    const ret = dr + dv * (beta * MKT[i] + bv * bm(rng));
+    cum += ret;
+    out.push((Math.exp(cum) - 1) * 100);
+  }
+  return out;
+}
+
+const PORTFOLIO = genSeries(0.092, 0.17, 0.75, 42);
+
+const BENCHMARKS = [
+  { id:'sp500',   name:'S&P 500',       color:'#6A80FF', annRet:0.105, vol:0.15, beta:1.00, seed:1 },
+  { id:'nasdaq',  name:'NASDAQ-100',    color:'#FFB020', annRet:0.140, vol:0.22, beta:1.20, seed:2 },
+  { id:'msciw',   name:'MSCI World',    color:'#36CFC9', annRet:0.090, vol:0.13, beta:0.95, seed:3 },
+  { id:'dow',     name:'Dow Jones',     color:'#F759AB', annRet:0.070, vol:0.12, beta:0.80, seed:4 },
+  { id:'stoxx50', name:'Euro Stoxx 50', color:'#73D13D', annRet:0.085, vol:0.16, beta:0.88, seed:5 },
+  { id:'ibex',    name:'IBEX 35',       color:'#FF9C6E', annRet:0.100, vol:0.17, beta:0.82, seed:6 },
+  { id:'em',      name:'MSCI EM',       color:'#B37FEB', annRet:0.030, vol:0.18, beta:0.70, seed:7 },
+];
+BENCHMARKS.forEach(b => b.series = genSeries(b.annRet, b.vol, b.beta, b.seed));
+
+// ── Active state ──────────────────────────────────────────────
+const active = new Set(['sp500']);
+let currentRange = '1Y';
+const NDAYS = { '1M':21, '3M':63, '6M':126, '1Y':252, 'ALL':DAYS };
+
+function rebase(arr, start) { const b = arr[start]; return arr.slice(start).map(v => v - b); }
+
+function getSlice(range) {
+  const n = NDAYS[range] || DAYS;
+  const s = Math.max(0, DAYS - n);
+  return {
+    labels:    DATES.slice(s).map(d => d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'2-digit'})),
+    portfolio: rebase(PORTFOLIO, s),
+    benches:   Object.fromEntries(BENCHMARKS.map(b => [b.id, rebase(b.series, s)])),
+  };
+}
+
+// ── Chart ─────────────────────────────────────────────────────
+Chart.defaults.color = '#8B8FA8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+Chart.defaults.font.family = "'Instrument Sans', sans-serif";
+
+const ctx = document.getElementById('benchChart').getContext('2d');
+
+function makeGradient() {
+  const g = ctx.createLinearGradient(0, 0, 0, 280);
+  g.addColorStop(0, 'rgba(0,229,118,0.14)');
+  g.addColorStop(1, 'rgba(0,229,118,0.00)');
+  return g;
+}
+
+function buildDatasets(slice) {
+  const ds = [{
+    label: 'My Portfolio',
+    data: slice.portfolio,
+    borderColor: '#00E576',
+    borderWidth: 2.5,
+    backgroundColor: makeGradient(),
+    fill: true, tension: 0.4,
+    pointRadius: 0, pointHoverRadius: 5,
+    pointHoverBackgroundColor: '#00E576',
+    pointHoverBorderColor: '#07080F',
+    pointHoverBorderWidth: 2,
+    order: 0,
+  }];
+  BENCHMARKS.forEach(b => {
+    ds.push({
+      label: b.name,
+      data: active.has(b.id) ? slice.benches[b.id] : [],
+      borderColor: b.color, borderWidth: 1.5,
+      borderDash: [5, 4],
+      backgroundColor: 'transparent', fill: false, tension: 0.4,
+      pointRadius: 0, pointHoverRadius: 4,
+      pointHoverBackgroundColor: b.color,
+      pointHoverBorderColor: '#07080F',
+      pointHoverBorderWidth: 2,
+      hidden: !active.has(b.id),
+      order: 1,
+    });
+  });
+  return ds;
+}
+
+const initSlice = getSlice(currentRange);
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: { labels: initSlice.labels, datasets: buildDatasets(initSlice) },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#14151F',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        padding: { top: 10, bottom: 10, left: 14, right: 16 },
+        displayColors: true,
+        usePointStyle: true,
+        boxWidth: 7, boxHeight: 7,
+        callbacks: {
+          title: items => items[0].label,
+          label: ctx => {
+            const v = ctx.parsed.y;
+            return `  ${ctx.dataset.label}:  ${v >= 0 ? '+' : ''}${v.toFixed(2)}%`;
+          },
+          labelColor: ctx => ({
+            borderColor: ctx.dataset.borderColor,
+            backgroundColor: ctx.dataset.borderColor,
+          }),
+        },
+        filter: item => item.dataset.data && item.dataset.data.length > 0,
+        itemSort: (a, b) => b.parsed.y - a.parsed.y,
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { maxTicksLimit: 6, color: '#fff', font: { size: 11 } }
+      },
+      y: {
+        position: 'right',
+        grid: {
+          color: ctx => ctx.tick.value === 0 ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.04)',
+          lineWidth: ctx => ctx.tick.value === 0 ? 1 : 1,
+        },
+        ticks: {
+          callback: v => (v >= 0 ? '+' : '') + v.toFixed(1) + '%',
+          maxTicksLimit: 5, color: '#fff', font: { size: 11 }
+        }
+      }
+    }
+  }
+});
+
+// ── Update ────────────────────────────────────────────────────
+function updateChart() {
+  const slice = getSlice(currentRange);
+  chart.data.labels = slice.labels;
+  chart.data.datasets[0].data = slice.portfolio;
+  BENCHMARKS.forEach((b, i) => {
+    const ds = chart.data.datasets[i + 1];
+    ds.data   = active.has(b.id) ? slice.benches[b.id] : [];
+    ds.hidden = !active.has(b.id);
+  });
+  chart.update('active');
+
+  const portEnd = slice.portfolio[slice.portfolio.length - 1];
+  const sign = portEnd >= 0 ? '+' : '';
+  const col  = portEnd >= 0 ? '#00E576' : '#FF6B6B';
+  const arr  = portEnd >= 0 ? '↑' : '↓';
+  document.getElementById('perf-sub').innerHTML =
+    `<span style="color:${col};font-weight:600;">${sign}${portEnd.toFixed(2)}% ${arr}</span>` +
+    `&nbsp;·&nbsp;Time-weighted return rebased to period start`;
+}
+
+// ── Range slicer ──────────────────────────────────────────────
+document.getElementById('slicer').addEventListener('click', e => {
+  const btn = e.target.closest('.slicer-btn');
+  if (!btn) return;
+  document.querySelectorAll('.slicer-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentRange = btn.dataset.range;
+  updateChart();
+});
+
+// ── Benchmark pills ───────────────────────────────────────────
+const pillsEl = document.getElementById('bench-pills');
+BENCHMARKS.forEach(b => {
+  const pill = document.createElement('button');
+  pill.className = 'bench-pill';
+  pill.innerHTML = `<span class="bench-dot"></span>${b.name}`;
+
+  function applyState() {
+    const on = active.has(b.id);
+    pill.style.background    = on ? `${b.color}1A` : 'rgba(255,255,255,0.03)';
+    pill.style.borderColor   = on ? `${b.color}60` : 'rgba(255,255,255,0.08)';
+    pill.style.color         = on ? b.color : 'var(--text-3)';
+    pill.querySelector('.bench-dot').style.background = on ? b.color : '#4A4D62';
+  }
+
+  pill.addEventListener('click', () => {
+    active.has(b.id) ? active.delete(b.id) : active.add(b.id);
+    applyState();
+    updateChart();
+  });
+
+  applyState();
+  pillsEl.appendChild(pill);
+});
+
+updateChart();
+</script>
+</body>
+</html>

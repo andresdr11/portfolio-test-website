@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#07080F; color:#fff; font-family:'Instrument Sans',sans-serif; padding:32px; }
+
+  .card { background:#14151F; border:1px solid rgba(255,255,255,0.07); border-radius:12px; overflow:hidden; max-width:960px; }
+
+  .card-header { display:flex; justify-content:space-between; align-items:center; padding:18px 24px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .card-title { font-size:14px; font-weight:600; }
+  .card-count { font-size:11px; color:#8B8FA8; }
+
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    font-size:11px; color:#8B8FA8; font-weight:600; padding:10px 16px;
+    text-align:right; border-bottom:1px solid rgba(255,255,255,0.06);
+    cursor:pointer; user-select:none; white-space:nowrap;
+  }
+  thead th:first-child { text-align:left; }
+  thead th .sort-arrow { margin-left:4px; opacity:0.4; }
+  thead th.sorted .sort-arrow { opacity:1; color:#00E576; }
+
+  tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.1s; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:hover { background:rgba(255,255,255,0.03); }
+
+  td { padding:14px 16px; vertical-align:middle; text-align:right; }
+  td:first-child { text-align:left; }
+
+  .pos-cell { display:flex; align-items:center; gap:12px; }
+  .avatar {
+    width:36px; height:36px; border-radius:8px; background:#1E2030;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:#8B8FA8; flex-shrink:0;
+  }
+  .pos-name { font-size:13px; font-weight:600; }
+  .pos-sub  { font-size:11px; color:#8B8FA8; margin-top:2px; }
+
+  .main  { font-size:13px; font-weight:600; }
+  .sub   { font-size:11px; color:#8B8FA8; margin-top:2px; }
+
+  .green { color:#00E576; }
+  .red   { color:#FF6B6B; }
+
+  .weight-cell { min-width:90px; }
+  .weight-bar-wrap { display:flex; align-items:center; gap:8px; justify-content:flex-end; }
+  .weight-bar-bg { width:48px; height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+  .weight-bar-fill { height:100%; background:#6A80FF; border-radius:2px; }
+  .weight-val { font-size:12px; font-weight:600; color:#fff; min-width:36px; text-align:right; }
+</style>
+</head><body>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Positions</span>
+    <span class="card-count" id="count"></span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="padding-left:24px;">Position</th>
+        <th class="weight-cell sorted">Weight <span class="sort-arrow">↓</span></th>
+        <th>Cost</th>
+        <th>Value</th>
+        <th>P/L</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const POSITIONS = [
+  { ticker:'NVDA',      name:'NVIDIA Corp',                            units:20,   price:199.880, mkt:3403.56, cost:2133.06, avg:106.653, pnl:+1270.50, pnl_pct:+59.56, weight:15.5, cur:'USD' },
+  { ticker:'GDX.MI',   name:'VanEck Gold Miners UCITS ETF',           units:33,   price:91.840,  mkt:3030.72, cost:1437.25, avg:43.553,  pnl:+1593.47, pnl_pct:+110.87,weight:13.8, cur:'EUR' },
+  { ticker:'EUNL.XGAT',name:'iShares Core MSCI World ETF',            units:18,   price:115.892, mkt:2086.06, cost:1708.19, avg:94.899,  pnl:+377.87,  pnl_pct:+22.12, weight:9.5,  cur:'EUR' },
+  { ticker:'UNH',      name:'UnitedHealth Group Inc',                 units:7,    price:346.160, mkt:2063.04, cost:1804.63, avg:257.804, pnl:+258.41,  pnl_pct:+14.32, weight:9.4,  cur:'USD' },
+  { ticker:'NOVC.XGAT',name:'Novo Nordisk A/S',                       units:52,   price:34.370,  mkt:1787.24, cost:2038.68, avg:39.205,  pnl:-251.44,  pnl_pct:-12.33, weight:8.1,  cur:'DKK' },
+  { ticker:'AMZN',     name:'Amazon.com Inc.',                        units:8,    price:249.910, mkt:1702.19, cost:1454.78, avg:181.847, pnl:+247.41,  pnl_pct:+17.01, weight:7.7,  cur:'USD' },
+  { ticker:'BRK.B',    name:'Berkshire Hathaway Inc. Class B',        units:4,    price:468.480, mkt:1595.46, cost:1660.00, avg:415.000, pnl:-64.54,   pnl_pct:-3.89,  weight:7.3,  cur:'USD' },
+  { ticker:'HOOD',     name:'Robinhood Markets Inc.',                 units:21,   price:86.430,  mkt:1545.32, cost:1142.13, avg:54.387,  pnl:+403.19,  pnl_pct:+35.30, weight:7.0,  cur:'USD' },
+  { ticker:'BABA',     name:'Alibaba Group Holding Ltd - ADR',        units:12,   price:135.380, mkt:1383.15, cost:1212.45, avg:101.037, pnl:+170.70,  pnl_pct:+14.08, weight:6.3,  cur:'USD' },
+  { ticker:'OHLA.MC',  name:'Obrascon Huarte Lain',                   units:1800, price:0.488,   mkt:878.04,  cost:675.00,  avg:0.375,   pnl:+203.04,  pnl_pct:+30.08, weight:4.0,  cur:'EUR' },
+];
+
+const maxWeight = Math.max(...POSITIONS.map(p => p.weight));
+
+function fmt(n, decimals=2) {
+  return n.toLocaleString('de-DE', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function fmtPrice(p, cur) {
+  const sym = cur === 'EUR' ? '€' : cur === 'USD' ? '$' : cur === 'DKK' ? 'kr' : '';
+  return sym + fmt(p, p < 10 ? 3 : 2);
+}
+
+const tbody = document.getElementById('tbody');
+document.getElementById('count').textContent = POSITIONS.length + ' positions';
+
+POSITIONS.forEach(p => {
+  const isPos = p.pnl >= 0;
+  const cls = isPos ? 'green' : 'red';
+  const sign = isPos ? '+' : '';
+  const initials = p.ticker.replace('.', '').substring(0, 3);
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td style="padding-left:24px;">
+      <div class="pos-cell">
+        <div class="avatar">${initials}</div>
+        <div>
+          <div class="pos-name">${p.name}</div>
+          <div class="pos-sub">${p.ticker} &nbsp;·&nbsp; x${p.units}</div>
+        </div>
+      </div>
+    </td>
+    <td class="weight-cell">
+      <div class="weight-bar-wrap">
+        <div class="weight-bar-bg"><div class="weight-bar-fill" style="width:${(p.weight/maxWeight*100).toFixed(0)}%"></div></div>
+        <span class="weight-val">${fmt(p.weight, 1)}%</span>
+      </div>
+    </td>
+    <td>
+      <div class="main">€${fmt(p.cost)}</div>
+      <div class="sub">${fmtPrice(p.avg, p.cur)} avg</div>
+    </td>
+    <td>
+      <div class="main">€${fmt(p.mkt)}</div>
+      <div class="sub">${fmtPrice(p.price, p.cur)}</div>
+    </td>
+    <td>
+      <div class="main ${cls}">${sign}€${fmt(Math.abs(p.pnl))}</div>
+      <div class="sub ${cls}">${sign}${fmt(p.pnl_pct, 2)}%</div>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+</script>
+</body></html>
