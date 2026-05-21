@@ -3334,7 +3334,12 @@ async function loadPortfolio() {
   // Canonical patch: align last point to attribution_summary so every read of pnlPts[-1] matches the KPI strip
   if (pnlPts.length > 0) pnlPts[pnlPts.length - 1] = { ...pnlPts[pnlPts.length - 1], value: totalProfitEur };
   // TWR series: time-weighted return (%) — eliminates deposit size effect
+  console.log('📊 DATA CHECK: twr_history length:', d.twr_history?.length || 'MISSING');
+  console.log('📊 DATA CHECK: portfolio_history length:', d.portfolio_history?.length || 'MISSING');
+
   const twrPts  = (d.twr_history  && d.twr_history.length  > 5) ? d.twr_history  : [];
+  console.log('📊 VARIABLES: twrPts initialized with length:', twrPts.length);
+
   // S&P 500 benchmark (same dates as twr_history, normalized to 0%)
   const sp500Pts = (d.sp500_history && d.sp500_history.length > 5) ? d.sp500_history : [];
 
@@ -6047,7 +6052,13 @@ async function loadPortfolio() {
 
   // ── MONTHLY RETURNS HEATMAP — Premium ─────────────────────────────────────
   (function initMonthlyHeatmap() {
-    if (!twrPts || twrPts.length < 10) return;
+    console.log('🔄 RETURNS CALENDAR: Initializing heatmap...');
+    console.log('📊 RETURNS CALENDAR: twrPts length:', twrPts?.length || 'UNDEFINED');
+
+    if (!twrPts || twrPts.length < 10) {
+      console.error('❌ RETURNS CALENDAR: twrPts missing or insufficient:', twrPts?.length || 'undefined');
+      return;
+    }
 
     const MN_FULL  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; // kept for compat
@@ -6656,8 +6667,19 @@ async function loadPortfolio() {
 
   // ── PERFORMANCE TAB CHART ─────────────────────────────────────────────────
   (function initPerfChart() {
+    console.log('🔄 PERFORMANCE: Initializing chart...');
     const canvas = document.getElementById('perfChart');
-    if (!canvas || twrPts.length < 2) return;
+    console.log('📊 PERFORMANCE: Canvas found:', !!canvas);
+    console.log('📊 PERFORMANCE: twrPts length:', twrPts?.length || 'UNDEFINED');
+
+    if (!canvas) {
+      console.error('❌ PERFORMANCE: Canvas element not found!');
+      return;
+    }
+    if (!twrPts || twrPts.length < 2) {
+      console.error('❌ PERFORMANCE: twrPts data missing or insufficient:', twrPts?.length || 'undefined');
+      return;
+    }
     const ctx = canvas.getContext('2d');
 
     const PERF_BENCHMARKS = [
@@ -8441,9 +8463,18 @@ document.addEventListener('portfolioLoaded', e => window._divInit && window._div
 
 // ── ACTIVITY LOG ──────────────────────────────────────────────
 document.addEventListener('portfolioLoaded', e => {
+  console.log('🔄 ACTIVITY LOG: Event received, processing...');
   const d     = e.detail;
+  console.log('📊 ACTIVITY LOG: Data received:', {
+    transactions: d.transactions?.length || 'MISSING',
+    pnl_breakdown: d.pnl_breakdown?.length || 'MISSING'
+  });
+
   const tbody = document.getElementById('txn-tbody');
-  if (!tbody) return;
+  if (!tbody) {
+    console.error('❌ ACTIVITY LOG: tbody element not found!');
+    return;
+  }
 
   const fmtDate = iso => {
     if (!iso) return '—';
