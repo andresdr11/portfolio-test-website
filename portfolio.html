@@ -3241,14 +3241,16 @@ function buildGradient(ctx, h) {
 
 // ── Main loader ───────────────────────────────────────────────
 async function loadPortfolio() {
+  console.log('🔄 Loading portfolio data...');
   let d;
   try {
     const res = await fetch('portfolio_data.json');
     if (!res.ok) throw new Error('not found');
     d = await res.json();
+    console.log('✅ Portfolio data loaded:', d.generated_at);
   } catch (e) {
     set('page-subtitle', 'portfolio_data.json no encontrado — ejecuta el notebook para generarlo');
-    console.warn('portfolio_data.json missing:', e);
+    console.warn('❌ portfolio_data.json missing:', e);
     return;
   }
 
@@ -7447,7 +7449,13 @@ async function loadPortfolio() {
 
 
   // Signal dividend section with full data payload
-  document.dispatchEvent(new CustomEvent('portfolioLoaded', { detail: d }));
+  try {
+    console.log('🚀 Dispatching portfolioLoaded event...');
+    document.dispatchEvent(new CustomEvent('portfolioLoaded', { detail: d }));
+    console.log('✅ Event dispatched successfully');
+  } catch (eventError) {
+    console.error('❌ Error dispatching portfolioLoaded event:', eventError);
+  }
 }
 
 // ── PORTFOLIO PROJECTION ─────────────────────────────────────
@@ -8063,7 +8071,18 @@ window.initProjection = function(d) {
   })();
 };
 
-loadPortfolio();
+loadPortfolio().catch(error => {
+  console.error('💥 Critical error in loadPortfolio():', error);
+  console.log('🔧 Attempting to load with empty data...');
+  // Try to dispatch event with minimal data to unblock the UI
+  try {
+    document.dispatchEvent(new CustomEvent('portfolioLoaded', {
+      detail: { kpis: {}, transactions: [], portfolio_history: [], pnl_breakdown: [] }
+    }));
+  } catch (e) {
+    console.error('Failed to dispatch fallback event:', e);
+  }
+});
 
 // ── INCOME CALENDAR SECTION ──────────────────────────────────
 (function() {
